@@ -9,6 +9,7 @@
     "bootstrap": "^5.2.1",
     "bootstrap-icons": "^1.9.1",
     "font-awesome": "^4.7.0",
+    "joi": "^17.10.1",
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",

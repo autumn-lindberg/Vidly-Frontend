@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Input from "./common/input";
 import logo from "../img/film-reel.svg";
+const Joi = require("joi-browser");
 
 class LoginForm extends Component {
   // initialize email and password fields to be empy and to have no errors
@@ -9,40 +10,46 @@ class LoginForm extends Component {
     errors: {},
   };
 
-  email = React.createRef();
-
-  // This validation algorithm for the entire form returns true when it passes and an errors object when it doesn't
-  // The errors object stores two strings in separate props to represent an error trace for each input field
-  validate = () => {
-    // destructure data props from state
-    const { data } = this.state;
-    // initialize as empty object so we know what to return
-    const errors = {};
-    // BASIC VALIDATION FOR ENTIRE FORM
-    // if username field is empty (trim function removes whitespace from a string)
-    if (data.email.trim() === "") {
-      errors.email = "Email is required.";
-    }
-    // if passwordfield is empty (trim function removes whitespace from a string)
-    if (data.password.trim() === "") {
-      errors.password = "Password is required.";
-    }
-    // if errors still empty, return nothing. Otherwise return the error
-    return Object.keys(errors).length === 0 ? null : errors;
+  schema = {
+    email: Joi.string().required().label("Email"),
+    password: Joi.string().required().label("Password"),
   };
 
-  validateProperty = (input) => {
-    // validate username
-    if (input.name === "username") {
+  // validate entire form using Joi
+  validate = () => {
+    const options = { abortEarly: false };
+    // actual validation method
+    //   const { error } = this.schema.validate(this.state.data, options);
+    const { error } = Joi.validate(this.state.data, this.schema, options);
+    // grabbing error data from resulting array
+    // don't return anything if there isn't an error
+    if (!error) return null;
+    // create array store error data that matches the format of our state
+    const errors = {};
+    // extended for loop
+    for (let item of error.details) {
+      // each "item" (entried in the details prop) has a message and a path
+      // path[0] is the name of the culprit that caused error
+      // take the input's name and use it to create a property in our errors array
+      errors[item.path[0]] = item.message;
     }
-    // validate password
-    if (input.name === "password") {
-    }
+    return errors;
+  };
+
+  validateProperty = ({ name, value }) => {
+    // [name] is a computed property, it sets the validationObj's prop to name parameter
+    const validationObj = { [name]: value };
+    // create a new schema for each individual input using the schema for the entire form
+    const schema = Joi.object({ [name]: this.schema[name] });
+    // options not needed in argument list, multiple errors displayed is not user friendly
+    const { error } = Joi.validate(validationObj, schema);
+    // either return the error message or nothing
+    return error ? error.details[0].message : null;
   };
 
   handleChange = (e) => {
     // clone the state by spread operator
-    const data = { ...this.state.account };
+    const data = { ...this.state.data };
     const errors = { ...this.state.errors };
     // use validation function and send error to corresponding property in errors object
     const errorMsg = this.validateProperty(e.currentTarget);
@@ -125,7 +132,7 @@ class LoginForm extends Component {
             // this.validate() is truthy when not empty, and null (empty) is falsey
           }
           <button
-            disabled={this.validate()}
+            //disabled={this.validate()}
             type="submit"
             className="btn btn-primary"
           >
