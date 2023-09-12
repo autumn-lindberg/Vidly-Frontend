@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../img/film-reel.svg";
 import profile from "../img/profile-user.svg";
 import NavItem from "./common/navItem";
-import NavItemDropdown from "./common/navItemDropdown";
+import HorizontalDivider from "./common/horizontalDivider";
 
 // This component creates a specific configuration of a bootstrap navigation
 // It includes 4 links and a dropdown menu with 3 options
@@ -65,22 +65,22 @@ const NavBar = () => {
             }
             <form className="d-flex me-4">
               <input
-                className="form-control me-2 border border-secondary input-lg"
+                className="navSearchBar form-control me-2 border border-dark input-lg"
                 type="search"
                 placeholder="Search..."
                 aria-label="Search"
               />
               <button
-                className="btn btn-primary btn-lg border-secondary"
+                className="btn btn-primary btn-lg border-dark"
                 type="submit"
               >
-                <i class="bi-search h3"></i>
+                <i class="bi-search h3 test text-dark"></i>
               </button>
             </form>
             {
               // PROFILE LOGIN BUTTON
             }
-            <div class="dropdown">
+            <div class="dropdown-center">
               <button
                 className="btn bg-transparent dropdown-toggle border-0"
                 type="button"
@@ -88,20 +88,24 @@ const NavBar = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img src={profile} width={75} height={75} />
+                <img src={profile} width={65} height={65} />
               </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <ul
+                class="dropdown-menu text-center border-dark"
+                aria-labelledby="dropdownMenuButton1"
+              >
                 <li>
                   <Link to="/settings" class="dropdown-item h4">
                     Settings
                   </Link>
                 </li>
+                <HorizontalDivider color="black" />
                 <li>
                   <Link to="/login" class="dropdown-item h4">
                     Login
                   </Link>
                 </li>
-                <li>
+                <li className="mb-4">
                   <Link to="/register" class="dropdown-item h4">
                     Register
                   </Link>

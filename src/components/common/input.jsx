@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+// This component renders a bootstrap input box with a label on top of it
+// It uses props data to fill in its data and use event handlers
 const Input = (props) => {
   return (
     <div className="mb-3">
@@ -12,11 +14,11 @@ const Input = (props) => {
       }
       <input
         name={props.name}
-        type={props.name}
+        type={props.type}
         value={props.value}
         onChange={props.onChange}
         id={props.name}
-        className="form-control"
+        className="form-control input-lg border-secondary"
         aria-describedby="emailHelp"
       />
       {

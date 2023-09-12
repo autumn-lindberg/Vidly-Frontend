@@ -4,7 +4,7 @@ import logo from "../img/film-reel.svg";
 const Joi = require("joi-browser");
 
 // login form extends form to get all its methods
-class LoginForm extends Form {
+class MovieForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
     data: { email: "", password: "" },
@@ -63,4 +63,4 @@ class LoginForm extends Form {
   }
 }
 
-export default LoginForm;
+export default MovieForm;

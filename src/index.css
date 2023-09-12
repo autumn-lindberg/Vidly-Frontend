@@ -1,3 +1,9 @@
+:root {
+  --color-one: hsla(216, 69%, 59%, 0.75);
+  --color-two: hsla(229, 72%, 86%, 1);
+  --dark-text: #{$dark};
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -13,13 +19,24 @@ body {
 }
 
 .myNav {
-  background-color: hsla(216, 69%, 59%, 0.75);
+  background-color: var(--color-one);
+}
+
+.navSearchBar {
+  background-color: var(--color-two) !important;
+}
+.navSearchBar::placeholder {
+  color: var(--dark-text) !important;
 }
 
 .spacer {
   width: 5% !important;
 }
 
+.dropdown-menu {
+  transform: translateX(-1vw);
+  background-color: var(--color-two) !important;
+}
 .dropdown-toggle::after {
   margin-left: 0.275em !important;
 }
