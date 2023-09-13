@@ -40,3 +40,7 @@ body {
 .dropdown-toggle::after {
   margin-left: 0.275em !important;
 }
+
+.hoverLink:hover {
+  color: var(--color-one) !important;
+}

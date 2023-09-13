@@ -52,7 +52,7 @@ const NavBar = () => {
               }
               <NavItem content="Home" path="/" />
               <NavItem content="Movies" path="/movies" />
-              <NavItem content="Rentals" path="/rentals" />
+              <NavItem content="Products" path="/products" />
               <NavItem content="Customers" path="/customers" />
               {
                 // Nav dropdown item not needed, but here's the syntax

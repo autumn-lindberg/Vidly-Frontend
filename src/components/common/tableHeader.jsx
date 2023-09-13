@@ -42,7 +42,7 @@ class TableHeader extends Component {
                 // call the sort function when table header is clicked
                 onClick={() => this.raiseSort(column.path)}
               >
-                {column.label}
+                {column.label || column.key}
                 {
                   // if the column matches the current sort column, render the icon
                 }

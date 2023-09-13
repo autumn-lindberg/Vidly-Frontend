@@ -68,15 +68,11 @@ class Form extends Component {
   // This function renders a simple button element
   // This particular method renders a submit button, which calls the validate function
   // this button is disabled until validation criteria are met
-  renderButton(label) {
+  renderButton(label, classes = "btn btn-primary") {
     return (
       // SUBMIT BUTTON
       // this.validate() is truthy when not empty, and null (empty) is falsey
-      <button
-        disabled={this.validate()}
-        type="submit"
-        className="btn btn-primary"
-      >
+      <button disabled={this.validate()} type="submit" className={classes}>
         {label}
       </button>
     );

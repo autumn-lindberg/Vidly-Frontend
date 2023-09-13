@@ -6,6 +6,7 @@ import { paginate } from "../utils/paginate";
 import ListGroup from "./listGroup";
 import { generateGenre } from "../utils/generateGenre";
 import MovieTable from "./movieTable";
+import MovieForm from "./movieForm";
 import _ from "lodash";
 
 // this component is the main component on the page, called in app.js (app.js is then called in index.js)
@@ -64,7 +65,7 @@ class Movies extends Component {
   // get initial data into state, style title
   componentDidMount() {
     const listGroup = document.querySelector(".listGroup");
-    const title = document.querySelector(".title");
+    const addButton = document.querySelector(".addButton");
     // offsetWidth returns the width of a given element as an integer
     const listGroupWidth = listGroup.offsetWidth;
     const style = listGroupWidth + "px";
@@ -72,7 +73,7 @@ class Movies extends Component {
     // set initial data
     this.setState({ movies: getMovies(), genres: getGenres() });
     // adjust style to move title and subtitle
-    title.style.paddingLeft = style;
+    // addButton.style.width = style;
   }
 
   // function to show only the information for the current page of items AND current genre
@@ -111,9 +112,62 @@ class Movies extends Component {
     return (
       // react fragment because encasing div is not the job of this table
       <React.Fragment>
-        <div className="title">
-          <h1>Movies Component</h1>
-          <h3>{message}</h3>
+        <div class="titleAndButton d-flex justify-content-between">
+          <div className="addButtonModal">
+            <button
+              type="button"
+              className="btn btn-primary addButton p-3 h3 me-4 mt-2"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              <div className="h4 ps-2 pe-2">[+] New Movie</div>
+            </button>
+
+            <div
+              class="modal fade"
+              id="exampleModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      New Movie
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <MovieForm />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="title">
+            <h1>Movies List</h1>
+            <h3>{message}</h3>
+          </div>
+          <form className="d-flex me-4">
+            <input
+              className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+              type="search"
+              placeholder="Search Movies"
+              aria-label="Search"
+            />
+            <button
+              className="btn btn-primary btn-lg border-dark m-3"
+              type="submit"
+            >
+              <i class="bi-search h3 test text-dark"></i>
+            </button>
+          </form>
         </div>
         <br />
         <div className="row">

@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { Outlet } from "react-router-dom";
 
-class Rentals extends Component {
+class Products extends Component {
   state = {};
   render() {
     return (
       <React.Fragment>
-        <h1>rentals test</h1>
+        <h1>products test</h1>
       </React.Fragment>
     );
   }
 }
 
-export default Rentals;
+export default Products;

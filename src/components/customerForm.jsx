@@ -5,18 +5,16 @@ import HorizontalDivider from "./common/horizontalDivider";
 const Joi = require("joi-browser");
 
 // login form extends form to get all its methods
-class MovieForm extends Form {
+class CustomerForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
-    data: { title: "", genre: "", stock: "", rate: "" },
+    data: { id: "", name: "" },
     errors: {},
   };
 
   schema = {
-    title: Joi.string().required().label("Title"),
-    genre: Joi.string().required().label("Genre"),
-    stock: Joi.string().required().label("Stock"),
-    rate: Joi.string().required().label("Rate"),
+    id: Joi.string().required().label("ID"),
+    name: Joi.string().required().label("Name"),
   };
 
   doSubmit = () => {
@@ -37,15 +35,13 @@ class MovieForm extends Form {
         }
         <form onSubmit={this.handleSubmit}>
           {
-            // Email input
+            // ID input
           }
-          {this.renderInput("title", "Title")}
+          {this.renderInput("id", "ID")}
           {
-            // Password input
+            // Name input
           }
-          {this.renderInput("genre", "Genre")}
-          {this.renderInput("stock", "Stock")}
-          {this.renderInput("rate", "Rate")}
+          {this.renderInput("name", "Name")}
           <HorizontalDivider />
           <div className="text-center">
             {
@@ -68,4 +64,4 @@ class MovieForm extends Form {
   }
 }
 
-export default MovieForm;
+export default CustomerForm;

@@ -1,6 +1,6 @@
 import "./App.css";
 import Movies from "./components/movies";
-import Rentals from "./components/rentals";
+import Products from "./components/products";
 import Customers from "./components/customers";
 import Settings from "./components/settings";
 import NavBar from "./components/navBar";
@@ -25,7 +25,7 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/movies" element={<Movies />} />
-          <Route path="/rentals" element={<Rentals />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/customers/:id" element={<CustomerDetails />} />
           <Route path="/settings" element={<Settings />} />
