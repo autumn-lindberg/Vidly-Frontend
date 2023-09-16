@@ -112,7 +112,7 @@ class Movies extends Component {
     return (
       // react fragment because encasing div is not the job of this table
       <React.Fragment>
-        <div class="titleAndButton d-flex justify-content-between">
+        <div class="titleAndButton d-flex justify-content-start">
           <div className="addButtonModal">
             <button
               type="button"
@@ -150,24 +150,26 @@ class Movies extends Component {
               </div>
             </div>
           </div>
-          <div className="title">
-            <h1>Movies List</h1>
-            <h3>{message}</h3>
+          <div className="ms-2 d-flex justify-content-between flex-grow-1">
+            <div className="title">
+              <h1>Movies List</h1>
+              <h3>{message}</h3>
+            </div>
+            <form className="d-flex me-4">
+              <input
+                className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+                type="search"
+                placeholder="Search Movies"
+                aria-label="Search"
+              />
+              <button
+                className="btn btn-primary btn-lg border-dark m-3"
+                type="submit"
+              >
+                <i class="bi-search h3 test text-dark"></i>
+              </button>
+            </form>
           </div>
-          <form className="d-flex me-4">
-            <input
-              className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
-              type="search"
-              placeholder="Search Movies"
-              aria-label="Search"
-            />
-            <button
-              className="btn btn-primary btn-lg border-dark m-3"
-              type="submit"
-            >
-              <i class="bi-search h3 test text-dark"></i>
-            </button>
-          </form>
         </div>
         <br />
         <div className="row">
