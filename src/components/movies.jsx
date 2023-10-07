@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
+import httpService from "../services/httpservice";
+import config from "../config.json";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./listGroup";
 import { generateGenre } from "../utils/generateGenre";
 import MovieTable from "./movieTable";
 import MovieForm from "./movieForm";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 
 // this component is the main component on the page, called in app.js (app.js is then called in index.js)
@@ -22,7 +26,23 @@ class Movies extends Component {
   };
 
   // handler for the delete button
-  handleDelete = (movie) => {
+  handleDelete = async (movie) => {
+    /*
+    const response = await httpService.delete(
+      `${config.apiEndpoint}/movies/${movie.title}`
+    );
+    */
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //toast(response.data);
     // update movies to reflect deletion
     // goes through all movies and check if id matches on passed to handleDelete
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
@@ -32,6 +52,16 @@ class Movies extends Component {
 
   // handler for the like button
   handleLike = (movie) => {
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
     // copy entire movies array from state (destructure into an array of objects using spread operator)
     const movies = [...this.state.movies];
     // indexOf returns first occurrence of given param (a movie in this case)
@@ -69,7 +99,17 @@ class Movies extends Component {
     // offsetWidth returns the width of a given element as an integer
     const listGroupWidth = listGroup.offsetWidth;
     const style = listGroupWidth + "px";
-
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
+    //////////
     // set initial data
     this.setState({ movies: getMovies(), genres: getGenres() });
     // adjust style to move title and subtitle
@@ -112,6 +152,7 @@ class Movies extends Component {
     return (
       // react fragment because encasing div is not the job of this table
       <React.Fragment>
+        <ToastContainer />
         <div class="titleAndButton d-flex justify-content-start">
           <div className="addButtonModal">
             <button

@@ -11,7 +11,7 @@ class Home extends Component {
     return (
       <React.Fragment>
         <ToastContainer />
-        <h1>Home Page</h1>
+        <h1>Home Page!</h1>
         <button onClick={this.toastMe} className="btn btn-success">
           Say Hello!
         </button>
