@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../img/film-reel.svg";
 import profile from "../img/profile-user.svg";
@@ -23,6 +23,7 @@ const NavBar = () => {
               className="navbar-brand me-0"
               width={100}
               height={100}
+              alt="logo"
             />
           </NavLink>
           <h1 className="text-dark me-5">Vidly.</h1>
@@ -88,7 +89,7 @@ const NavBar = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img src={profile} width={65} height={65} />
+                <img src={profile} width={65} height={65} alt="profile icon" />
               </button>
               <ul
                 class="dropdown-menu text-center border-dark"

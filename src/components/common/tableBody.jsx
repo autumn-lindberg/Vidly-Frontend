@@ -28,7 +28,7 @@ class TableBody extends Component {
         {
           // for each item (a movie), create a table row
           items.map((item) => (
-            <tr scope="row" key={item.title}>
+            <tr key={item.title}>
               {
                 // for each column in columns array (located in components/movieTable.jsx and passed by props to table.jsx then here)
                 columns.map((column) => (

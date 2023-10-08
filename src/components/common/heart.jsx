@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 // this functional stateless component renders a bootstrap heart icon
 

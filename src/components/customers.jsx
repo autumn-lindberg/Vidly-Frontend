@@ -44,10 +44,8 @@ class Customers extends Component {
 
   // get initial data into state, style title
   componentDidMount() {
-    const listGroup = document.querySelector(".listGroup");
-
+    //const listGroup = document.querySelector(".listGroup");
     // CALL SERVER AND SET INITIAL DATA
-
     // adjust style to move title and subtitle
     // title.style.paddingLeft = style;
   }

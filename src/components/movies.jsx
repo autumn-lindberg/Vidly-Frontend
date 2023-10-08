@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
-import httpService from "../services/httpservice";
-import config from "../config.json";
+//import httpService from "../services/httpservice";
+//import config from "../config.json";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./listGroup";
 import { generateGenre } from "../utils/generateGenre";
 import MovieTable from "./movieTable";
 import MovieForm from "./movieForm";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 
@@ -94,11 +94,11 @@ class Movies extends Component {
 
   // get initial data into state, style title
   componentDidMount() {
-    const listGroup = document.querySelector(".listGroup");
-    const addButton = document.querySelector(".addButton");
+    //const listGroup = document.querySelector(".listGroup");
+    //const addButton = document.querySelector(".addButton");
     // offsetWidth returns the width of a given element as an integer
-    const listGroupWidth = listGroup.offsetWidth;
-    const style = listGroupWidth + "px";
+    //const listGroupWidth = listGroup.offsetWidth;
+    //const style = listGroupWidth + "px";
     //////////
     //////////
     //////////

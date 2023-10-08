@@ -10,7 +10,7 @@ import CustomerDetails from "./components/customerDetails";
 import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
 import { Route, Routes } from "react-router-dom";
-import React, { Component } from "react";
+import React from "react";
 
 function App() {
   return (

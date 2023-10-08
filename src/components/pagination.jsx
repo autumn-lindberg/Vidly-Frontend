@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import _ from "lodash";
 
 // pagination component renders a set of buttons to select a page from and highlights the current page

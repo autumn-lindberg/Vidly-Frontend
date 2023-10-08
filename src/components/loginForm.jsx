@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Form from "./common/form";
 import logo from "../img/film-reel.svg";
 const Joi = require("joi-browser");
@@ -25,7 +25,14 @@ class LoginForm extends Form {
     return (
       <div classtype="container">
         <h1 className="mb-4">
-          Login to <img className="ms-2" src={logo} width={60} height={60} />
+          Login to{" "}
+          <img
+            className="ms-2"
+            src={logo}
+            width={60}
+            height={60}
+            alt="vidly logo icon"
+          />
           Vidly.
         </h1>
 

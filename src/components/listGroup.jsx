@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 // ListGroup component returns a bootstrap list group (like radio buttons, but cleaner)
 

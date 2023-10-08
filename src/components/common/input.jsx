@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 // This component renders a bootstrap input box with a label on top of it
 // It uses props data to fill in its data and use event handlers
