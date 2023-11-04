@@ -3,18 +3,14 @@ import CustomerTable from "./customerTable";
 import CustomerForm from "./customerForm";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
+import { getCustomers } from "../services/customerService";
 import _ from "lodash";
+// import httpService from "../services/httpservice";
 
 class Customers extends Component {
   // title are so that table can be re-used from movie table
   state = {
-    customers: [
-      { id: 1, name: "Fred", title: "fred" },
-      { id: 2, name: "Bob", title: "bob" },
-      { id: 3, name: "George", title: "george" },
-      { id: 4, name: "Yankee", title: "yankee" },
-      { id: 5, name: "BillyBob", title: "billybob" },
-    ],
+    customers: [],
     pageSize: 4,
     currentPage: 1,
     sortColumn: { path: "", order: "asc" },
@@ -43,11 +39,13 @@ class Customers extends Component {
   };
 
   // get initial data into state, style title
-  componentDidMount() {
+  async componentDidMount() {
     //const listGroup = document.querySelector(".listGroup");
-    // CALL SERVER AND SET INITIAL DATA
     // adjust style to move title and subtitle
     // title.style.paddingLeft = style;
+    // CALL SERVER AND SET INITIAL DATA
+    const { data: customers } = await getCustomers();
+    this.setState({ customers: customers });
   }
 
   // function to show only the information for the current page of items
@@ -66,6 +64,10 @@ class Customers extends Component {
     customers = paginate(customers, currentPage, pageSize);
     //
     return { customers, numberOfCustomers };
+  };
+
+  handleSearch = (e) => {
+    // search customers here
   };
 
   render() {
@@ -95,13 +97,8 @@ class Customers extends Component {
               type="search"
               placeholder="Search Customers"
               aria-label="Search"
+              onChange={this.handleSearch}
             />
-            <button
-              className="btn btn-primary btn-lg border-dark m-3"
-              type="submit"
-            >
-              <i class="bi-search h3 test text-dark"></i>
-            </button>
           </form>
           <div class="titleAndButton d-flex">
             <div className="addButtonModal">

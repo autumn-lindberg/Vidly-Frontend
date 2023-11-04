@@ -72,7 +72,12 @@ class Form extends Component {
     return (
       // SUBMIT BUTTON
       // this.validate() is truthy when not empty, and null (empty) is falsey
-      <button disabled={this.validate()} type="submit" className={classes}>
+      <button
+        disabled={this.validate()}
+        type="submit"
+        className={classes}
+        data-bs-dismiss="modal"
+      >
         {label}
       </button>
     );
@@ -94,6 +99,26 @@ class Form extends Component {
         label={label}
         onChange={this.handleChange}
       />
+    );
+  }
+
+  // renders a single radio button with a label
+  renderRadioButton(name, label, group, handleRadioChange) {
+    return (
+      <div class="form-check">
+        {}
+        <input
+          class="form-check-input"
+          type="radio"
+          name={group}
+          id={name}
+          value={name}
+          onChange={handleRadioChange}
+        />
+        <label class="form-check-label" for={name}>
+          {label}
+        </label>
+      </div>
     );
   }
 }

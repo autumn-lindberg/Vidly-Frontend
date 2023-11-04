@@ -2,7 +2,11 @@ import React from "react";
 import Form from "./common/form";
 import logo from "../img/film-reel.svg";
 import HorizontalDivider from "./common/horizontalDivider";
+import httpService from "../services/httpservice";
+import config from "../config.json";
+import { toast } from "react-toastify";
 const Joi = require("joi-browser");
+const ObjectId = require("bson-objectid");
 
 // login form extends form to get all its methods
 class MovieForm extends Form {
@@ -14,14 +18,41 @@ class MovieForm extends Form {
 
   schema = {
     title: Joi.string().required().label("Title"),
-    genre: Joi.string().required().label("Genre"),
     stock: Joi.string().required().label("Stock"),
+    genre: Joi.string().required().label("Genre"),
     rate: Joi.string().required().label("Rate"),
   };
 
-  doSubmit = () => {
-    // call the server
-    console.log("submitted");
+  setRadio = (e) => {
+    // clone state data
+    const data = { ...this.state.data };
+    // update data in state
+    data.genre = e.currentTarget.value;
+    this.setState({ data: data });
+  };
+
+  doSubmit = async () => {
+    // copy data from state
+    const data = { ...this.state.data };
+    const movie = {
+      _id: ObjectId(),
+      title: data.title,
+      numberInStock: data.stock,
+      genre: {
+        name: data.genre,
+      },
+      dailyRentalRate: data.rate,
+      liked: false,
+    };
+    try {
+      const response = await httpService.post(
+        `${config.apiEndpoint}/movies`,
+        movie
+      );
+      toast(response.status);
+    } catch (exception) {
+      console.log(exception);
+    }
   };
 
   render() {
@@ -44,13 +75,26 @@ class MovieForm extends Form {
         }
         <form onSubmit={this.handleSubmit}>
           {
-            // Email input
+            // title input
           }
           {this.renderInput("title", "Title")}
           {
-            // Password input
+            // genre radio boxes
           }
-          {this.renderInput("genre", "Genre")}
+          <label className="text-center form-label">Genre</label>
+          <div className="d-flex justify-content-evenly mb-4">
+            {this.props.genres.map((genre) => {
+              // uppercase first letter
+              genre.name =
+                genre.name.charAt(0).toUpperCase() + genre.name.slice(1);
+              return this.renderRadioButton(
+                genre.name,
+                genre.name,
+                "genres",
+                this.setRadio
+              );
+            })}
+          </div>
           {this.renderInput("stock", "Stock")}
           {this.renderInput("rate", "Rate")}
           <HorizontalDivider />

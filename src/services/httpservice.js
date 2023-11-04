@@ -15,9 +15,10 @@ Axios.interceptors.response.use(null, (error) => {
 });
 
 // export functions in case http library changes in the future
-export default {
+const httpService = {
   get: Axios.get,
   post: Axios.post,
   put: Axios.put,
   delete: Axios.delete,
 };
+export default httpService;

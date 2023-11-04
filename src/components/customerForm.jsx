@@ -17,7 +17,13 @@ class CustomerForm extends Form {
     name: Joi.string().required().label("Name"),
   };
 
-  doSubmit = () => {
+  handleSubmit = () => {
+    ////////////////
+    ////////////////
+    ////////////////
+    ////////////////
+    ////////////////
+    ////////////////
     // call the server
     console.log("submitted");
   };

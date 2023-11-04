@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { getMovies } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
-//import httpService from "../services/httpservice";
-//import config from "../config.json";
+import { getMovies } from "../services/movieService";
+import { getGenres } from "../services/genreService";
+import httpService from "../services/httpservice";
+import config from "../config.json";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./listGroup";
 import { generateGenre } from "../utils/generateGenre";
 import MovieTable from "./movieTable";
 import MovieForm from "./movieForm";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 
@@ -27,41 +27,19 @@ class Movies extends Component {
 
   // handler for the delete button
   handleDelete = async (movie) => {
-    /*
-    const response = await httpService.delete(
-      `${config.apiEndpoint}/movies/${movie.title}`
-    );
-    */
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //toast(response.data);
     // update movies to reflect deletion
     // goes through all movies and check if id matches on passed to handleDelete
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
     // update state to reflect this
     this.setState({ movies: movies });
+    const response = await httpService.delete(
+      `${config.apiEndpoint}/movies/${movie._id}`
+    );
+    toast(`Status: ${response.status}`);
   };
 
   // handler for the like button
-  handleLike = (movie) => {
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
+  handleLike = async (movie) => {
     // copy entire movies array from state (destructure into an array of objects using spread operator)
     const movies = [...this.state.movies];
     // indexOf returns first occurrence of given param (a movie in this case)
@@ -72,6 +50,17 @@ class Movies extends Component {
     movies[index].liked = !movies[index].liked;
     // update state
     this.setState({ movies: movies });
+
+    // make a put request and update data
+    try {
+      const response = await httpService.put(
+        `${config.apiEndpoint}/movies/${movie._id}`,
+        movie[index]
+      );
+      toast(`Status: ${response.status}`);
+    } catch (exception) {
+      console.log(exception);
+    }
   };
 
   // handler for the pagination
@@ -93,28 +82,24 @@ class Movies extends Component {
   };
 
   // get initial data into state, style title
-  componentDidMount() {
+  async componentDidMount() {
     //const listGroup = document.querySelector(".listGroup");
     //const addButton = document.querySelector(".addButton");
     // offsetWidth returns the width of a given element as an integer
     //const listGroupWidth = listGroup.offsetWidth;
     //const style = listGroupWidth + "px";
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    //////////
-    // set initial data
-    this.setState({ movies: getMovies(), genres: getGenres() });
     // adjust style to move title and subtitle
     // addButton.style.width = style;
+
+    // set initial data
+    const { data: movies } = await getMovies();
+    const { data: genres } = await getGenres();
+    this.setState({ movies: movies, genres: genres });
   }
+
+  handleSearch = (e) => {
+    // handle search button
+  };
 
   // function to show only the information for the current page of items AND current genre
   getPageData = () => {
@@ -185,7 +170,7 @@ class Movies extends Component {
                     ></button>
                   </div>
                   <div class="modal-body">
-                    <MovieForm />
+                    <MovieForm genres={this.state.genres} />
                   </div>
                 </div>
               </div>
@@ -202,13 +187,8 @@ class Movies extends Component {
                 type="search"
                 placeholder="Search Movies"
                 aria-label="Search"
+                onChange={this.handleSearch}
               />
-              <button
-                className="btn btn-primary btn-lg border-dark m-3"
-                type="submit"
-              >
-                <i class="bi-search h3 test text-dark"></i>
-              </button>
             </form>
           </div>
         </div>

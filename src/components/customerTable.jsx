@@ -6,7 +6,6 @@ class CustomerTable extends Component {
   // state not needed, doesn't change throughout component life cycle
   // path is the data's property name. components/tableBody.jsx uses this to access the data inside each customer object
   columns = [
-    { path: "id", label: "ID Number" },
     { path: "name", label: "Name" },
     {
       key: "view",
