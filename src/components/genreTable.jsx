@@ -1,31 +1,11 @@
 import React, { Component } from "react";
 import Table from "./common/table";
-import ViewIcon from "./common/viewIcon";
-import RentIcon from "./common/rentIcon";
-import { getMovies } from "../services/movieService";
 
-class CustomerTable extends Component {
-  // use state to store movies
-  state = {
-    movies: [],
-  };
-  async componentDidMount() {
-    const { data: movies } = await getMovies();
-    this.setState({ movies: movies });
-  }
+class GenreTable extends Component {
+  // state not needed, doesn't change throughout component life cycle
   // path is the data's property name. components/tableBody.jsx uses this to access the data inside each customer object
   columns = [
     { path: "name", label: "Name" },
-    {
-      key: "view",
-      content: (customer) => <ViewIcon customer={customer} />,
-    },
-    {
-      key: "rent",
-      content: (customer) => (
-        <RentIcon customer={customer} movies={this.state.movies} />
-      ),
-    },
     {
       key: "delete",
       // content is a function that takes in a customer and uses that to pass it to onDelete handler
@@ -51,10 +31,10 @@ class CustomerTable extends Component {
         columns={this.columns}
         sortColumn={this.props.sortColumn}
         onSort={this.props.onSort}
-        items={this.props.customers}
+        items={this.props.genres}
       />
     );
   }
 }
 
-export default CustomerTable;
+export default GenreTable;

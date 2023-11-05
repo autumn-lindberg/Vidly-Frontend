@@ -101,7 +101,7 @@ class Products extends Component {
     if (numberOfProducts === 0) {
       message = "No products found";
     } else {
-      message = numberOfProducts + " customers in system";
+      message = numberOfProducts + " products in system";
     }
     return (
       <React.Fragment>

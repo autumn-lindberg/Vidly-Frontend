@@ -6,7 +6,7 @@ const ProductCard = ({ product }) => {
     <div class="col-sm-3 pb-4">
       <div class="card" style={{ width: "18rem" }}>
         <img
-          src={`data:${product.imageSrc.contentType};base64, ${Buffer.from(
+          src={`data:image/jpeg;base64, ${Buffer.from(
             product.imageSrc.data
           ).toString("base64")}`}
           class="card-img-top mx-auto"
