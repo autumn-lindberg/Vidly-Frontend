@@ -4,26 +4,41 @@ import CustomerForm from "./customerForm";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getCustomers } from "../services/customerService";
+import { toast, ToastContainer } from "react-toastify";
 import _ from "lodash";
-// import httpService from "../services/httpservice";
+import httpService from "../services/httpservice";
+import config from "../config.json";
+import "react-toastify/dist/ReactToastify.css";
+import { filterCustomers } from "../utils/filterCustomers";
 
 class Customers extends Component {
   // title are so that table can be re-used from movie table
   state = {
     customers: [],
+    filtered: [],
     pageSize: 4,
     currentPage: 1,
     sortColumn: { path: "", order: "asc" },
   };
 
   // handler for the delete button
-  handleDelete = (customer) => {
+  handleDelete = async (customer) => {
     // update customers to reflect deletion
     // goes through all customers and check if id matches on passed to handleDelete
     // array filter takes a function as a parameter that returns T/F whether to include or not
     const customers = this.state.customers.filter((m) => m.id !== customer.id);
     // update state to reflect this
     this.setState({ customers: customers });
+
+    // send delete request
+    try {
+      const response = await httpService.delete(
+        `${config.apiEndpoint}/customers/${customer._id}`
+      );
+      toast(`Status: ${response.status}`);
+    } catch (exception) {
+      console.log(exception);
+    }
   };
 
   // handler for the pagination
@@ -45,29 +60,33 @@ class Customers extends Component {
     // title.style.paddingLeft = style;
     // CALL SERVER AND SET INITIAL DATA
     const { data: customers } = await getCustomers();
-    this.setState({ customers: customers });
+    this.setState({ customers: customers, filtered: customers });
   }
 
   // function to show only the information for the current page of items
   getPageData = () => {
     // grab current pagination information from state
     const { pageSize, currentPage, sortColumn } = this.state;
-    let { customers } = this.state;
+    let { filtered } = this.state;
     // destructure customers array to take its length, naming it numberOfCustomers
     // length is a property of EVERY array in JS
-    const { length: numberOfCustomers } = customers;
-
+    const { length: numberOfCustomers } = filtered;
     // order data using lodash
     // params are original array, propName of column being sorted, order by
-    customers = _.orderBy(customers, [sortColumn.path], [sortColumn.order]);
+    filtered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     // paginate data
-    customers = paginate(customers, currentPage, pageSize);
+    filtered = paginate(filtered, currentPage, pageSize);
     //
-    return { customers, numberOfCustomers };
+    return { filtered, numberOfCustomers };
   };
 
   handleSearch = (e) => {
     // search customers here
+    const searchText = e.currentTarget.value;
+    // duplicate state
+    const customers = this.state.customers;
+    const filtered = filterCustomers(customers, searchText);
+    this.setState({ filtered: filtered });
   };
 
   render() {
@@ -77,7 +96,7 @@ class Customers extends Component {
     // get page data, customersObj stores customers and length of array
     const customersObj = this.getPageData();
     // extract returned values from customersObj so variables can be used
-    const { customers, numberOfCustomers } = customersObj;
+    const { filtered, numberOfCustomers } = customersObj;
 
     if (numberOfCustomers === 0) {
       message = "No customers found";
@@ -86,6 +105,7 @@ class Customers extends Component {
     }
     return (
       <React.Fragment>
+        <ToastContainer />
         <div className="ms-4 d-flex justify-content-between">
           <div className="title">
             <h1>Customers List</h1>
@@ -144,7 +164,7 @@ class Customers extends Component {
         <div className="row">
           <div className="col">
             <CustomerTable
-              customers={customers}
+              customers={filtered}
               onSort={this.onSort}
               sortColumn={this.state.sortColumn}
               onDelete={this.handleDelete}

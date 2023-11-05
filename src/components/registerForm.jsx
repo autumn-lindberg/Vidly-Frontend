@@ -62,7 +62,7 @@ class RegisterForm extends Form {
           <div class="mb-3 form-check">
             <input type="checkbox" id="confirm" className="form-check-input" />
             <label id="confirm" className="form-check-label" htmlFor="confirm">
-              Check me out
+              I am not a robot
             </label>
           </div>
           {

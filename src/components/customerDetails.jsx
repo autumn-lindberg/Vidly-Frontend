@@ -7,11 +7,11 @@ const CustomerDetails = () => {
   return (
     <React.Fragment>
       <h1>{location.state.name}</h1>
-      <p>{location.state.dateJoined}</p>
-      <p>{location.state.phone}</p>
-      <p>{location.state.email}</p>
-      <p>{location.state.isGold.toString()}</p>
-      <p>{location.state.points}</p>
+      <p>Member Since {location.state.dateJoined}</p>
+      <p>Phone Number: {location.state.phone}</p>
+      <p>Email: {location.state.email}</p>
+      <p>Gold Member: {location.state.isGold.toString()}</p>
+      <p>Rewards Points: {location.state.points}</p>
       <br />
       <Link to="/customers">
         <button type="buton" className="btn btn-success">

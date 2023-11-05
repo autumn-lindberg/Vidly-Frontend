@@ -55,6 +55,8 @@ const NavBar = () => {
               <NavItem content="Movies" path="/movies" />
               <NavItem content="Products" path="/products" />
               <NavItem content="Customers" path="/customers" />
+              <NavItem content="Genres" path="/genres" />
+              <NavItem content="Rentals" path="/rentals" />
               {
                 // Nav dropdown item not needed, but here's the syntax
                 // main is a string, dropdowns is an array of objects that hold name and path
@@ -95,13 +97,7 @@ const NavBar = () => {
                 class="dropdown-menu text-center border-dark"
                 aria-labelledby="dropdownMenuButton1"
               >
-                <li>
-                  <Link to="/settings" class="dropdown-item h4">
-                    Settings
-                  </Link>
-                </li>
-                <HorizontalDivider color="black" />
-                <li>
+                <li className="pt-3">
                   <Link to="/login" class="dropdown-item h4">
                     Login
                   </Link>
