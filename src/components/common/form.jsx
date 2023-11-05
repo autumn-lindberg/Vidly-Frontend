@@ -105,7 +105,7 @@ class Form extends Component {
   // renders a single radio button with a label
   renderRadioButton(name, label, group, handleRadioChange) {
     return (
-      <div class="form-check">
+      <div class="form-check" key={label}>
         {}
         <input
           class="form-check-input"
@@ -120,6 +120,10 @@ class Form extends Component {
         </label>
       </div>
     );
+  }
+
+  renderFileUpload() {
+    //
   }
 }
 

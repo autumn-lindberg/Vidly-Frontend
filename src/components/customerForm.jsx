@@ -1,65 +1,75 @@
 import React from "react";
 import Form from "./common/form";
-import logo from "../img/film-reel.svg";
 import HorizontalDivider from "./common/horizontalDivider";
+import httpService from "../services/httpservice";
+import config from "../config.json";
+import { toast } from "react-toastify";
 const Joi = require("joi-browser");
+const ObjectId = require("bson-objectid");
 
 // login form extends form to get all its methods
 class CustomerForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
-    data: { id: "", name: "" },
+    data: { name: "", phone: "", email: "" },
     errors: {},
   };
 
   schema = {
-    id: Joi.string().required().label("ID"),
     name: Joi.string().required().label("Name"),
+    phone: Joi.string()
+      .regex(/^[0-9]{10}$/)
+      .required()
+      .label("Phone")
+      .error(() => {
+        return {
+          message: "Phone Number must be ten digits, without spaces.",
+        };
+      }),
+    email: Joi.string().required().label("Email"),
   };
 
-  handleSubmit = () => {
-    ////////////////
-    ////////////////
-    ////////////////
-    ////////////////
-    ////////////////
-    ////////////////
-    // call the server
-    console.log("submitted");
+  // form.jsx component requires the submit function to be called doSubmit
+  doSubmit = async () => {
+    const data = { ...this.state.data };
+    const customer = {
+      _id: ObjectId(),
+      name: data.name,
+      dateJoined: Date.now(),
+      phone: data.phone,
+      email: data.email,
+      isGold: false,
+      points: 0,
+    };
+
+    try {
+      const response = await httpService.post(
+        `${config.apiEndpoint}/customers`,
+        customer
+      );
+      toast(response.status);
+    } catch (exception) {
+      console.log(exception);
+    }
   };
 
   render() {
     return (
       <div classtype="container">
-        <h1 className="mb-4">
-          Login to{" "}
-          <img
-            className="ms-2"
-            src={logo}
-            width={60}
-            height={60}
-            alt="vidly logo icon"
-          />
-          Vidly.
-        </h1>
-
         {
           // Submission handler
         }
         <form onSubmit={this.handleSubmit}>
           {
-            // ID input
-          }
-          {this.renderInput("id", "ID")}
-          {
-            // Name input
+            // inputs
           }
           {this.renderInput("name", "Name")}
+          {this.renderInput("phone", "Phone")}
+          {this.renderInput("email", "Email")}
           <HorizontalDivider />
           <div className="text-center">
             {
               // renderButton is also part of "this" now
-              // why tf does it throw error when both these functions are called in same {}??
               this.renderButton("Submit", "btn btn-success")
             }
             <button

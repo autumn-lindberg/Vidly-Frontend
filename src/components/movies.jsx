@@ -12,12 +12,14 @@ import MovieForm from "./movieForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
+import { filterMovies } from "../utils/filterMovies";
 
 // this component is the main component on the page, called in app.js (app.js is then called in index.js)
 
 class Movies extends Component {
   state = {
     movies: [],
+    filtered: [],
     pageSize: 4,
     currentPage: 1,
     genres: [],
@@ -32,10 +34,14 @@ class Movies extends Component {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
     // update state to reflect this
     this.setState({ movies: movies });
-    const response = await httpService.delete(
-      `${config.apiEndpoint}/movies/${movie._id}`
-    );
-    toast(`Status: ${response.status}`);
+    try {
+      const response = await httpService.delete(
+        `${config.apiEndpoint}/movies/${movie._id}`
+      );
+      toast(`Status: ${response.status}`);
+    } catch (exception) {
+      console.log(exception);
+    }
   };
 
   // handler for the like button
@@ -94,11 +100,16 @@ class Movies extends Component {
     // set initial data
     const { data: movies } = await getMovies();
     const { data: genres } = await getGenres();
-    this.setState({ movies: movies, genres: genres });
+    this.setState({ movies: movies, genres: genres, filtered: movies });
   }
 
   handleSearch = (e) => {
-    // handle search button
+    // search customers here
+    const searchText = e.currentTarget.value;
+    // duplicate state
+    const movies = this.state.movies;
+    const filtered = filterMovies(movies, searchText);
+    this.setState({ filtered: filtered });
   };
 
   // function to show only the information for the current page of items AND current genre
@@ -106,18 +117,18 @@ class Movies extends Component {
     // grab current pagination information from state
     const { pageSize, currentPage, sortColumn } = this.state;
     // only display movies from specified genre (default is set to all)
-    let movies = generateGenre(this.state.movies, this.state.currentGenre);
+    let filtered = generateGenre(this.state.filtered, this.state.currentGenre);
     // destructure movies array to take its length, naming it numberOfMovies
     // length is a property of EVERY array in JS
-    const { length: numberOfMovies } = movies;
+    const { length: numberOfMovies } = filtered;
 
     // order data using lodash
     // params are original array, propName of column being sorted, order by
-    movies = _.orderBy(movies, [sortColumn.path], [sortColumn.order]);
+    filtered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     // paginate data
-    movies = paginate(movies, currentPage, pageSize);
+    filtered = paginate(filtered, currentPage, pageSize);
     //
-    return { movies, numberOfMovies };
+    return { filtered, numberOfMovies };
   };
 
   render() {
@@ -127,7 +138,7 @@ class Movies extends Component {
     // get page data, moviesObj stores movies and length of array
     const moviesObj = this.getPageData();
     // extract returned values from moviesObj so variables can be used
-    const { movies, numberOfMovies } = moviesObj;
+    const { filtered, numberOfMovies } = moviesObj;
 
     if (numberOfMovies === 0) {
       message = "No movies found";
@@ -203,7 +214,7 @@ class Movies extends Component {
           </div>
           <div className="col">
             <MovieTable
-              movies={movies}
+              movies={filtered}
               onSort={this.onSort}
               sortColumn={this.state.sortColumn}
               onDelete={this.handleDelete}

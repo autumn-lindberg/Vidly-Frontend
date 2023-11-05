@@ -8,46 +8,44 @@ const Joi = require("joi-browser");
 const ObjectId = require("bson-objectid");
 
 // login form extends form to get all its methods
-class MovieForm extends Form {
+class CustomerForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
-    data: { title: "", genre: "", stock: "", rate: "" },
+    data: { name: "", phone: "", email: "" },
     errors: {},
   };
 
   schema = {
-    title: Joi.string().required().label("Title"),
-    stock: Joi.string().required().label("Stock"),
-    genre: Joi.string().required().label("Genre"),
-    rate: Joi.string().required().label("Rate"),
-  };
-
-  setRadio = (e) => {
-    // clone state data
-    const data = { ...this.state.data };
-    // update data in state
-    data.genre = e.currentTarget.value;
-    this.setState({ data: data });
+    name: Joi.string().required().label("Name"),
+    phone: Joi.string()
+      .regex(/^[0-9]{10}$/)
+      .required()
+      .label("Phone")
+      .error(() => {
+        return {
+          message: "Phone Number must be ten digits, without spaces.",
+        };
+      }),
+    email: Joi.string().required().label("Email"),
   };
 
   // form.jsx component requires the submit function to be called doSubmit
   doSubmit = async () => {
-    // copy data from state
     const data = { ...this.state.data };
-    const movie = {
+    const customer = {
       _id: ObjectId(),
-      title: data.title,
-      numberInStock: data.stock,
-      genre: {
-        name: data.genre,
-      },
-      dailyRentalRate: data.rate,
-      liked: false,
+      name: data.name,
+      dateJoined: Date.now(),
+      phone: data.phone,
+      email: data.email,
+      isGold: false,
+      points: 0,
     };
+
     try {
       const response = await httpService.post(
-        `${config.apiEndpoint}/movies`,
-        movie
+        `${config.apiEndpoint}/customers`,
+        customer
       );
       toast(response.status);
     } catch (exception) {
@@ -63,33 +61,16 @@ class MovieForm extends Form {
         }
         <form onSubmit={this.handleSubmit}>
           {
-            // title input
+            // inputs
           }
           {this.renderInput("title", "Title")}
-          {
-            // genre radio boxes
-          }
-          <label className="text-center form-label">Genre</label>
-          <div className="d-flex justify-content-evenly mb-4">
-            {this.props.genres.map((genre) => {
-              // uppercase first letter
-              genre.name =
-                genre.name.charAt(0).toUpperCase() + genre.name.slice(1);
-              return this.renderRadioButton(
-                genre.name,
-                genre.name,
-                "genres",
-                this.setRadio
-              );
-            })}
-          </div>
+          {this.renderInput("description", "Description")}
+          {this.renderInput("price", "Price")}
           {this.renderInput("stock", "Stock")}
-          {this.renderInput("rate", "Rate")}
           <HorizontalDivider />
           <div className="text-center">
             {
               // renderButton is also part of "this" now
-              // why tf does it throw error when both these functions are called in same {}??
               this.renderButton("Submit", "btn btn-success")
             }
             <button
@@ -107,4 +88,4 @@ class MovieForm extends Form {
   }
 }
 
-export default MovieForm;
+export default CustomerForm;
