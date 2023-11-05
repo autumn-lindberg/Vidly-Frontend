@@ -8,62 +8,34 @@ const Joi = require("joi-browser");
 const ObjectId = require("bson-objectid");
 
 // login form extends form to get all its methods
-class CustomerForm extends Form {
+class GenreForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
-    data: { title: "", description: "", price: "", stock: "" },
+    data: { name: "" },
     errors: {},
   };
 
   schema = {
-    title: Joi.string().required().label("Title"),
-    description: Joi.string().required().label("Description"),
-    price: Joi.string()
-      .regex(/^[0-9]+$/)
-      .required()
-      .label("Price"),
-    stock: Joi.string()
-      .regex(/^[0-9]+$/)
-      .required()
-      .label("Stock"),
-    imageSrc: Joi.any().required().label("Thumbnail"),
+    name: Joi.string().required().label("Name"),
   };
 
   // form.jsx component requires the submit function to be called doSubmit
   doSubmit = async () => {
     const data = { ...this.state.data };
-    const product = {
+    const customer = {
       _id: ObjectId(),
-      title: data.title,
-      description: data.description,
-      price: data.price,
-      stock: data.stock,
-      imageSrc: data.imageSrc,
+      name: data.name,
     };
 
     try {
       const response = await httpService.post(
-        `${config.apiEndpoint}/products`,
-        product
+        `${config.apiEndpoint}/genres`,
+        customer
       );
       toast(response.status);
     } catch (exception) {
       console.log(exception);
     }
-  };
-
-  setFile = (e) => {
-    const properties = { ...this.state.data };
-    let imageSrc = e.target.files[0];
-    let reader = new FileReader();
-    let file;
-    reader.readAsDataURL(imageSrc);
-    reader.onload = () => {
-      file = reader.result;
-      console.log(reader.result);
-      properties.imageSrc = file;
-      this.setState({ data: properties });
-    };
   };
 
   render() {
@@ -76,11 +48,7 @@ class CustomerForm extends Form {
           {
             // inputs
           }
-          {this.renderInput("title", "Title")}
-          {this.renderInput("description", "Description")}
-          {this.renderInput("price", "Price")}
-          {this.renderInput("stock", "Stock")}
-          {this.renderFileUpload(this.setFile)}
+          {this.renderInput("name", "Name")}
           <HorizontalDivider />
           <div className="text-center">
             {
@@ -102,4 +70,4 @@ class CustomerForm extends Form {
   }
 }
 
-export default CustomerForm;
+export default GenreForm;

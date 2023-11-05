@@ -11,6 +11,7 @@ import RegisterForm from "./components/registerForm";
 import ProductDetails from "./components/productDetails";
 import Genres from "./components/genres";
 import Rentals from "./components/rentals";
+import NewRental from "./components/newRental";
 import { Route, Routes } from "react-router-dom";
 import React from "react";
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/customers/:id" element={<CustomerDetails />} />
           <Route path="/genres" element={<Genres />} />
           <Route path="/rentals" element={<Rentals />} />
+          <Route path="/rent/:id" element={<NewRental />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

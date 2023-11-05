@@ -122,8 +122,22 @@ class Form extends Component {
     );
   }
 
-  renderFileUpload() {
-    //
+  renderFileUpload(handleFileUpload) {
+    return (
+      <div class="mb-3">
+        <label for="formFile" class="form-label">
+          Thumbnail Photo
+        </label>
+        <input
+          class="form-control"
+          type="file"
+          id="formFile"
+          onChange={handleFileUpload}
+          required={true}
+        />
+        <div class="invalid-feedback">Thumbnail Is Required.</div>
+      </div>
+    );
   }
 }
 
