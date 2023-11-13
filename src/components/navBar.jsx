@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../img/film-reel.svg";
 import profile from "../img/profile-user.svg";
@@ -10,6 +11,12 @@ import HorizontalDivider from "./common/horizontalDivider";
 // Some other time I may refactor to work with any number of configurations
 
 const NavBar = () => {
+  const [navigate, setNavigate] = useState(false);
+  const handleLogout = () => {
+    // unset JWT from local storage
+    localStorage.removeItem("token");
+    setNavigate(true);
+  };
   return (
     <React.Fragment>
       <nav className="navbar navbar-expand-lg navbar-light myNav">
@@ -107,6 +114,14 @@ const NavBar = () => {
                     Register
                   </Link>
                 </li>
+                <HorizontalDivider />
+                <li className="mb-4">
+                  <div class="dropdown-item h4">
+                    <button onClick={handleLogout} className="btn btn-danger">
+                      Logout
+                    </button>
+                  </div>
+                </li>
               </ul>
             </div>
             <div className="spacer d-block"> </div>
@@ -114,6 +129,7 @@ const NavBar = () => {
         </div>
       </nav>
       <br />
+      {navigate ? <Navigate to="/login" /> : console.log("")}
     </React.Fragment>
   );
 };
