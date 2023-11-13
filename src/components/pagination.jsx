@@ -38,7 +38,11 @@ const Pagination = ({
               // handle page change when button is clicked (function is passed in by props)
               // onPageChange is defined in components/movies.jsx
             }
-            <a className="page-link" onClick={() => onPageChange(pageNumber)}>
+            <a
+              href="#"
+              className="page-link"
+              onClick={() => onPageChange(pageNumber)}
+            >
               {pageNumber}
             </a>
           </li>
