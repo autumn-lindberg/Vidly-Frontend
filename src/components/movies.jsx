@@ -151,6 +151,11 @@ class Movies extends Component {
     return (
       // react fragment because encasing div is not the job of this table
       <React.Fragment>
+        {!this.context.user || JSON.stringify(this.context.user) === "{}" ? (
+          <Navigate to="/login" />
+        ) : (
+          console.log("")
+        )}
         <ToastContainer />
         <div class="titleAndButton d-flex justify-content-start">
           <div className="addButtonModal">
@@ -231,12 +236,6 @@ class Movies extends Component {
             />
           </div>
         </div>
-        {!this.context.user ||
-        JSON.stringify(this.context.user.name) === "{}" ? (
-          <Navigate to="/login" />
-        ) : (
-          console.log("")
-        )}
       </React.Fragment>
     );
   }
