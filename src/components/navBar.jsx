@@ -1,21 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../img/film-reel.svg";
 import profile from "../img/profile-user.svg";
 import NavItem from "./common/navItem";
 import HorizontalDivider from "./common/horizontalDivider";
+import UserContext from "./../UserContext";
 
 // This component creates a specific configuration of a bootstrap navigation
 // It includes 4 links and a dropdown menu with 3 options
 // Some other time I may refactor to work with any number of configurations
 
 const NavBar = () => {
+  const userContext = useContext(UserContext);
   const [navigate, setNavigate] = useState(false);
-  const handleLogout = () => {
+  const resetNavigate = async () => {
+    setTimeout(1000);
+    setNavigate(false);
+  };
+  const onLogout = () => {
     // unset JWT from local storage
     localStorage.removeItem("token");
+    if (localStorage.getItem("g_state")) localStorage.removeItem("g_state");
+    // remove user from context
+    userContext.handleLogout();
     setNavigate(true);
+    resetNavigate();
   };
   return (
     <React.Fragment>
@@ -104,24 +114,41 @@ const NavBar = () => {
                 class="dropdown-menu text-center border-dark"
                 aria-labelledby="dropdownMenuButton1"
               >
-                <li className="pt-3">
-                  <Link to="/login" class="dropdown-item h4">
-                    Login
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link to="/register" class="dropdown-item h4">
-                    Register
-                  </Link>
-                </li>
-                <HorizontalDivider />
-                <li className="mb-4">
-                  <div class="dropdown-item h4">
-                    <button onClick={handleLogout} className="btn btn-danger">
-                      Logout
-                    </button>
+                {!userContext.user.name ||
+                userContext.user.name.length === 0 ? (
+                  <div>
+                    <li className="pt-3">
+                      <Link to="/login" class="dropdown-item h4">
+                        Login
+                      </Link>
+                    </li>
+                    <li className="mb-4">
+                      <Link to="/register" class="dropdown-item h4">
+                        Register
+                      </Link>
+                    </li>
                   </div>
-                </li>
+                ) : (
+                  <li className="p-2">
+                    <h3>Welcome,</h3>
+                    <br />
+                    <h4>{userContext.user.name}</h4>
+                  </li>
+                )}
+                {userContext.user.name && userContext.user.name.length !== 0 ? (
+                  <div>
+                    <HorizontalDivider />
+                    <li className="mb-4">
+                      <div class="dropdown-item h4">
+                        <button onClick={onLogout} className="btn btn-danger">
+                          Logout
+                        </button>
+                      </div>
+                    </li>
+                  </div>
+                ) : (
+                  <br />
+                )}
               </ul>
             </div>
             <div className="spacer d-block"> </div>

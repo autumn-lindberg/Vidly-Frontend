@@ -20,7 +20,7 @@ class MovieList extends Component {
     { path: "numberInStock", label: "Stock" },
     { path: "dailyRentalRate", label: "Price" },
     {
-      key: "like",
+      key: "Liked",
       // content is a function that takes in a movie and uses its liked prop to fill in heart or not (using onLike function)
       // handleLike prop in heart component is the onLike prop (a function) in movieTable component passed in by props
       // onLike prop then calls handleLike function (defined in components/movies.jsx)

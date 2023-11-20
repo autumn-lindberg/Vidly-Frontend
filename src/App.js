@@ -13,29 +13,56 @@ import Genres from "./components/genres";
 import Rentals from "./components/rentals";
 import NewRental from "./components/newRental";
 import { Route, Routes } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
+import UserContext from "./UserContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
+  const [user, setUser] = useState({});
+  function handleLogin(user) {
+    setUser(user);
+  }
+  function handleRegister(user) {
+    setUser(user);
+  }
+  function handleLogout() {
+    setUser({});
+  }
   return (
-    <div class="bg-light">
-      <NavBar />
-      <main className="container">
-        <Routes>
-          <Route index element={<Home />}></Route>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/movies" element={<Movies />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/customers/:id" element={<CustomerDetails />} />
-          <Route path="/genres" element={<Genres />} />
-          <Route path="/rentals" element={<Rentals />} />
-          <Route path="/rent/:id" element={<NewRental />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </div>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+      {
+        // give access to user and setUser
+      }
+
+      <UserContext.Provider
+        value={{
+          user: user,
+          handleLogin: handleLogin,
+          handleLogout: handleLogout,
+          handleRegister: handleRegister,
+        }}
+      >
+        <div class="bg-light">
+          <NavBar />
+          <main className="container">
+            <Routes>
+              <Route index element={<Home />}></Route>
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/register" element={<RegisterForm />} />
+              <Route path="/movies" element={<Movies />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductDetails />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/customers/:id" element={<CustomerDetails />} />
+              <Route path="/genres" element={<Genres />} />
+              <Route path="/rentals" element={<Rentals />} />
+              <Route path="/rent/:id" element={<NewRental />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+        </div>
+      </UserContext.Provider>
+    </GoogleOAuthProvider>
   );
 }
 
