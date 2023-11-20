@@ -10,8 +10,11 @@ import httpService from "../services/httpservice";
 import config from "../config.json";
 import "react-toastify/dist/ReactToastify.css";
 import { filterProducts } from "../utils/filterProducts";
+import UserContext from "../UserContext";
+import { Navigate } from "react-router-dom";
 
 class Products extends Component {
+  static contextType = UserContext;
   // title are so that table can be re-used from movie table
   state = {
     products: [],
@@ -175,6 +178,12 @@ class Products extends Component {
             currentPage={currentPage}
           />
         </div>
+        {!this.context.user ||
+        JSON.stringify(this.context.user.name) === "{}" ? (
+          <Navigate to="/login" />
+        ) : (
+          console.log("")
+        )}
       </React.Fragment>
     );
   }

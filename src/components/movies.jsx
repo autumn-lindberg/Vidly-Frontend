@@ -13,10 +13,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import { filterMovies } from "../utils/filterMovies";
+import UserContext from "../UserContext";
+import { Navigate } from "react-router-dom";
 
 // this component is the main component on the page, called in app.js (app.js is then called in index.js)
 
 class Movies extends Component {
+  static contextType = UserContext;
   state = {
     movies: [],
     filtered: [],
@@ -228,6 +231,12 @@ class Movies extends Component {
             />
           </div>
         </div>
+        {!this.context.user ||
+        JSON.stringify(this.context.user.name) === "{}" ? (
+          <Navigate to="/login" />
+        ) : (
+          console.log("")
+        )}
       </React.Fragment>
     );
   }

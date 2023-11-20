@@ -5,11 +5,14 @@ import logo from "../img/film-reel.svg";
 import httpService from "../services/httpservice";
 import config from "../config.json";
 import { ToastContainer, toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+import UserContext from "../UserContext";
+import { GoogleLogin } from "@react-oauth/google";
 const Joi = require("joi-browser");
-const ObjectId = require("bson-objectid");
 
 // login form extends form to get all its methods
 class RegisterForm extends Form {
+  static contextType = UserContext;
   // initialize email and password fields to be empy and to have no errors
   state = {
     data: { name: "", email: "", password: "" },
@@ -28,7 +31,6 @@ class RegisterForm extends Form {
     const data = { ...this.state.data };
     // call the server
     const user = {
-      _id: ObjectId(),
       name: data.name,
       email: data.email,
       password: data.password,
@@ -44,6 +46,13 @@ class RegisterForm extends Form {
         toast("Registration Error");
       } else {
         toast(response.status);
+        // store JWT
+        const JWT = response.headers["x-auth-token"];
+        localStorage.setItem("token", JWT);
+        // decode JWT so user data can be set
+        const user = jwtDecode(JWT);
+        // set context
+        this.context.handleRegister(user);
         this.setState({ navigate: true });
       }
     } catch (exception) {
@@ -67,7 +76,6 @@ class RegisterForm extends Form {
             />
             Vidly.
           </h1>
-
           {
             // Submission handler
           }
@@ -109,6 +117,39 @@ class RegisterForm extends Form {
               this.renderButton("Submit")
             }
           </form>
+          <br />
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              const jwt = jwtDecode(credentialResponse.credential);
+              const user = {
+                name: jwt.name,
+                email: jwt.email,
+                password: jwt.sub,
+                isAdmin: true,
+              };
+              // send object to new user
+              const response = await httpService.post(
+                `${config.apiEndpoint}/users`,
+                user
+              );
+              toast(response.status);
+              if (response.status === 200) {
+                // store JWT
+                const token = response.headers["x-auth-token"];
+                localStorage.setItem("token", token);
+                // set context
+                const myContext = jwtDecode(token);
+                this.context.handleRegister(myContext);
+                this.setState({ navigate: true });
+              } else {
+                toast("Error occurred");
+              }
+            }}
+            onError={() => {
+              toast("Login Failed");
+            }}
+          />
+          ;
         </div>
         {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
       </React.Fragment>
