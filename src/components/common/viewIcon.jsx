@@ -7,6 +7,7 @@ const ViewIcon = ({ customer }) => {
       <Link
         to={`/customers/${customer._id}`}
         state={{
+          _id: customer._id,
           name: customer.name,
           dateJoined: customer.dateJoined,
           phone: customer.phone,

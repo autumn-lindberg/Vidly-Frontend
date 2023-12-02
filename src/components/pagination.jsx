@@ -38,13 +38,12 @@ const Pagination = ({
               // handle page change when button is clicked (function is passed in by props)
               // onPageChange is defined in components/movies.jsx
             }
-            <a
-              href="/#"
-              className="page-link"
-              onClick={() => onPageChange(pageNumber)}
-            >
-              {pageNumber}
-            </a>
+            {
+              // eslint-disable-next-line
+              <a className="page-link" onClick={() => onPageChange(pageNumber)}>
+                {pageNumber}
+              </a>
+            }
           </li>
         ))
       }

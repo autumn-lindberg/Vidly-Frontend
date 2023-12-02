@@ -1,18 +1,25 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import CustomerForm from "./customerForm";
 
 const CustomerDetails = () => {
   //const routeParams = useParams();
   const location = useLocation();
+  let placeholders = ["", "", "", "", "", "", ""];
+  if (location.state) {
+    placeholders = [
+      location.state._id,
+      location.state.name,
+      location.state.dateJoined,
+      location.state.phone,
+      location.state.email,
+      location.state.isGold,
+      location.state.points,
+    ];
+  }
   return (
     <React.Fragment>
-      <h1>{location.state.name}</h1>
-      <p>Member Since {location.state.dateJoined}</p>
-      <p>Phone Number: {location.state.phone}</p>
-      <p>Email: {location.state.email}</p>
-      <p>Gold Member: {location.state.isGold.toString()}</p>
-      <p>Rewards Points: {location.state.points}</p>
-      <br />
+      <CustomerForm placeholders={placeholders} />
       <Link to="/customers">
         <button type="buton" className="btn btn-success">
           Save
