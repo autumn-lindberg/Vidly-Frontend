@@ -108,6 +108,11 @@ class Products extends Component {
     }
     return (
       <React.Fragment>
+        {!this.context.user || JSON.stringify(this.context.user) === "{}" ? (
+          <Navigate to="/login" />
+        ) : (
+          console.log("")
+        )}
         <ToastContainer />
         <div className="ms-4 d-flex justify-content-between">
           <div className="title">
@@ -178,12 +183,6 @@ class Products extends Component {
             currentPage={currentPage}
           />
         </div>
-        {!this.context.user ||
-        JSON.stringify(this.context.user.name) === "{}" ? (
-          <Navigate to="/login" />
-        ) : (
-          console.log("")
-        )}
       </React.Fragment>
     );
   }

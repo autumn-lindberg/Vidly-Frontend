@@ -8,13 +8,13 @@ import HorizontalDivider from "./common/horizontalDivider";
 import UserContext from "./../UserContext";
 
 // This component creates a specific configuration of a bootstrap navigation
-// It includes 4 links and a dropdown menu with 3 options
 // Some other time I may refactor to work with any number of configurations
 
 const NavBar = () => {
   const userContext = useContext(UserContext);
   const [navigate, setNavigate] = useState(false);
   const resetNavigate = async () => {
+    setNavigate(true);
     setTimeout(1000);
     setNavigate(false);
   };
@@ -24,7 +24,6 @@ const NavBar = () => {
     if (localStorage.getItem("g_state")) localStorage.removeItem("g_state");
     // remove user from context
     userContext.handleLogout();
-    setNavigate(true);
     resetNavigate();
   };
   return (
@@ -80,23 +79,6 @@ const NavBar = () => {
                 //<NavItemDropdown mainItem={main} dropdowns={dropdownMenus} />
               }
             </ul>
-            {
-              // SEARCH BAR
-            }
-            <form className="d-flex me-4">
-              <input
-                className="navSearchBar form-control me-2 border border-dark input-lg"
-                type="search"
-                placeholder="Search..."
-                aria-label="Search"
-              />
-              <button
-                className="btn btn-primary btn-lg border-dark"
-                type="submit"
-              >
-                <i class="bi-search h3 test text-dark"></i>
-              </button>
-            </form>
             {
               // PROFILE LOGIN BUTTON
             }

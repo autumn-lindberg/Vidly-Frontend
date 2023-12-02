@@ -51,6 +51,8 @@ class LoginForm extends Form {
         // set context
         this.context.handleLogin(user);
         this.setState({ navigate: true });
+        setTimeout(1000);
+        this.setState({ navigate: false });
       }
     } catch (exception) {
       console.log(exception);
@@ -140,7 +142,6 @@ class LoginForm extends Form {
               toast("Login Failed");
             }}
           />
-          ;
         </div>
         {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
       </React.Fragment>

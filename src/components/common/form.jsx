@@ -19,7 +19,7 @@ class Form extends Component {
     for (let item of error.details) {
       // each "item" (entried in the details prop) has a message and a path
       // path[0] is the name of the culprit that caused error
-      // take the input's name and use it to create a property in our errors array
+      // take the input's name and use it to create a property in our errors object
       errors[item.path[0]] = item.message;
     }
     return errors;
@@ -72,6 +72,8 @@ class Form extends Component {
     return (
       // SUBMIT BUTTON
       // this.validate() is truthy when not empty, and null (empty) is falsey
+      // if placeholders, don't bother with validation because it works wonky
+      // data in inputs is coming from props not state, so theres nothing to validate
       <button
         disabled={this.validate()}
         type="submit"

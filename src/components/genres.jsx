@@ -10,8 +10,11 @@ import httpService from "../services/httpservice";
 import config from "../config.json";
 import "react-toastify/dist/ReactToastify.css";
 import { filterGenres } from "../utils/filterGenres";
+import { Navigate } from "react-router-dom";
+import UserContext from "../UserContext";
 
 class Genres extends Component {
+  static contextType = UserContext;
   // title are so that table can be re-used from movie table
   state = {
     genres: [],
@@ -105,6 +108,11 @@ class Genres extends Component {
     }
     return (
       <React.Fragment>
+        {!this.context.user || JSON.stringify(this.context.user) === "{}" ? (
+          <Navigate to="/login" />
+        ) : (
+          console.log("")
+        )}
         <ToastContainer />
         <div className="ms-4 d-flex justify-content-between">
           <div className="title">

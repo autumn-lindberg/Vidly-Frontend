@@ -9,8 +9,11 @@ import httpService from "../services/httpservice";
 import config from "../config.json";
 import "react-toastify/dist/ReactToastify.css";
 import { filterRentals } from "../utils/filterRentals";
+import UserContext from "../UserContext";
+import { Navigate } from "react-router-dom";
 
 class Rentals extends Component {
+  static contextType = UserContext;
   // title are so that table can be re-used from movie table
   state = {
     rentals: [],
@@ -117,6 +120,11 @@ class Rentals extends Component {
     }
     return (
       <React.Fragment>
+        {!this.context.user || JSON.stringify(this.context.user) === "{}" ? (
+          <Navigate to="/login" />
+        ) : (
+          console.log("")
+        )}
         <ToastContainer />
         <div className="title">
           <h1>Rentals List</h1>

@@ -10,8 +10,11 @@ import httpService from "../services/httpservice";
 import config from "../config.json";
 import "react-toastify/dist/ReactToastify.css";
 import { filterCustomers } from "../utils/filterCustomers";
+import UserContext from "../UserContext";
+import { Navigate } from "react-router-dom";
 
 class Customers extends Component {
+  static contextType = UserContext;
   // title are so that table can be re-used from movie table
   state = {
     customers: [],
@@ -105,6 +108,11 @@ class Customers extends Component {
     }
     return (
       <React.Fragment>
+        {!this.context.user || JSON.stringify(this.context.user) === "{}" ? (
+          <Navigate to="/login" />
+        ) : (
+          console.log("")
+        )}
         <ToastContainer />
         <div className="ms-4 d-flex justify-content-between">
           <div className="title">
