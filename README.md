@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# Vidly-Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Summary:
 
-## Available Scripts
+Vidly frontend is a react app created using create-react-app, an npm package that generates all necessary files and dependencies to start a basic react project.
 
-In the project directory, you can run:
+## Workflow:
 
-### `npm start`
+- Figma (design)
+- create-react-app (npm package for creating base files)
+- React 16/18
+  - React 18 used for most components
+  - React 16 used mainly for inheritance use (explained later)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## To-Do and Next Steps (see "projects" tab in repo)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- [ ] Fix the known issues
 
-### `npm test`
+## Known Issues
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [ ] "Save" upon editing throws error
+  - Likely due to Axios trying to load page before request is completed?
+- [ ] New Product Upload - base64 is not decoding correctly, so image is not displayed
+  - Seed images work just fine
 
-### `npm run build`
+## Dependencies
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- @react-oauth/google
+- @testing-library/jest-dom
+- axios **(requests to server)**
+- bootstrap
+- bootstrap-icons
+- bson-objectid **(creating ObjectID before requests are sent to server)**
+- dotenv
+- font-awesome
+- joi **(form validation)**
+- joi-browser **(form validation)**
+- lodash **(utility functions)**
+- react
+- react-dom
+- reat-file-base64 **(converting uploaded images to buffer)**
+- react-router-dom
+- react-scripts
+- react-toastify **(display toast notifications)**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Organization:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- node_modules
+  - y'all know that this is
+- public
+  - favicon stored here
+  - index.html
+    - meta tags
+    - google fonts
+    - anything else that would normally belong inside `<head>` in an HTML file
+- src
+  - components
+    - common
+      - simple icon elements like `<Heart/>`, `<ViewIcon/>`, and `<RentIcon/>`
+      - form.jsx, which holds functions to validate a form and render form elements **(to be inherited by something like `<LoginForm/>` element)**
+    - all other components you see on the app, for example:
+      - `<NavBar/>`
+      - `<Movies/>`
+      - `<Genres/>`
+      - `<Customers/>`
+      - `<Products/>`
+  - img
+    - film-reel.svg **(for logo)**
+    - profile-user.svg **(bootstrap icons wasn't big enough for my taste)**
+  - services
+    - `movieService.js`, `genreService.js`, `productService.js`, and `customerService.js` have functions to grab data for their respective pages
+    - httpService gives aliases to axios functions in case you want to change libraries
+  - utils
+    - filtering functions for each dataset
+    - generic pagination function
+  - App.js **(main component)**
+    - context for app
+    - routing
+  - App.css **(styles for whole project)**
+    -index.js **(root component)**
+  - .gitignore
+    - node_modules because **LARGE**
+  - dockerfile
+  - readme.md
