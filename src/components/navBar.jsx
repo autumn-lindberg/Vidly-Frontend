@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { Link, NavLink } from "react-router-dom";
-import logo from "../img/film-reel.svg";
-import profile from "../img/profile-user.svg";
+import logo from "../img/film-reel.png";
+import profile from "../img/profile-user.png";
+import profileHover from "../img/profile-user-hover.png";
 import NavItem from "./common/navItem";
 import HorizontalDivider from "./common/horizontalDivider";
 import UserContext from "./../UserContext";
@@ -28,7 +29,7 @@ const NavBar = () => {
   };
   return (
     <React.Fragment>
-      <nav className="navbar navbar-expand-lg navbar-light myNav">
+      <nav className="navbar navbar-expand-lg navbar-light myNav pt-1 pb-1">
         <div className="container-fluid">
           {
             // Main Logo
@@ -36,13 +37,13 @@ const NavBar = () => {
           <NavLink to="/">
             <img
               src={logo}
-              className="navbar-brand me-0"
-              width={100}
-              height={100}
+              className="navbar-brand me-0 ms-4"
+              width={80}
+              height={90}
               alt="logo"
             />
           </NavLink>
-          <h1 className="text-dark me-5">Vidly.</h1>
+          <h1 className="h2 fw-bold me-5 vidly-text">Vidly.</h1>
           {
             // Bootstrap mobile nav hamburger menu button
           }
@@ -82,7 +83,7 @@ const NavBar = () => {
             {
               // PROFILE LOGIN BUTTON
             }
-            <div class="dropdown-center">
+            <div className="dropdown-center">
               <button
                 className="btn bg-transparent dropdown-toggle border-0"
                 type="button"
@@ -90,22 +91,37 @@ const NavBar = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img src={profile} width={65} height={65} alt="profile icon" />
+                <div className="figure">
+                  <img
+                    className="image-main"
+                    src={profile}
+                    width={65}
+                    height={65}
+                    alt="profile icon"
+                  />
+                  <img
+                    className="image-hover"
+                    src={profileHover}
+                    width={65}
+                    height={65}
+                    alt="profile icon"
+                  />
+                </div>
               </button>
               <ul
-                class="dropdown-menu text-center border-dark"
+                className="dropdown-menu text-center border-light"
                 aria-labelledby="dropdownMenuButton1"
               >
                 {!userContext.user.name ||
                 userContext.user.name.length === 0 ? (
                   <div>
                     <li className="pt-3">
-                      <Link to="/login" class="dropdown-item h4">
+                      <Link to="/login" className="dropdown-item h4">
                         Login
                       </Link>
                     </li>
-                    <li className="mb-4">
-                      <Link to="/register" class="dropdown-item h4">
+                    <li className="mb-3">
+                      <Link to="/register" className="dropdown-item h4">
                         Register
                       </Link>
                     </li>
@@ -121,7 +137,7 @@ const NavBar = () => {
                   <div>
                     <HorizontalDivider />
                     <li className="mb-4">
-                      <div class="dropdown-item h4">
+                      <div className="dropdown-item h4">
                         <button onClick={onLogout} className="btn btn-danger">
                           Logout
                         </button>

@@ -9,6 +9,7 @@ Axios.interceptors.response.use(null, (error) => {
     toast(`Error ${response.status}`);
     return Promise.reject(error);
   } else {
+    console.log(error);
     toast("An Unexpected Error Occurred");
     return Promise.reject(error);
   }

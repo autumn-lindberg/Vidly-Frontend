@@ -17,17 +17,17 @@ class CustomerTable extends Component {
   columns = [
     { path: "name", label: "Name" },
     {
-      key: "view",
+      key: "Edit",
       content: (customer) => <ViewIcon customer={customer} />,
     },
     {
-      key: "rent",
+      key: "Rent",
       content: (customer) => (
         <RentIcon customer={customer} movies={this.state.movies} />
       ),
     },
     {
-      key: "delete",
+      key: "Delete",
       // content is a function that takes in a customer and uses that to pass it to onDelete handler
       // onDelete is passed in by props from components/customers.jsx as handleDelete()
       content: (customer) => (

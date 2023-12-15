@@ -151,13 +151,13 @@ class Movies extends Component {
     return (
       // react fragment because encasing div is not the job of this table
       <React.Fragment>
-        {!this.context.user || JSON.stringify(this.context.user) === "{}" ? (
+        {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
           console.log("")
         )}
         <ToastContainer />
-        <div class="titleAndButton d-flex justify-content-start">
+        <div className="titleAndButton d-flex justify-content-start">
           <div className="addButtonModal">
             <button
               type="button"
@@ -169,26 +169,26 @@ class Movies extends Component {
             </button>
 
             <div
-              class="modal fade"
+              className="modal fade"
               id="exampleModal"
-              tabindex="-1"
+              tabIndex="-1"
               aria-labelledby="exampleModalLabel"
               aria-hidden="true"
             >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">
                       New Movie
                     </h5>
                     <button
                       type="button"
-                      class="btn-close"
+                      className="btn-close"
                       data-bs-dismiss="modal"
                       aria-label="Close"
                     ></button>
                   </div>
-                  <div class="modal-body">
+                  <div className="modal-body">
                     <MovieForm genres={this.state.genres} />
                   </div>
                 </div>

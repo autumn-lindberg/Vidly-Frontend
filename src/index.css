@@ -1,6 +1,17 @@
 :root {
-  --color-one: hsla(216, 69%, 59%, 0.75);
-  --color-two: hsla(229, 72%, 86%, 1);
+  --color-one: #9671ff;
+  --color-two: #703ffe;
+  --color-three: #4b2e9e;
+  --color-four: #3f2b75;
+  --white: #fff;
+  --black: #000;
+  --ff-primary: "Lato", sans-serif;
+
+  --fw-primary: 300;
+  --fw-thin: 100;
+  --fw-semi-bold: 400;
+  --fw-bold: 500;
+
   --dark-text: #{$dark};
 }
 
@@ -11,9 +22,7 @@ code {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--ff-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -21,24 +30,58 @@ body {
 .myNav {
   background-color: var(--color-one);
 }
-
-.navSearchBar {
-  background-color: var(--color-two) !important;
+.vidly-text {
+  color: var(--white) !important;
+  transform: translateY(-10px) translateX(-5px);
 }
-.navSearchBar::placeholder {
-  color: var(--dark-text) !important;
+.nav-link,
+.dropdown-item {
+  color: var(--white) !important;
+  font-weight: var(--fw-thin) !important;
+}
+.nav-link:hover,
+.dropdown-item:hover {
+  color: var(--color-three) !important;
+  background-color: transparent !important;
+}
+.navbar-nav .show > .nav-link,
+.navbar-nav .nav-link.active {
+  color: var(--color-four) !important;
+  font-weight: var(--fw-semi-bold) !important;
+}
+.figure {
+  position: relative;
+  max-width: 100%;
+}
+.figure img.image-hover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.figure:hover img.image-hover {
+  opacity: 1;
 }
 
 .spacer {
-  width: 5% !important;
+  width: 2% !important;
 }
-
 .dropdown-menu {
-  transform: translateX(-1vw);
-  background-color: var(--color-two) !important;
+  transform: translateX(-50px);
+  border-radius: 1% !important;
+  border: 2px solid var(--white) !important;
+  background-color: var(--color-one) !important;
 }
 .dropdown-toggle::after {
   margin-left: 0.275em !important;
+  color: var(--white) !important;
+}
+.dropdown-toggle:hover::after {
+  color: #ded !important;
 }
 
 .hoverLink:hover {

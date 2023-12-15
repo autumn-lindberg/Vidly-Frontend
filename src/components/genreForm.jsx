@@ -57,7 +57,7 @@ class GenreForm extends Form {
             }
             <button
               type="button"
-              class="btn btn-danger ms-2"
+              className="btn btn-danger ms-2"
               data-bs-dismiss="modal"
               aria-label="Close"
             >

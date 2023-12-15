@@ -71,9 +71,7 @@ class Form extends Component {
   renderButton(label, classes = "btn btn-primary") {
     return (
       // SUBMIT BUTTON
-      // this.validate() is truthy when not empty, and null (empty) is falsey
-      // if placeholders, don't bother with validation because it works wonky
-      // data in inputs is coming from props not state, so theres nothing to validate
+      // this.validate() is truthy when there is an error, and falsey when there is not
       <button
         disabled={this.validate()}
         type="submit"
@@ -107,17 +105,17 @@ class Form extends Component {
   // renders a single radio button with a label
   renderRadioButton(name, label, group, handleRadioChange) {
     return (
-      <div class="form-check" key={label}>
+      <div className="form-check" key={label}>
         {}
         <input
-          class="form-check-input"
+          className="form-check-input"
           type="radio"
           name={group}
           id={name}
           value={name}
           onChange={handleRadioChange}
         />
-        <label class="form-check-label" for={name}>
+        <label className="form-check-label" for={name}>
           {label}
         </label>
       </div>
@@ -126,18 +124,18 @@ class Form extends Component {
 
   renderFileUpload(handleFileUpload) {
     return (
-      <div class="mb-3">
-        <label for="formFile" class="form-label">
+      <div className="mb-3">
+        <label for="formFile" className="form-label">
           Thumbnail Photo
         </label>
         <input
-          class="form-control"
+          className="form-control"
           type="file"
           id="formFile"
           onChange={handleFileUpload}
           required={true}
         />
-        <div class="invalid-feedback">Thumbnail Is Required.</div>
+        <div className="invalid-feedback">Thumbnail Is Required.</div>
       </div>
     );
   }

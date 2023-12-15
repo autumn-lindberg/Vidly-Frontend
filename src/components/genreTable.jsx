@@ -7,48 +7,48 @@ class GenreTable extends Component {
   columns = [
     { path: "name", label: "Name" },
     {
-      key: "delete",
+      key: "Delete",
       // content is a function that takes in a customer and uses that to pass it to onDelete handler
       // onDelete is passed in by props from components/customers.jsx as handleDelete()
       content: (customer) => (
         <React.Fragment>
           <button
             type="button"
-            class="btn btn-danger"
+            className="btn btn-danger"
             data-bs-toggle="modal"
             data-bs-target="#confirm"
           >
             Delete
           </button>
-          <div class="modal fade" tabindex="-1" id="confirm">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Delete Genre</h5>
+          <div className="modal fade" tabIndex="-1" id="confirm">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Delete Genre</h5>
                   <button
                     type="button"
-                    class="btn-close"
+                    className="btn-close"
                     data-bs-dismiss="modal"
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="modal-body">
+                <div className="modal-body">
                   <p>
                     Are you sure you want to delete this genre? It cannot be
                     undone.
                   </p>
                 </div>
-                <div class="modal-footer">
+                <div className="modal-footer">
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     data-bs-dismiss="modal"
                   >
                     Cancel & Go Back
                   </button>
                   <button
                     type="button"
-                    class="btn btn-danger"
+                    className="btn btn-danger"
                     onClick={() => this.props.onDelete(customer)}
                   >
                     Delete This Genre
