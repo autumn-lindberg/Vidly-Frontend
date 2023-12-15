@@ -16,7 +16,7 @@ const ViewIcon = ({ customer }) => {
           points: customer.points,
         }}
       >
-        <i className="bi-box-arrow-up-right h2 text-dark hoverLink"></i>
+        <i className="bi-pencil h2 text-dark hoverLink"></i>
       </Link>
     </React.Fragment>
   );

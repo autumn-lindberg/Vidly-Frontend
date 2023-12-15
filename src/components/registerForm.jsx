@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import Form from "./common/form";
-import logo from "../img/film-reel.svg";
+import logo from "../img/film-reel.png";
 import httpService from "../services/httpservice";
 import config from "../config.json";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,6 +25,10 @@ class RegisterForm extends Form {
     email: Joi.string().required().label("Email"),
     password: Joi.string().required().label("Password"),
   };
+
+  componentDidMount() {
+    if (localStorage.getItem("token")) this.setState({ navigate: true });
+  }
 
   doSubmit = async () => {
     // duplicate the state
@@ -98,7 +102,7 @@ class RegisterForm extends Form {
             {
               // CHECK BOX
             }
-            <div class="mb-3 form-check">
+            <div className="mb-3 form-check">
               <input
                 type="checkbox"
                 id="confirm"

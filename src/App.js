@@ -42,7 +42,7 @@ function App() {
           handleRegister: handleRegister,
         }}
       >
-        <div class="bg-light">
+        <div className="bg-light">
           <NavBar />
           <main className="container">
             <Routes>
@@ -50,11 +50,17 @@ function App() {
               <Route path="/login" element={<LoginForm />} />
               <Route path="/register" element={<RegisterForm />} />
               <Route path="/movies" element={<Movies />} />
+              {
+                // route movies/:id to MovieDetails
+              }
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetails />} />
               <Route path="/customers" element={<Customers />} />
               <Route path="/customers/:id" element={<CustomerDetails />} />
               <Route path="/genres" element={<Genres />} />
+              {
+                // route genres/:id to GenreDetails
+              }
               <Route path="/rentals" element={<Rentals />} />
               <Route path="/rent/:id" element={<NewRental />} />
               <Route path="*" element={<NotFound />} />

@@ -120,7 +120,7 @@ class Rentals extends Component {
     }
     return (
       <React.Fragment>
-        {!this.context.user || JSON.stringify(this.context.user) === "{}" ? (
+        {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
           console.log("")

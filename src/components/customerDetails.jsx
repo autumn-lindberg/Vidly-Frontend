@@ -5,17 +5,17 @@ import CustomerForm from "./customerForm";
 const CustomerDetails = () => {
   //const routeParams = useParams();
   const location = useLocation();
-  let placeholders = ["", "", "", "", "", "", ""];
+  let placeholders;
   if (location.state) {
-    placeholders = [
-      location.state._id,
-      location.state.name,
-      location.state.dateJoined,
-      location.state.phone,
-      location.state.email,
-      location.state.isGold,
-      location.state.points,
-    ];
+    placeholders = {
+      _id: location.state._id,
+      name: location.state.name,
+      dateJoined: location.state.dateJoined,
+      phone: location.state.phone,
+      email: location.state.email,
+      isGold: location.state.isGold,
+      points: location.state.points,
+    };
   }
   return (
     <React.Fragment>

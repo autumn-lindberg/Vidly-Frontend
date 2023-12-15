@@ -27,7 +27,7 @@ class MovieList extends Component {
       content: (movie) => <Heart liked={movie.liked} />,
     },
     {
-      key: "select",
+      key: "Select",
       // content is a function that takes in a movie and uses that to pass it to onDelete handler
       // onDelete is passed in by props from components/movies.jsx as handleDelete()
       content: (movie) => (

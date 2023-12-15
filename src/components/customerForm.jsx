@@ -12,11 +12,17 @@ const ObjectId = require("bson-objectid");
 class CustomerForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
-    data: {
-      name: this.props.placeholders ? this.props.placeholders[1] : "",
-      phone: this.props.placeholders ? this.props.placeholders[3] : "",
-      email: this.props.placeholders ? this.props.placeholders[4] : "",
-    },
+    data: this.props.placeholders
+      ? {
+          name: this.props.placeholders.name,
+          phone: this.props.placeholders.phone,
+          email: this.props.placeholders.email,
+        }
+      : {
+          name: "",
+          phone: "",
+          email: "",
+        },
     errors: {},
     navigate: false,
   };
@@ -35,22 +41,20 @@ class CustomerForm extends Form {
     email: Joi.string().required().label("Email"),
   };
 
+  componendDidMount() {
+    if (this.props.placeholders) {
+      console.log("placeholders found");
+      const { placeholders } = this.props;
+      this.setState({ data: placeholders });
+    }
+  }
+
   // form.jsx component requires the submit function to be called doSubmit
   doSubmit = async () => {
-    let customer;
-    let placehold = true;
-    const { placeholders } = this.props;
-    // i feel like 4 is enough. fix this garbo, turn it into an object!!
-    if (
-      placeholders[0] === "" &&
-      placeholders[1] === "" &&
-      placeholders[2] === "" &&
-      placeholders[3] === ""
-    )
-      placehold = false;
+    // copy data from state
     const data = { ...this.state.data };
-    if (!placehold) {
-      customer = {
+    if (!this.props.placeholders) {
+      const customer = {
         _id: ObjectId(),
         name: data.name,
         dateJoined: Date.now(),
@@ -59,47 +63,47 @@ class CustomerForm extends Form {
         isGold: false,
         points: 0,
       };
-    } else {
-      customer = {
-        _id: placeholders[0],
-        name: data.name,
-        dateJoined: placeholders[2],
-        phone: data.phone,
-        email: data.email,
-        isGold: placeholders[5],
-        points: placeholders[6],
-      };
-    }
-
-    try {
-      if (!placehold) {
+      try {
         const response = await httpService.post(
           `${config.apiEndpoint}/customers`,
           customer
         );
         toast(response.status);
-      } else {
+      } catch (exception) {
+        console.log(exception);
+      }
+    } else {
+      const customer = {
+        _id: this.props.placeholders._id,
+        name: data.name,
+        dateJoined: this.props.placeholders.dateJoined,
+        phone: data.phone,
+        email: data.email,
+        isGold: this.props.placeholders.isGold,
+        points: this.props.placeholders.points,
+      };
+      try {
         const response = await httpService.put(
-          `${config.apiEndpoint}/customers/${this.props.placeholders[0]}`,
+          `${config.apiEndpoint}/customers/${this.props.placeholders._id}`,
           customer
         );
-        this.setState({ navigate: true });
-        setTimeout(5000);
         toast(response.status);
+        this.setState({ navigate: true });
+      } catch (exception) {
+        console.log(exception);
       }
-    } catch (exception) {
-      console.log(exception);
     }
   };
 
   render() {
     return (
       <div classtype="container">
+        {this.state.navigate ? <Navigate to="/customers" /> : console.log("")}
         {
           // Submission handler
           // if validation not required skip to do submit
         }
-        <form onSubmit={this.doSubmit}>
+        <form onSubmit={this.handleSubmit}>
           {
             // inputs
           }
@@ -114,7 +118,7 @@ class CustomerForm extends Form {
             }
             <button
               type="button"
-              class="btn btn-danger ms-2"
+              className="btn btn-danger ms-2"
               data-bs-dismiss="modal"
               aria-label="Close"
             >
@@ -122,7 +126,6 @@ class CustomerForm extends Form {
             </button>
           </div>
         </form>
-        {this.state.navigate ? <Navigate to="/customers" /> : console.log("")}
       </div>
     );
   }
