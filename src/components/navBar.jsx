@@ -5,7 +5,6 @@ import logo from "../img/film-reel.png";
 import profile from "../img/profile-user.png";
 import profileHover from "../img/profile-user-hover.png";
 import NavItem from "./common/navItem";
-import HorizontalDivider from "./common/horizontalDivider";
 import UserContext from "./../UserContext";
 
 // This component creates a specific configuration of a bootstrap navigation
@@ -43,7 +42,9 @@ const NavBar = () => {
               alt="logo"
             />
           </NavLink>
-          <h1 className="h2 fw-bold me-5 vidly-text">Vidly.</h1>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <h1 className="h2 fw-bold me-5 vidly-text">Vidly.</h1>
+          </Link>
           {
             // Bootstrap mobile nav hamburger menu button
           }
@@ -127,23 +128,19 @@ const NavBar = () => {
                     </li>
                   </div>
                 ) : (
-                  <li className="p-2">
-                    <h3>Welcome,</h3>
-                    <br />
+                  <li className="p-3 user-name-text">
+                    <h3>Welcome</h3>
                     <h4>{userContext.user.name}</h4>
                   </li>
                 )}
                 {userContext.user.name && userContext.user.name.length !== 0 ? (
-                  <div>
-                    <HorizontalDivider />
-                    <li className="mb-4">
-                      <div className="dropdown-item h4">
-                        <button onClick={onLogout} className="btn btn-danger">
-                          Logout
-                        </button>
-                      </div>
-                    </li>
-                  </div>
+                  <li className="mb-3">
+                    <div className="dropdown-item h4">
+                      <button onClick={onLogout} className="btn btn-primary">
+                        Logout
+                      </button>
+                    </div>
+                  </li>
                 ) : (
                   <br />
                 )}
@@ -153,7 +150,6 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
-      <br />
       {navigate ? <Navigate to="/login" /> : console.log("")}
     </React.Fragment>
   );

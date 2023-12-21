@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import GenreTable from "./genreTable";
 import GenreForm from "./genreForm";
+import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getGenres } from "../services/genreService";
@@ -107,89 +108,92 @@ class Genres extends Component {
       message = numberOfGenres + " genres in system";
     }
     return (
-      <React.Fragment>
+      <>
         {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
           console.log("")
         )}
-        <ToastContainer />
-        <div className="ms-4 d-flex justify-content-between">
-          <div className="title">
-            <h1>Genres List</h1>
-            <h3>{message}</h3>
-          </div>
-          <form className="d-flex me-4">
-            <input
-              className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
-              type="search"
-              placeholder="Search genres"
-              aria-label="Search"
-              onChange={this.handleSearch}
-            />
-          </form>
-          <div className="titleAndButton d-flex">
-            <div className="addButtonModal">
-              <button
-                type="button"
-                className="btn btn-primary addButton p-3 h3 me-4 mt-2"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-              >
-                <div className="h4 ps-2 pe-2">[+] New Genre</div>
-              </button>
+        <div className="page-container">
+          <ToastContainer />
+          <div className="ms-4 d-flex justify-content-between">
+            <div className="title">
+              <h1>Genres List</h1>
+              <h3>{message}</h3>
+            </div>
+            <form className="d-flex me-4">
+              <input
+                className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+                type="search"
+                placeholder="Search genres"
+                aria-label="Search"
+                onChange={this.handleSearch}
+              />
+            </form>
+            <div className="titleAndButton d-flex">
+              <div className="addButtonModal">
+                <button
+                  type="button"
+                  className="btn btn-primary addButton p-3 h3 me-4 mt-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  <div className="h4 ps-2 pe-2">[+] New Genre</div>
+                </button>
 
-              <div
-                className="modal fade"
-                id="exampleModal"
-                tabIndex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">
-                        New Customer
-                      </h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className="modal-body">
-                      <GenreForm />
+                <div
+                  className="modal fade"
+                  id="exampleModal"
+                  tabIndex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          New Customer
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <GenreForm />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <br />
-        <div className="row">
-          <div className="col">
-            <GenreTable
-              genres={filtered}
-              onSort={this.onSort}
-              sortColumn={this.state.sortColumn}
-              onDelete={this.handleDelete}
-              onLike={this.handleLike}
-            />
-            {
-              // name of prop is still numberOfMovies because it's being reused
-            }
-            <Pagination
-              numberOfMovies={numberOfGenres}
-              onPageChange={this.handlePageChange}
-              pageSize={pageSize}
-              currentPage={currentPage}
-            />
+          <br />
+          <div className="row">
+            <div className="col">
+              <GenreTable
+                genres={filtered}
+                onSort={this.onSort}
+                sortColumn={this.state.sortColumn}
+                onDelete={this.handleDelete}
+                onLike={this.handleLike}
+              />
+              {
+                // name of prop is still numberOfMovies because it's being reused
+              }
+              <Pagination
+                numberOfMovies={numberOfGenres}
+                onPageChange={this.handlePageChange}
+                pageSize={pageSize}
+                currentPage={currentPage}
+              />
+            </div>
           </div>
         </div>
-      </React.Fragment>
+        <Footer />
+      </>
     );
   }
 }

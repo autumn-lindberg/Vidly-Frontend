@@ -3,6 +3,7 @@ import { getMovies } from "../services/movieService";
 import { getGenres } from "../services/genreService";
 import httpService from "../services/httpservice";
 import config from "../config.json";
+import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./listGroup";
@@ -149,94 +150,96 @@ class Movies extends Component {
       message = numberOfMovies + " movies available for rent";
     }
     return (
-      // react fragment because encasing div is not the job of this table
-      <React.Fragment>
-        {!localStorage.getItem("token") ? (
-          <Navigate to="/login" />
-        ) : (
-          console.log("")
-        )}
-        <ToastContainer />
-        <div className="titleAndButton d-flex justify-content-start">
-          <div className="addButtonModal">
-            <button
-              type="button"
-              className="btn btn-primary addButton p-3 h3 me-4 mt-2"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              <div className="h4 ps-2 pe-2">[+] New Movie</div>
-            </button>
+      <>
+        <div className="page-container">
+          {!localStorage.getItem("token") ? (
+            <Navigate to="/login" />
+          ) : (
+            console.log("")
+          )}
+          <ToastContainer />
+          <div className="titleAndButton d-flex justify-content-start">
+            <div className="addButtonModal">
+              <button
+                type="button"
+                className="btn btn-primary addButton p-3 h3 me-4 mt-2"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                <div className="h4 ps-2 pe-2">[+] New Movie</div>
+              </button>
 
-            <div
-              className="modal fade"
-              id="exampleModal"
-              tabIndex="-1"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">
-                      New Movie
-                    </h5>
-                    <button
-                      type="button"
-                      className="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div className="modal-body">
-                    <MovieForm genres={this.state.genres} />
+              <div
+                className="modal fade"
+                id="exampleModal"
+                tabIndex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalLabel">
+                        New Movie
+                      </h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div className="modal-body">
+                      <MovieForm genres={this.state.genres} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="ms-2 d-flex justify-content-between flex-grow-1">
-            <div className="title">
-              <h1>Movies List</h1>
-              <h3>{message}</h3>
+            <div className="ms-2 d-flex justify-content-between flex-grow-1">
+              <div className="title">
+                <h1>Movies List</h1>
+                <h3>{message}</h3>
+              </div>
+              <form className="d-flex me-4">
+                <input
+                  className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+                  type="search"
+                  placeholder="Search Movies"
+                  aria-label="Search"
+                  onChange={this.handleSearch}
+                />
+              </form>
             </div>
-            <form className="d-flex me-4">
-              <input
-                className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
-                type="search"
-                placeholder="Search Movies"
-                aria-label="Search"
-                onChange={this.handleSearch}
+          </div>
+          <br />
+          <div className="row">
+            <div className="col-2 listGroup">
+              <ListGroup
+                genres={this.state.genres}
+                currentGenre={this.state.currentGenre}
+                onGenreChange={this.handleGenreChange}
               />
-            </form>
+            </div>
+            <div className="col">
+              <MovieTable
+                movies={filtered}
+                onSort={this.onSort}
+                sortColumn={this.state.sortColumn}
+                onDelete={this.handleDelete}
+                onLike={this.handleLike}
+              />
+              <Pagination
+                numberOfMovies={numberOfMovies}
+                onPageChange={this.handlePageChange}
+                pageSize={pageSize}
+                currentPage={currentPage}
+              />
+            </div>
           </div>
         </div>
-        <br />
-        <div className="row">
-          <div className="col-2 listGroup">
-            <ListGroup
-              genres={this.state.genres}
-              currentGenre={this.state.currentGenre}
-              onGenreChange={this.handleGenreChange}
-            />
-          </div>
-          <div className="col">
-            <MovieTable
-              movies={filtered}
-              onSort={this.onSort}
-              sortColumn={this.state.sortColumn}
-              onDelete={this.handleDelete}
-              onLike={this.handleLike}
-            />
-            <Pagination
-              numberOfMovies={numberOfMovies}
-              onPageChange={this.handlePageChange}
-              pageSize={pageSize}
-              currentPage={currentPage}
-            />
-          </div>
-        </div>
-      </React.Fragment>
+        <Footer />
+      </>
     );
   }
 }

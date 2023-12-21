@@ -44,7 +44,7 @@ function App() {
       >
         <div className="bg-light">
           <NavBar />
-          <main className="container">
+          <main className="container-fluid pt-0 ps-0 pe-0">
             <Routes>
               <Route index element={<Home />}></Route>
               <Route path="/login" element={<LoginForm />} />

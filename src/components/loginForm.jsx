@@ -1,8 +1,9 @@
 import React from "react";
 import Form from "./common/form";
-import logo from "../img/film-reel.png";
+import logo from "../img/film-reel-purple.png";
 import httpService from "../services/httpservice";
 import config from "../config.json";
+import Footer from "./footer";
 import { ToastContainer, toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
 import UserContext from "../UserContext";
@@ -65,90 +66,95 @@ class LoginForm extends Form {
 
   render() {
     return (
-      <React.Fragment>
-        <ToastContainer />
-        <div classtype="container">
-          <h1 className="mb-4">
-            Login to{" "}
-            <img
-              className="ms-2"
-              src={logo}
-              width={60}
-              height={60}
-              alt="vidly logo icon"
-            />
-            Vidly.
-          </h1>
-          {
-            // Submission handler
-          }
-          <form onSubmit={this.handleSubmit}>
+      <>
+        <div className="page-container login-register-page">
+          <ToastContainer />
+          <div classtype="container">
+            <h1 className="mb-4 d-flex">
+              Login to{" "}
+              <div className="register-login-logo">
+                <img
+                  className="ms-2 vidly-icon"
+                  src={logo}
+                  width={60}
+                  height={60}
+                  alt="vidly logo icon"
+                />
+                <span className="logo-text h2 fw-bold">Vidly.</span>
+              </div>
+            </h1>
             {
-              // Email input
+              // Submission handler
             }
-            {this.renderInput("email", "Email")}
-            <div id="emailHelp" className="form-text mb-3">
-              We'll never share your email with anyone else.
-            </div>
-            {
-              // Password input
-            }
-            {this.renderInput("password", "Password", "password")}
-            {
-              // CHECK BOX
-            }
-            <div className="mb-3 form-check">
-              <input
-                type="checkbox"
-                id="confirm"
-                className="form-check-input"
-              />
-              <label
-                id="confirm"
-                className="form-check-label"
-                htmlFor="confirm"
-              >
-                I am not a robot
-              </label>
-            </div>
-            {
-              // renderButton is also part of "this" now
-              this.renderButton("Submit")
-            }
-          </form>
-          <br />
-          <GoogleLogin
-            onSuccess={async (credentialResponse) => {
-              const jwt = jwtDecode(credentialResponse.credential);
-              const user = {
-                email: jwt.email,
-                password: jwt.sub,
-              };
-              // send object to new user
-              const response = await httpService.post(
-                `${config.apiEndpoint}/login`,
-                user
-              );
-              toast(response.status);
-              if (response.status === 200) {
-                // store JWT
-                const token = response.headers["x-auth-token"];
-                localStorage.setItem("token", token);
-                // set context
-                const myContext = jwtDecode(token);
-                this.context.handleLogin(myContext);
-                this.setState({ navigate: true });
-              } else {
-                toast("Error occurred");
+            <form onSubmit={this.handleSubmit}>
+              {
+                // Email input
               }
-            }}
-            onError={() => {
-              toast("Login Failed");
-            }}
-          />
+              {this.renderInput("email", "Email")}
+              <div id="emailHelp" className="form-text mb-3">
+                We'll never share your email with anyone else.
+              </div>
+              {
+                // Password input
+              }
+              {this.renderInput("password", "Password", "password")}
+              {
+                // CHECK BOX
+              }
+              <div className="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  id="confirm"
+                  className="form-check-input"
+                />
+                <label
+                  id="confirm"
+                  className="form-check-label"
+                  htmlFor="confirm"
+                >
+                  I am not a robot
+                </label>
+              </div>
+              {
+                // renderButton is also part of "this" now
+                this.renderButton("Submit")
+              }
+            </form>
+            <br />
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                const jwt = jwtDecode(credentialResponse.credential);
+                const user = {
+                  email: jwt.email,
+                  password: jwt.sub,
+                };
+                // send object to new user
+                const response = await httpService.post(
+                  `${config.apiEndpoint}/login`,
+                  user
+                );
+                toast(response.status);
+                if (response.status === 200) {
+                  // store JWT
+                  const token = response.headers["x-auth-token"];
+                  localStorage.setItem("token", token);
+                  // set context
+                  const myContext = jwtDecode(token);
+                  this.context.handleLogin(myContext);
+                  this.setState({ navigate: true });
+                } else {
+                  toast("Error occurred");
+                }
+              }}
+              onError={() => {
+                toast("Login Failed");
+              }}
+            />
+          </div>
+          {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
         </div>
-        {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
-      </React.Fragment>
+        <Footer />
+      </>
     );
   }
 }

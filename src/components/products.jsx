@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ProductCard from "./productCard";
 import ProductForm from "./productForm";
+import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getProducts } from "../services/productService";
@@ -107,83 +108,86 @@ class Products extends Component {
       message = numberOfProducts + " products in system";
     }
     return (
-      <React.Fragment>
+      <>
         {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
           console.log("")
         )}
-        <ToastContainer />
-        <div className="ms-4 d-flex justify-content-between">
-          <div className="title">
-            <h1>products List</h1>
-            <h3>{message}</h3>
-          </div>
-          <form className="d-flex me-4">
-            <input
-              className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
-              type="search"
-              placeholder="Search products"
-              aria-label="Search"
-              onChange={this.handleSearch}
-            />
-          </form>
-          <div className="titleAndButton d-flex">
-            <div className="addButtonModal">
-              <button
-                type="button"
-                className="btn btn-primary addButton p-3 h3 me-4 mt-2"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-              >
-                <div className="h4 ps-2 pe-2">[+] New product</div>
-              </button>
+        <div className="page-container">
+          <ToastContainer />
+          <div className="ms-4 d-flex justify-content-between">
+            <div className="title">
+              <h1>products List</h1>
+              <h3>{message}</h3>
+            </div>
+            <form className="d-flex me-4">
+              <input
+                className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+                type="search"
+                placeholder="Search products"
+                aria-label="Search"
+                onChange={this.handleSearch}
+              />
+            </form>
+            <div className="titleAndButton d-flex">
+              <div className="addButtonModal">
+                <button
+                  type="button"
+                  className="btn btn-primary addButton p-3 h3 me-4 mt-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  <div className="h4 ps-2 pe-2">[+] New product</div>
+                </button>
 
-              <div
-                className="modal fade"
-                id="exampleModal"
-                tabIndex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">
-                        New product
-                      </h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className="modal-body">
-                      <ProductForm />
+                <div
+                  className="modal fade"
+                  id="exampleModal"
+                  tabIndex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          New product
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <ProductForm />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <br />
+          <div className="row">
+            {filtered.map((product) => {
+              return <ProductCard product={product} key={product.title} />;
+            })}
+            {
+              // name of prop is still numberOfMovies because it's being reused
+            }
+            <Pagination
+              numberOfMovies={numberOfProducts}
+              onPageChange={this.handlePageChange}
+              pageSize={pageSize}
+              currentPage={currentPage}
+            />
+          </div>
         </div>
-        <br />
-        <div className="row">
-          {filtered.map((product) => {
-            return <ProductCard product={product} key={product.title} />;
-          })}
-          {
-            // name of prop is still numberOfMovies because it's being reused
-          }
-          <Pagination
-            numberOfMovies={numberOfProducts}
-            onPageChange={this.handlePageChange}
-            pageSize={pageSize}
-            currentPage={currentPage}
-          />
-        </div>
-      </React.Fragment>
+        <Footer />
+      </>
     );
   }
 }

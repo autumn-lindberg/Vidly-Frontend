@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import RentalTable from "./rentalTable";
+import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getRentals } from "../services/rentalService";
@@ -119,48 +120,51 @@ class Rentals extends Component {
       message = numberOfRentals + " rentals in system";
     }
     return (
-      <React.Fragment>
+      <>
         {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
           console.log("")
         )}
-        <ToastContainer />
-        <div className="title">
-          <h1>Rentals List</h1>
-        </div>
-        <h3>{message}</h3>
-        <form className="d-flex me-4">
-          <input
-            className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
-            type="search"
-            placeholder="Search Rentals"
-            aria-label="Search"
-            onChange={this.handleSearch}
-          />
-        </form>
-        <br />
-        <div className="row">
-          <div className="col">
-            <RentalTable
-              rentals={filtered}
-              onSort={this.onSort}
-              sortColumn={this.state.sortColumn}
-              onReturn={this.onReturn}
-              onDelete={this.handleDelete}
+        <div className="page-container">
+          <ToastContainer />
+          <div className="title">
+            <h1>Rentals List</h1>
+          </div>
+          <h3>{message}</h3>
+          <form className="d-flex me-4">
+            <input
+              className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+              type="search"
+              placeholder="Search Rentals"
+              aria-label="Search"
+              onChange={this.handleSearch}
             />
-            {
-              // name of prop is still numberOfMovies because it's being reused
-            }
-            <Pagination
-              numberOfMovies={numberOfRentals}
-              onPageChange={this.handlePageChange}
-              pageSize={pageSize}
-              currentPage={currentPage}
-            />
+          </form>
+          <br />
+          <div className="row">
+            <div className="col">
+              <RentalTable
+                rentals={filtered}
+                onSort={this.onSort}
+                sortColumn={this.state.sortColumn}
+                onReturn={this.onReturn}
+                onDelete={this.handleDelete}
+              />
+              {
+                // name of prop is still numberOfMovies because it's being reused
+              }
+              <Pagination
+                numberOfMovies={numberOfRentals}
+                onPageChange={this.handlePageChange}
+                pageSize={pageSize}
+                currentPage={currentPage}
+              />
+            </div>
           </div>
         </div>
-      </React.Fragment>
+        <Footer />
+      </>
     );
   }
 }
