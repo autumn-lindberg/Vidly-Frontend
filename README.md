@@ -18,8 +18,9 @@ Vidly frontend is a react app created using create-react-app, an npm package tha
 
 ## Known Issues
 
-- [ ] "Save" upon editing throws error
-  - Likely due to Axios trying to load page before request is completed?
+- [x] "Save" upon editing throws error
+  - ~~Likely due to Axios trying to load page before request is completed?~~
+  - The wrong function was being called upon form submission, and default behavior (full page reload) was not being prevented. Axios trying to make a request while pages is reloading threw an error.
 - [ ] New Product Upload - base64 is not decoding correctly, so image is not displayed
   - Seed images work just fine
 
