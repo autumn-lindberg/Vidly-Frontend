@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import GenreEdit from "./common/genreEdit";
 import Table from "./common/table";
 
 class GenreTable extends Component {
@@ -6,6 +7,10 @@ class GenreTable extends Component {
   // path is the data's property name. components/tableBody.jsx uses this to access the data inside each customer object
   columns = [
     { path: "name", label: "Name" },
+    {
+      key: "Edit",
+      content: (genre) => <GenreEdit genre={genre} />,
+    },
     {
       key: "Delete",
       // content is a function that takes in a customer and uses that to pass it to onDelete handler

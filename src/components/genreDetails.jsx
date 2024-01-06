@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "./footer";
 import { Link, useLocation } from "react-router-dom";
-import CustomerForm from "./customerForm";
+import GenreForm from "./genreForm";
 
 const CustomerDetails = () => {
   //const routeParams = useParams();
@@ -11,18 +11,13 @@ const CustomerDetails = () => {
     placeholders = {
       _id: location.state._id,
       name: location.state.name,
-      dateJoined: location.state.dateJoined,
-      phone: location.state.phone,
-      email: location.state.email,
-      isGold: location.state.isGold,
-      points: location.state.points,
     };
   }
   return (
     <React.Fragment>
       <div className="page-container">
-        <CustomerForm placeholders={placeholders} />
-        <Link to="/customers">
+        <GenreForm placeholders={placeholders} />
+        <Link to="/genres">
           <button type="buton" className="btn btn-success">
             Save
           </button>

@@ -43,7 +43,6 @@ class CustomerForm extends Form {
 
   componendDidMount() {
     if (this.props.placeholders) {
-      console.log("placeholders found");
       const { placeholders } = this.props;
       this.setState({ data: placeholders });
     }
@@ -101,7 +100,6 @@ class CustomerForm extends Form {
         {this.state.navigate ? <Navigate to="/customers" /> : console.log("")}
         {
           // Submission handler
-          // if validation not required skip to do submit
         }
         <form onSubmit={this.handleSubmit}>
           {

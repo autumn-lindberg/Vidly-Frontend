@@ -4,6 +4,7 @@ import MovieList from "./movieList";
 import httpService from "../services/httpservice";
 import config from "../config.json";
 import { toast, ToastContainer } from "react-toastify";
+import Footer from "./footer";
 const ObjectId = require("bson-objectid");
 
 const NewRental = () => {
@@ -48,15 +49,18 @@ const NewRental = () => {
 
   return (
     <React.Fragment>
-      <ToastContainer />
-      <h1>Rent a Movie to {location.state.name}</h1>
-      <br />
-      <MovieList movies={location.state.movies} onSelect={handleSelect} />
-      <Link to="/customers">
-        <button type="buton" className="btn btn-danger">
-          Cancel
-        </button>
-      </Link>
+      <div className="page-container">
+        <ToastContainer />
+        <h1>Rent a Movie to {location.state.name}</h1>
+        <br />
+        <MovieList movies={location.state.movies} onSelect={handleSelect} />
+        <Link to="/customers">
+          <button type="buton" className="btn btn-danger">
+            Cancel
+          </button>
+        </Link>
+      </div>
+      <Footer />
     </React.Fragment>
   );
 };
