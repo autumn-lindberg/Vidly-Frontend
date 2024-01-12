@@ -190,7 +190,7 @@ class Movies extends Component {
                       ></button>
                     </div>
                     <div className="modal-body">
-                      <MovieForm genres={this.state.genres} />
+                      <MovieForm />
                     </div>
                   </div>
                 </div>

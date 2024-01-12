@@ -9,7 +9,7 @@ const Joi = require("joi-browser");
 const ObjectId = require("bson-objectid");
 
 // login form extends form to get all its methods
-class CustomerForm extends Form {
+class ProductForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
     data: this.props.placeholders
@@ -42,8 +42,27 @@ class CustomerForm extends Form {
 
   componentDidMount() {
     if (this.props.placeholders) {
+      // set initial data
       const { placeholders } = this.props;
       this.setState({ data: placeholders });
+      // populate the thumbnail
+      const fileInput = document.querySelector('input[type="file"]');
+      // take array from props
+      const arr = this.props.placeholders.imageSrc.data;
+      // convert to uint8array
+      const uArray = new Uint8Array(arr);
+      // convert uint8array to blob
+      const blob = new Blob(uArray, {
+        type: "image/jpeg",
+      });
+      // convert blob to file
+      const myFile = new File([blob], "test.jpg", { type: "image/jpeg" });
+      // create datatransfer
+      const dataTransfer = new DataTransfer();
+      // add file to datatransfer
+      dataTransfer.items.add(myFile);
+      // set file input to files in datatransfer
+      fileInput.files = dataTransfer.files;
     }
   }
 
@@ -118,18 +137,6 @@ class CustomerForm extends Form {
           {this.renderInput("description", "Description")}
           {this.renderInput("price", "Price")}
           {this.renderInput("stock", "Stock")}
-          {this.props.placeholders ? (
-            <img
-              src={`data:image/jpeg;base64, ${Buffer.from(
-                this.props.placeholders.imageSrc.data
-              ).toString("base64")}`}
-              className="card-img-top mx-auto"
-              alt={this.props.placeholders.title}
-              style={{ height: "15rem", width: "16rem" }}
-            />
-          ) : (
-            console.log("")
-          )}
           {this.renderFileUpload(this.setFile)}
           <HorizontalDivider />
           <div className="text-center">
@@ -154,4 +161,4 @@ class CustomerForm extends Form {
   }
 }
 
-export default CustomerForm;
+export default ProductForm;

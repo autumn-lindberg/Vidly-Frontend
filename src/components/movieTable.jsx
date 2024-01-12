@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Heart from "./common/heart";
 import Table from "./common/table";
+import MovieEdit from "./common/movieEdit";
 
 class MovieTable extends Component {
   // state not needed, doesn't change throughout component life cycle
@@ -21,6 +22,10 @@ class MovieTable extends Component {
           handleLike={() => this.props.onLike(movie)}
         />
       ),
+    },
+    {
+      key: "Edit",
+      content: (movie) => <MovieEdit movie={movie} />,
     },
     {
       key: "Delete",
