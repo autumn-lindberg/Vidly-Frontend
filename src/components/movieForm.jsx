@@ -2,6 +2,7 @@ import React from "react";
 import Form from "./common/form";
 import HorizontalDivider from "./common/horizontalDivider";
 import httpService from "../services/httpservice";
+import { getGenres } from "../services/genreService";
 import config from "../config.json";
 import { toast } from "react-toastify";
 const Joi = require("joi-browser");
@@ -11,16 +12,41 @@ const ObjectId = require("bson-objectid");
 class MovieForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
-    data: { title: "", genre: "", stock: "", rate: "" },
+    genres: [],
+    data: this.props.placehlders
+      ? {
+          title: this.props.placeholders.name,
+          genre: this.props.placeholders.genre.name,
+          numberInStock: this.props.placeholders.numberInStock,
+          dailyRentalRate: this.props.placeholders.dailyRentalRate,
+        }
+      : { title: "", genre: "", numberInStock: "", dailyRentalRate: "" },
     errors: {},
+    navigate: false,
   };
 
   schema = {
     title: Joi.string().required().label("Title"),
-    stock: Joi.string().required().label("Stock"),
+    numberInStock: Joi.string().required().label("Stock"),
     genre: Joi.string().required().label("Genre"),
-    rate: Joi.string().required().label("Rate"),
+    dailyRentalRate: Joi.string().required().label("Rate"),
   };
+
+  async componentDidMount() {
+    // get genres for radio buttons
+    const { data: genres } = await getGenres();
+    this.setState({ genres: genres });
+    // set defaults
+    if (this.props.placeholders) {
+      const { placeholders } = this.props;
+      this.setState({ data: placeholders });
+      // set radio to checked
+      const checked = document.querySelector(
+        `#${this.props.placeholders.genre.name}`
+      );
+      checked.checked = true;
+    }
+  }
 
   setRadio = (e) => {
     // clone state data
@@ -37,11 +63,11 @@ class MovieForm extends Form {
     const movie = {
       _id: ObjectId(),
       title: data.title,
-      numberInStock: data.stock,
+      numberInStock: data.numberInStock,
       genre: {
         name: data.genre,
       },
-      dailyRentalRate: data.rate,
+      dailyRentalRate: data.dailyRentalRate,
       liked: false,
     };
     try {
@@ -71,7 +97,7 @@ class MovieForm extends Form {
           }
           <label className="text-center form-label">Genre</label>
           <div className="d-flex justify-content-evenly mb-4">
-            {this.props.genres.map((genre) => {
+            {this.state.genres.map((genre) => {
               // uppercase first letter
               genre.name =
                 genre.name.charAt(0).toUpperCase() + genre.name.slice(1);
@@ -83,8 +109,8 @@ class MovieForm extends Form {
               );
             })}
           </div>
-          {this.renderInput("stock", "Stock")}
-          {this.renderInput("rate", "Rate")}
+          {this.renderInput("numberInStock", "Stock")}
+          {this.renderInput("dailyRentalRate", "Rate")}
           <HorizontalDivider />
           <div className="text-center">
             {
