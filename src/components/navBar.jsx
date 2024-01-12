@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../img/film-reel.png";
@@ -12,7 +13,16 @@ import UserContext from "./../UserContext";
 
 const NavBar = () => {
   const userContext = useContext(UserContext);
+  // WRAP CONTEXT IN A REF SO DEPENDENCY ARRAY CAN BE BLANK
+  const userRef = useRef(userContext);
   const [navigate, setNavigate] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const user = jwtDecode(token);
+      userRef.current.handleLogin(user);
+    }
+  }, []);
   const resetNavigate = async () => {
     setNavigate(true);
     setTimeout(1000);
@@ -113,8 +123,9 @@ const NavBar = () => {
                 className="dropdown-menu text-center border-light"
                 aria-labelledby="dropdownMenuButton1"
               >
-                {!userContext.user.name ||
-                userContext.user.name.length === 0 ? (
+                {(!userContext.user.name ||
+                  userContext.user.name.length === 0) &&
+                !localStorage.getItem("token") ? (
                   <div>
                     <li className="pt-3">
                       <Link to="/login" className="dropdown-item h4">

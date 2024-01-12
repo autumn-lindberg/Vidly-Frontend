@@ -3,6 +3,7 @@ import Form from "./common/form";
 import HorizontalDivider from "./common/horizontalDivider";
 import httpService from "../services/httpservice";
 import config from "../config.json";
+import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 const Joi = require("joi-browser");
@@ -85,14 +86,16 @@ class GenreForm extends Form {
               // renderButton is also part of "this" now
               this.renderButton("Submit", "btn btn-success")
             }
-            <button
-              type="button"
-              className="btn btn-danger ms-2"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            >
-              Cancel
-            </button>
+            <Link to="/genres">
+              <button
+                type="button"
+                className="btn btn-danger ms-2"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Cancel
+              </button>
+            </Link>
           </div>
         </form>
       </div>
