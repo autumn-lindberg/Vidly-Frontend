@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ViewIcon = ({ customer }) => {
+const CustomerEdit = ({ customer }) => {
   return (
     <React.Fragment>
       <Link
@@ -22,4 +22,4 @@ const ViewIcon = ({ customer }) => {
   );
 };
 
-export default ViewIcon;
+export default CustomerEdit;
