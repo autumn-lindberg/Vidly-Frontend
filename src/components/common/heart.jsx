@@ -1,8 +1,5 @@
 import React from "react";
 
-// this functional stateless component renders a bootstrap heart icon
-
-// functional stateless component
 // grab liked and handleLike function from props
 const Heart = ({ liked, handleLike }) => {
   return (

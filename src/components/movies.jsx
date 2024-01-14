@@ -93,13 +93,14 @@ class Movies extends Component {
 
   // get initial data into state, style title
   async componentDidMount() {
-    //const listGroup = document.querySelector(".listGroup");
-    //const addButton = document.querySelector(".addButton");
+    const listGroup = document.querySelector(".listGroup");
+    const addButton = document.querySelector(".addButton");
     // offsetWidth returns the width of a given element as an integer
-    //const listGroupWidth = listGroup.offsetWidth;
-    //const style = listGroupWidth + "px";
+    let listGroupWidth = listGroup.offsetWidth;
+    listGroupWidth -= listGroupWidth * 0.1;
+    const style = listGroupWidth + "px";
     // adjust style to move title and subtitle
-    // addButton.style.width = style;
+    addButton.style.width = style;
 
     // set initial data
     const { data: movies } = await getMovies();
@@ -147,7 +148,7 @@ class Movies extends Component {
     if (numberOfMovies === 0) {
       message = "No movies found";
     } else {
-      message = numberOfMovies + " movies available for rent";
+      message = numberOfMovies + " movies found";
     }
     return (
       <>
@@ -158,15 +159,15 @@ class Movies extends Component {
             console.log("")
           )}
           <ToastContainer />
-          <div className="titleAndButton d-flex justify-content-start">
+          <div className="titleAndButton d-flex justify-content-start align-items-top">
             <div className="addButtonModal">
               <button
                 type="button"
-                className="btn btn-primary addButton p-3 h3 me-4 mt-2"
+                className="btn btn-primary addButton p-4 me-4 mt-2"
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal"
               >
-                <div className="h4 ps-2 pe-2">[+] New Movie</div>
+                <div className="mb-0">[+] New Movie</div>
               </button>
 
               <div
@@ -196,14 +197,14 @@ class Movies extends Component {
                 </div>
               </div>
             </div>
-            <div className="ms-2 d-flex justify-content-between flex-grow-1">
-              <div className="title">
+            <div className="ms-2 d-flex justify-content-start flex-grow-1">
+              <div className="title ms-3">
                 <h1>Movies List</h1>
                 <h3>{message}</h3>
               </div>
-              <form className="d-flex me-4">
+              <form className="d-flex ms-5 navSearchBar">
                 <input
-                  className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+                  className="form-control m-3 border border-dark input-lg"
                   type="search"
                   placeholder="Search Movies"
                   aria-label="Search"
@@ -221,20 +222,24 @@ class Movies extends Component {
                 onGenreChange={this.handleGenreChange}
               />
             </div>
-            <div className="col">
-              <MovieTable
-                movies={filtered}
-                onSort={this.onSort}
-                sortColumn={this.state.sortColumn}
-                onDelete={this.handleDelete}
-                onLike={this.handleLike}
-              />
-              <Pagination
-                numberOfMovies={numberOfMovies}
-                onPageChange={this.handlePageChange}
-                pageSize={pageSize}
-                currentPage={currentPage}
-              />
+            <div className="col ms-4">
+              <div className="movieTable">
+                <MovieTable
+                  movies={filtered}
+                  onSort={this.onSort}
+                  sortColumn={this.state.sortColumn}
+                  onDelete={this.handleDelete}
+                  onLike={this.handleLike}
+                />
+                <div className="mt-4">
+                  <Pagination
+                    numberOfMovies={numberOfMovies}
+                    onPageChange={this.handlePageChange}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

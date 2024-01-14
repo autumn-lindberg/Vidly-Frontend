@@ -126,40 +126,46 @@ class Rentals extends Component {
         ) : (
           console.log("")
         )}
-        <div className="page-container">
+        <div className="page-container ms-3">
           <ToastContainer />
-          <div className="title">
-            <h1>Rentals List</h1>
+          <div className="d-flex justify-content-start align-items-top">
+            <div className="title">
+              <h1>Rentals List</h1>
+              <h3>{message}</h3>
+            </div>
+            <form className="d-flex ms-5 w-50">
+              <input
+                className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+                type="search"
+                placeholder="Search Rentals"
+                aria-label="Search"
+                onChange={this.handleSearch}
+              />
+            </form>
           </div>
-          <h3>{message}</h3>
-          <form className="d-flex me-4">
-            <input
-              className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
-              type="search"
-              placeholder="Search Rentals"
-              aria-label="Search"
-              onChange={this.handleSearch}
-            />
-          </form>
           <br />
           <div className="row">
             <div className="col">
-              <RentalTable
-                rentals={filtered}
-                onSort={this.onSort}
-                sortColumn={this.state.sortColumn}
-                onReturn={this.onReturn}
-                onDelete={this.handleDelete}
-              />
+              <div className="rentalTable">
+                <RentalTable
+                  rentals={filtered}
+                  onSort={this.onSort}
+                  sortColumn={this.state.sortColumn}
+                  onReturn={this.onReturn}
+                  onDelete={this.handleDelete}
+                />
+              </div>
               {
                 // name of prop is still numberOfMovies because it's being reused
               }
-              <Pagination
-                numberOfMovies={numberOfRentals}
-                onPageChange={this.handlePageChange}
-                pageSize={pageSize}
-                currentPage={currentPage}
-              />
+              <div className="mt-4">
+                <Pagination
+                  numberOfMovies={numberOfRentals}
+                  onPageChange={this.handlePageChange}
+                  pageSize={pageSize}
+                  currentPage={currentPage}
+                />
+              </div>
             </div>
           </div>
         </div>
