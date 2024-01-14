@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
   return (
     <>
       <div className="col-sm-3 pb-4">
-        <div className="card" style={{ height: "20rem", width: "16rem" }}>
+        <div className="card" style={{ height: "19rem", width: "15rem" }}>
           <img
             src={`data:image/jpeg;base64, ${Buffer.from(
               product.imageSrc.data
