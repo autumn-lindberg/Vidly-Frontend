@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import MovieList from "./movieList";
 import httpService from "../services/httpservice";
 import config from "../config.json";
@@ -52,13 +52,7 @@ const NewRental = () => {
       <div className="page-container">
         <ToastContainer />
         <h1>Rent a Movie to {location.state.name}</h1>
-        <br />
         <MovieList movies={location.state.movies} onSelect={handleSelect} />
-        <Link to="/customers">
-          <button type="buton" className="btn btn-danger">
-            Cancel
-          </button>
-        </Link>
       </div>
       <Footer />
     </React.Fragment>

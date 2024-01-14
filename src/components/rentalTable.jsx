@@ -21,13 +21,13 @@ class RentalTable extends Component {
       content: (rental) =>
         rental.dateReturned == null ? (
           <button
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => this.props.onReturn(rental)}
           >
             Return
           </button>
         ) : (
-          <p>RETURNED</p>
+          <p className="mb-0 mt-1 returnedText">RETURNED</p>
         ),
     },
     {

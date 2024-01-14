@@ -33,8 +33,42 @@ body {
 .btn:hover {
   background-color: var(--color-three) !important;
 }
+.list-group-item.active {
+  background-color: var(--color-two-and-half) !important;
+  border: var(--color-two-and-half) !important;
+}
+.list-group-item:hover {
+  background-color: var(--color-three) !important;
+  color: white !important;
+  cursor: pointer !important;
+}
+.page-item > a {
+  border: none;
+  color: #212529 !important;
+}
+.page-item.active > a {
+  background-color: var(--color-two-and-half) !important;
+  border: var(--color-two-and-half) !important;
+  color: white !important;
+}
+.page-item > a:hover {
+  background-color: var(--color-three) !important;
+  color: white !important;
+  cursor: pointer !important;
+}
+.bi-heart:hover {
+  cursor: pointer !important;
+}
+
 .page-container {
   padding: 2rem 4rem;
+}
+.mainContainer {
+  background: linear-gradient(
+    320deg,
+    #adb2d3 20.31%,
+    rgba(112, 63, 254, 0.47) 121.04%
+  );
 }
 
 .myNav {
@@ -58,6 +92,9 @@ body {
 .navbar-nav .nav-link.active {
   color: var(--color-four) !important;
   font-weight: var(--fw-semi-bold) !important;
+}
+.navSearchBar {
+  width: 45%;
 }
 .figure {
   position: relative;
@@ -97,7 +134,7 @@ body {
   color: #ded !important;
 }
 .hoverLink:hover {
-  color: var(--color-one) !important;
+  color: var(--color-three) !important;
 }
 .user-name-text {
   color: var(--white);
@@ -182,6 +219,26 @@ div.image-hover {
   font-size: 0.83rem !important;
 }
 
+/* CUSTOMER */
+td:has(> .btn.btn-primary),
+td:has(> .returnedText),
+.rentalTable th:nth-child(4),
+td:has(> a > .bi-film),
+.customerTable th:nth-child(3),
+.customerTable th:nth-child(4),
+td:has(> .btn.btn-danger),
+.movieTable th:nth-child(7),
+.genreTable th:nth-child(3),
+.rentalTable th:nth-child(5),
+.movieList th:nth-child(6) {
+  text-align: center;
+}
+
+/* MOVIE TABLE */
+.movieSearch {
+  font-size: 1.25rem !important;
+}
+
 /* FOOTER */
 .footer {
   background-color: #d9d9d9;
@@ -210,8 +267,18 @@ div.image-hover {
   transform: translateX(-6%) translateY(24%);
   color: var(--color-two-and-half) !important;
 }
-.logo-row > i {
+.logo-row > a {
   padding: 0 1rem 0 0;
+  color: var(--color-two-and-half);
+}
+.logo-row > a:hover {
+  color: var(--color-three);
+}
+.column-header + ul > a {
+  color: var(--color-two-and-half);
+}
+.column-header + ul > a:hover {
+  color: var(--color-three);
 }
 .navigation-column {
   width: 23%;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Table from "./common/table";
-import EditCustomer from "./common/editCustomer";
+import CustomerEdit from "./common/customerEdit";
 import RentIcon from "./common/rentIcon";
 import { getMovies } from "../services/movieService";
 
@@ -18,7 +18,7 @@ class CustomerTable extends Component {
     { path: "name", label: "Name" },
     {
       key: "Edit",
-      content: (customer) => <EditCustomer customer={customer} />,
+      content: (customer) => <CustomerEdit customer={customer} />,
     },
     {
       key: "Rent",

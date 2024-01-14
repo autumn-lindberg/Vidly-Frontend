@@ -4,6 +4,7 @@ import Heart from "./common/heart";
 import { filterMovies } from "../utils/filterMovies";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
+import { Link } from "react-router-dom";
 import _ from "lodash";
 
 class MovieList extends Component {
@@ -32,7 +33,7 @@ class MovieList extends Component {
       // onDelete is passed in by props from components/movies.jsx as handleDelete()
       content: (movie) => (
         <button
-          className="btn btn-success"
+          className="btn btn-primary"
           onClick={() => this.props.onSelect(movie)}
         >
           Select
@@ -92,27 +93,36 @@ class MovieList extends Component {
     const { filtered, numberOfMovies } = moviesObj;
     return (
       <React.Fragment>
-        <form className="d-flex me-4">
+        <form className="d-flex me-2 mb-4">
           <input
-            className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+            className="movieSearch form-control mt-3 p-3 border border-dark input-lg"
             type="search"
             placeholder="Search Movies"
             aria-label="Search"
             onChange={this.handleSearch}
           />
         </form>
-        <Table
-          columns={this.columns}
-          items={filtered}
-          sortColumn={this.state.sortColumn}
-          onSort={this.onSort}
-        />
-        <Pagination
-          numberOfMovies={numberOfMovies}
-          onPageChange={this.handlePageChange}
-          pageSize={pageSize}
-          currentPage={currentPage}
-        />
+        <div className="movieList">
+          <Table
+            columns={this.columns}
+            items={filtered}
+            sortColumn={this.state.sortColumn}
+            onSort={this.onSort}
+          />
+        </div>
+        <div className="d-flex justify-content-between mt-4">
+          <Pagination
+            numberOfMovies={numberOfMovies}
+            onPageChange={this.handlePageChange}
+            pageSize={pageSize}
+            currentPage={currentPage}
+          />
+          <Link to="/customers" className="me-5">
+            <button type="button" className="btn btn-danger me-3">
+              Cancel
+            </button>
+          </Link>
+        </div>
       </React.Fragment>
     );
   }
