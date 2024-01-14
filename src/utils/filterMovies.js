@@ -5,7 +5,9 @@ export function filterMovies(allResults, currentText) {
   currentText = currentText.toLowerCase();
   // array filter takes in a boolean function as a parameter
   // boolean function is the grounds on whether to include/exlude from new array
-  return allResults.filter((result) =>
-    result.title.toLowerCase().includes(currentText)
+  return allResults.filter(
+    (result) =>
+      result.title.toLowerCase().includes(currentText) ||
+      result.genre.name.toLowerCase().includes(currentText)
   );
 }

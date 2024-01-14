@@ -89,15 +89,25 @@ function Footer() {
         <div className="subscribe-column">
           <h3 className="column-header">Newsletter</h3>
           <p>Stay in the know about community events, sales, and updates.</p>
-          <form>
+          <form
+            className="gform"
+            method="POST"
+            action="https://script.google.com/macros/s/AKfycbzYMCL5dlqRBvqGg6nsUugs8o2jWPorYwZvor5drvjUhOO7A8_qMWe0fcqMlQQAFhEY/exec"
+            target="_blank"
+          >
             <input
               className="form-control subscribe"
               placeholder="Enter your email"
               type="text"
+              name="Email"
+              id="Email"
             />
             <button className="btn btn-primary subscribe-button">
               Subscribe
             </button>
+            <div style={{ display: "none" }} className="thankyou_message">
+              <h2>Thanks for contacting us! We will get back to you soon.</h2>
+            </div>
           </form>
         </div>
       </div>

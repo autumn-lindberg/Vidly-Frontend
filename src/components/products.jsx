@@ -114,7 +114,7 @@ class Products extends Component {
         ) : (
           console.log("")
         )}
-        <div className="page-container">
+        <div className="page-container ms-3 me-3">
           <ToastContainer />
           <div className="titleAndButton d-flex mb-2 justify-content-start align-items-top">
             <div className="addButtonModal">
