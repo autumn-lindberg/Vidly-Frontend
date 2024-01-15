@@ -102,8 +102,17 @@ class Form extends Component {
     );
   }
 
+  // renders a single dropdown item
+  renderDropdownItem(name, label) {
+    return (
+      <option value={name} key={name} id={name}>
+        {label}
+      </option>
+    );
+  }
+
   // renders a single radio button with a label
-  renderRadioButton(name, label, group, handleRadioChange) {
+  renderRadioButton(name, label, group) {
     return (
       <div className="form-check" key={label}>
         {}
@@ -113,7 +122,7 @@ class Form extends Component {
           name={group}
           id={name}
           value={name}
-          onChange={handleRadioChange}
+          onChange={this.setRadio}
         />
         <label className="form-check-label" for={name}>
           {label}
@@ -121,6 +130,15 @@ class Form extends Component {
       </div>
     );
   }
+
+  // handler for radio button
+  setRadio = (e) => {
+    // clone state data
+    const data = { ...this.state.data };
+    // update data in state
+    data.genre = e.currentTarget.value;
+    this.setState({ data: data });
+  };
 
   renderFileUpload(name) {
     return (
