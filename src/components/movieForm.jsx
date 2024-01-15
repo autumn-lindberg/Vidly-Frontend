@@ -5,6 +5,7 @@ import httpService from "../services/httpservice";
 import { getGenres } from "../services/genreService";
 import config from "../config.json";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const Joi = require("joi-browser");
 const ObjectId = require("bson-objectid");
 
@@ -41,20 +42,10 @@ class MovieForm extends Form {
       const { placeholders } = this.props;
       this.setState({ data: placeholders });
       // set radio to checked
-      const checked = document.querySelector(
-        `#${this.props.placeholders.genre.name}`
-      );
-      checked.checked = true;
+      const checked = document.querySelector(".form-select");
+      checked.value = placeholders.genre.name;
     }
   }
-
-  setRadio = (e) => {
-    // clone state data
-    const data = { ...this.state.data };
-    // update data in state
-    data.genre = e.currentTarget.value;
-    this.setState({ data: data });
-  };
 
   // form.jsx component requires the submit function to be called doSubmit
   doSubmit = async () => {
@@ -81,6 +72,12 @@ class MovieForm extends Form {
     }
   };
 
+  handleDropdown = (e) => {
+    const data = { ...this.state.data };
+    data.genre = e.currentTarget.value;
+    this.setState({ data: data });
+  };
+
   render() {
     return (
       <div classtype="container">
@@ -97,17 +94,18 @@ class MovieForm extends Form {
           }
           <label className="text-center form-label">Genre</label>
           <div className="d-flex justify-content-evenly mb-4">
-            {this.state.genres.map((genre) => {
-              // uppercase first letter
-              genre.name =
-                genre.name.charAt(0).toUpperCase() + genre.name.slice(1);
-              return this.renderRadioButton(
-                genre.name,
-                genre.name,
-                "genres",
-                this.setRadio
-              );
-            })}
+            <select className="form-select" onChange={this.handleDropdown}>
+              <option id="" name="" key="" disabled selected value="">
+                {" "}
+              </option>
+              {this.state.genres.map((genre) => {
+                const name = genre.name;
+                // uppercase first letter
+                genre.name =
+                  genre.name.charAt(0).toUpperCase() + genre.name.slice(1);
+                return this.renderDropdownItem(name, genre.name);
+              })}
+            </select>
           </div>
           {this.renderInput("numberInStock", "Stock")}
           {this.renderInput("dailyRentalRate", "Rate")}
@@ -118,14 +116,16 @@ class MovieForm extends Form {
               // why tf does it throw error when both these functions are called in same {}??
               this.renderButton("Submit", "btn btn-success")
             }
-            <button
-              type="button"
-              className="btn btn-danger ms-2"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            >
-              Cancel
-            </button>
+            <Link to="/movies">
+              <button
+                type="button"
+                className="btn btn-danger ms-2"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Cancel
+              </button>
+            </Link>
           </div>
         </form>
       </div>
