@@ -3,8 +3,6 @@ import Input from "./input";
 const Joi = require("joi-browser");
 
 class Form extends Component {
-  state = { data: {}, errors: {} };
-
   // validate entire form using Joi
   validate = () => {
     const options = { abortEarly: false };
@@ -46,7 +44,9 @@ class Form extends Component {
     if (errorMsg) errors[e.currentTarget.name] = errorMsg;
     else delete errors[e.currentTarget.name];
     // e.currentTarget.name takes the name property of the input field being changed
-    data[e.currentTarget.name] = e.currentTarget.value;
+    e.currentTarget.type === "file"
+      ? (data[e.currentTarget.name] = data["fileName"])
+      : (data[e.currentTarget.name] = e.currentTarget.value);
     // update the state to reflect current input and error info
     this.setState({ data, errors });
   };
@@ -122,7 +122,7 @@ class Form extends Component {
     );
   }
 
-  renderFileUpload(handleFileUpload) {
+  renderFileUpload(name) {
     return (
       <div className="mb-3">
         <label for="formFile" className="form-label">
@@ -132,13 +132,52 @@ class Form extends Component {
           className="form-control"
           type="file"
           id="formFile"
-          onChange={handleFileUpload}
+          onChange={this.handleFileUpload}
           required={true}
+          name={name}
         />
         <div className="invalid-feedback">Thumbnail Is Required.</div>
       </div>
     );
   }
+
+  handleFileUpload = (e) => {
+    this.setFile(e);
+    this.handleChange(e);
+  };
+
+  // set file for file upload
+  setFile = (e) => {
+    const properties = { ...this.state.data };
+    let imageSrc = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsArrayBuffer(imageSrc);
+    reader.onload = () => {
+      const file = Array.from(new Uint8Array(reader.result));
+      properties.imageSrc = file;
+      // set file name
+      // thank you https://html.spec.whatwg.org/multipage/input.html#fakepath-srsly
+      // for the algorithm
+      let name = imageSrc.name;
+      if (name.substr(0, 12) === "C:\\fakepath\\")
+        properties.fileName = name.substr(12); // modern browser
+      else {
+        let x;
+        x = name.lastIndexOf("/");
+        if (x >= 0)
+          // Unix-based path
+          properties.fileName = name.substr(x + 1);
+        else {
+          x = name.lastIndexOf("\\");
+          if (x >= 0)
+            // Windows-based path
+            properties.fileName = name.substr(x + 1);
+          properties.fileName = name; // just the filename
+        }
+      }
+      this.setState({ data: properties });
+    };
+  };
 }
 
 export default Form;

@@ -17,11 +17,6 @@ const CustomerDetails = () => {
     <React.Fragment>
       <div className="page-container">
         <GenreForm placeholders={placeholders} />
-        <Link to="/genres">
-          <button type="buton" className="btn btn-success">
-            Save
-          </button>
-        </Link>
       </div>
       <Footer />
     </React.Fragment>
