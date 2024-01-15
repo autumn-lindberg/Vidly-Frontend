@@ -22,11 +22,6 @@ const MovieDetails = () => {
     <React.Fragment>
       <div className="page-container">
         <MovieForm placeholders={placeholders} />
-        <Link to="/movies">
-          <button type="button" className="btn btn-success">
-            Save
-          </button>
-        </Link>
       </div>
       <Footer />
     </React.Fragment>

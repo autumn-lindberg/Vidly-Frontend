@@ -22,11 +22,6 @@ const CustomerDetails = () => {
     <React.Fragment>
       <div className="page-container">
         <CustomerForm placeholders={placeholders} />
-        <Link to="/customers">
-          <button type="buton" className="btn btn-success">
-            Save
-          </button>
-        </Link>
       </div>
       <Footer />
     </React.Fragment>

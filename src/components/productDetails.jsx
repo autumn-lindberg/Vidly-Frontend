@@ -12,6 +12,7 @@ const ProductDetails = () => {
     placeholders = {
       _id: state._id,
       title: state.title,
+      fileName: state.fileName,
       description: state.description,
       price: state.price,
       stock: state.stock,
@@ -23,11 +24,6 @@ const ProductDetails = () => {
     <React.Fragment>
       <div className="page-container">
         <ProductForm placeholders={placeholders} />
-        <Link to="/products">
-          <button type="buton" className="btn btn-success">
-            Save
-          </button>
-        </Link>
       </div>
       <Footer />
     </React.Fragment>

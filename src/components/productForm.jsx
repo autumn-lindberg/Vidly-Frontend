@@ -14,21 +14,23 @@ class ProductForm extends Form {
   state = {
     data: this.props.placeholders
       ? {
-          title: this.props.title,
-          description: this.props.description,
-          price: this.props.price,
-          stock: this.props.stock,
-          imageSrc: this.props.imageSrc,
+          title: this.props.placeholders.title,
+          description: this.props.placeholders.description,
+          fileName: this.props.placeholders.fileName,
+          price: this.props.placeholders.price.toString(),
+          stock: this.props.placeholders.stock.toString(),
+          imageSrc: this.props.placeholders.imageSrc,
           // add filename here
         }
-      : { title: "", description: "", price: "", stock: "" },
+      : { title: "", description: "", fileName: "", price: "", stock: "" },
     errors: {},
     navigate: false,
   };
 
   schema = {
-    title: Joi.string().required().label("Title"),
-    description: Joi.string().required().label("Description"),
+    title: Joi.string().required().min(3).label("Title"),
+    description: Joi.string().required().min(5).label("Description"),
+    fileName: Joi.string(),
     price: Joi.string()
       .regex(/^[0-9]+$/)
       .required()
@@ -56,7 +58,9 @@ class ProductForm extends Form {
         type: "image/jpeg",
       });
       // convert blob to file
-      const myFile = new File([blob], "test.jpg", { type: "image/jpeg" });
+      const myFile = new File([blob], `${this.props.placeholders.fileName}`, {
+        type: "image/jpeg",
+      });
       // create datatransfer
       const dataTransfer = new DataTransfer();
       // add file to datatransfer
@@ -73,6 +77,7 @@ class ProductForm extends Form {
       const product = {
         _id: ObjectId(),
         title: data.title,
+        fileName: data.fileName,
         description: data.description,
         price: data.price,
         stock: data.stock,
@@ -92,6 +97,7 @@ class ProductForm extends Form {
       const product = {
         _id: this.props.placeholders._id,
         title: data.title,
+        fileName: data.fileName,
         description: data.description,
         price: data.price,
         stock: data.stock,
@@ -110,18 +116,6 @@ class ProductForm extends Form {
     }
   };
 
-  setFile = (e) => {
-    const properties = { ...this.state.data };
-    let imageSrc = e.target.files[0];
-    let reader = new FileReader();
-    reader.readAsArrayBuffer(imageSrc);
-    reader.onload = () => {
-      const file = Array.from(new Uint8Array(reader.result));
-      properties.imageSrc = file;
-      this.setState({ data: properties });
-    };
-  };
-
   render() {
     return (
       <div classtype="container">
@@ -137,7 +131,7 @@ class ProductForm extends Form {
           {this.renderInput("description", "Description")}
           {this.renderInput("price", "Price")}
           {this.renderInput("stock", "Stock")}
-          {this.renderFileUpload(this.setFile)}
+          {this.renderFileUpload("fileName")}
           <HorizontalDivider />
           <div className="text-center">
             {
