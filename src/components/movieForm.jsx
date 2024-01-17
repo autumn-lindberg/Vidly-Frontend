@@ -14,7 +14,7 @@ class MovieForm extends Form {
   // initialize email and password fields to be empy and to have no errors
   state = {
     genres: [],
-    data: this.props.placehlders
+    data: this.props.placeholders
       ? {
           title: this.props.placeholders.name,
           genre: this.props.placeholders.genre.name,
@@ -51,24 +51,55 @@ class MovieForm extends Form {
   doSubmit = async () => {
     // copy data from state
     const data = { ...this.state.data };
-    const movie = {
-      _id: ObjectId(),
-      title: data.title,
-      numberInStock: data.numberInStock,
-      genre: {
-        name: data.genre,
-      },
-      dailyRentalRate: data.dailyRentalRate,
-      liked: false,
-    };
-    try {
-      const response = await httpService.post(
-        `${config.apiEndpoint}/movies`,
-        movie
-      );
-      toast(response.status);
-    } catch (exception) {
-      console.log(exception);
+    const { genres } = this.state;
+    if (!this.props.placeholders) {
+      const movie = {
+        _id: ObjectId(),
+        title: data.title,
+        numberInStock: data.numberInStock,
+        genre: {
+          name: data.genre,
+        },
+        dailyRentalRate: data.dailyRentalRate,
+        liked: false,
+      };
+      try {
+        const response = await httpService.post(
+          `${config.apiEndpoint}/movies`,
+          movie
+        );
+        if (response.status === 200)
+          toast.success(`Created New Movie ${movie.title}!`);
+        else toast.error("An Error Occurred. Please Try Again Later.");
+      } catch (exception) {
+        toast.error("An Error Occurred. Please Try Again Later.");
+      }
+    } else {
+      const genre = genres.find((g) => g.name === data.genre);
+      console.log(genre);
+      const movie = {
+        _id: this.props.placeholders._id,
+        title: data.title,
+        numberInStock: data.numberInStock,
+        genre: {
+          // check if element has
+          _id: genre._id,
+          name: data.genre,
+        },
+        dailyRentalRate: data.dailyRentalRate,
+        liked: this.props.placeholders.liked,
+      };
+      try {
+        const response = await httpService.put(
+          `${config.apiEndpoint}/movies/${this.props.placeholders._id}`,
+          movie
+        );
+        if (response.status === 200)
+          toast.success(`Successfully Updated ${movie.title}!`);
+        else toast.error("An Error Occurred. Please Try Again Later");
+      } catch (exception) {
+        toast.error("An Error Occurred. Please Try Again Later");
+      }
     }
   };
 

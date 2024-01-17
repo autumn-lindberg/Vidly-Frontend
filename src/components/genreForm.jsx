@@ -46,24 +46,28 @@ class GenreForm extends Form {
           `${config.apiEndpoint}/genres`,
           genre
         );
-        toast(response.status);
+        if (response.status === 200)
+          toast.success(`Created New Genre ${genre.name}!`);
+        else toast.error("An Error Occurred. Please Try Again Later.");
       } catch (exception) {
-        console.log(exception);
+        toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {
-      const customer = {
+      const genre = {
         _id: this.props.placeholders._id,
         name: data.name,
       };
       try {
         const response = await httpService.put(
           `${config.apiEndpoint}/genres/${this.props.placeholders._id}`,
-          customer
+          genre
         );
-        toast(response.status);
+        if (response.status === 200)
+          toast.success(`Successfully Updated ${genre.name}!`);
+        else toast.error("An Error Occurred. Please Try Again Later.");
         this.setState({ navigate: true });
       } catch (exception) {
-        console.log(exception);
+        toast.error("An Error Occurred. Please Try Again Later.");
       }
     }
   };

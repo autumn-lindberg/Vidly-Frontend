@@ -68,9 +68,11 @@ class CustomerForm extends Form {
           `${config.apiEndpoint}/customers`,
           customer
         );
-        toast(response.status);
+        if (response.status === 200)
+          toast.success(`Created New Customer ${customer.name} Successfully!`);
+        else toast.error("An Error Occurred. Please Try Again Later.");
       } catch (exception) {
-        console.log(exception);
+        toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {
       const customer = {
@@ -87,10 +89,12 @@ class CustomerForm extends Form {
           `${config.apiEndpoint}/customers/${this.props.placeholders._id}`,
           customer
         );
-        toast(response.status);
+        if (response.status === 200)
+          toast.success(`Successfully Updated ${customer.name}!`);
+        else toast.error("Error Occurred. Please Try Again Later.");
         this.setState({ navigate: true });
       } catch (exception) {
-        console.log(exception);
+        toast.error("Error Occurred. Please Try Again Later.");
       }
     }
   };

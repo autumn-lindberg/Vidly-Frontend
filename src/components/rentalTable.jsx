@@ -27,7 +27,7 @@ class RentalTable extends Component {
             Return
           </button>
         ) : (
-          <p className="mb-0 mt-1 returnedText">RETURNED</p>
+          <i className="mb-0 mt-1 returnedText">RETURNED</i>
         ),
     },
     {

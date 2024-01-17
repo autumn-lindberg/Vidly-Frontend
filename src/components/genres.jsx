@@ -5,11 +5,10 @@ import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getGenres } from "../services/genreService";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
 import config from "../config.json";
-import "react-toastify/dist/ReactToastify.css";
 import { filterGenres } from "../utils/filterGenres";
 import { Navigate } from "react-router-dom";
 import UserContext from "../UserContext";
@@ -39,9 +38,11 @@ class Genres extends Component {
       const response = await httpService.delete(
         `${config.apiEndpoint}/genres/${genre._id}`
       );
-      toast(`Status: ${response.status}`);
+      if (response.status === 200)
+        toast.success(`Successfully Deleted ${genre.name}!`);
+      else toast.error("An Error Occurred. Please Try Again Later");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later");
     }
   };
 
@@ -115,7 +116,6 @@ class Genres extends Component {
           ) : (
             console.log("")
           )}
-          <ToastContainer />
           <div className="titleAndButton d-flex justify-content-start align-items-top">
             <div className="addButtonModal">
               <button

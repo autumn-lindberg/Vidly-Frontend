@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import MovieList from "./movieList";
 import httpService from "../services/httpservice";
 import config from "../config.json";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Footer from "./footer";
 const ObjectId = require("bson-objectid");
 
@@ -41,16 +41,19 @@ const NewRental = () => {
         `${config.apiEndpoint}/rentals`,
         rental
       );
-      toast(response.status);
+      if (response.status === 200)
+        toast.success(
+          `Successfully Rented ${rental.customer.name} to ${rental.movie.title}!`
+        );
+      else toast.error("An Error Occurred. Please Try Again Later");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later");
     }
   };
 
   return (
     <React.Fragment>
       <div className="page-container">
-        <ToastContainer />
         <h1>Rent a Movie to {location.state.name}</h1>
         <MovieList movies={location.state.movies} onSelect={handleSelect} />
       </div>

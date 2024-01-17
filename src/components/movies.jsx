@@ -10,8 +10,7 @@ import ListGroup from "./listGroup";
 import { generateGenre } from "../utils/generateGenre";
 import MovieTable from "./movieTable";
 import MovieForm from "./movieForm";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import _ from "lodash";
 import { filterMovies } from "../utils/filterMovies";
 import UserContext from "../UserContext";
@@ -42,9 +41,11 @@ class Movies extends Component {
       const response = await httpService.delete(
         `${config.apiEndpoint}/movies/${movie._id}`
       );
-      toast(`Status: ${response.status}`);
+      if (response.status === 200)
+        toast.success(`Successfully Deleted ${movie.title}!`);
+      else toast.error("An Error Occurred. Please Try Again Later.");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later.");
     }
   };
 
@@ -67,9 +68,11 @@ class Movies extends Component {
         `${config.apiEndpoint}/movies/${movie._id}`,
         movies[index]
       );
-      toast(`Status: ${response.status}`);
+      if (response.status === 200)
+        toast.success(`Successfully Liked ${movies[index].title}!`);
+      else toast.error("An Error Occurred. Please Try Again Later.");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later.");
     }
   };
 
@@ -158,7 +161,6 @@ class Movies extends Component {
           ) : (
             console.log("")
           )}
-          <ToastContainer />
           <div className="titleAndButton d-flex justify-content-start align-items-top">
             <div className="addButtonModal">
               <button

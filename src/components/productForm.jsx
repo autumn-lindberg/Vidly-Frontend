@@ -89,9 +89,11 @@ class ProductForm extends Form {
           `${config.apiEndpoint}/products`,
           product
         );
-        toast(response.status);
+        if (response.status === 200)
+          toast.success(`Successfully Added ${product.title} To Products!`);
+        else toast.error("An Error Occurred. Please Try Again Later.");
       } catch (exception) {
-        console.log(exception);
+        toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {
       const product = {
@@ -108,10 +110,12 @@ class ProductForm extends Form {
           `${config.apiEndpoint}/products/${this.props.placeholders._id}`,
           product
         );
-        toast(response.status);
+        if (response.status === 200)
+          toast.success(`Updated ${product.title} Successfully!`);
+        else toast.error("An Error Occurred. Please Try Again Later");
         this.setState({ navigate: true });
       } catch (exception) {
-        console.log(exception);
+        toast.error("An Error Occurred. Please Try Again Later");
       }
     }
   };

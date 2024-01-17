@@ -5,7 +5,7 @@ import logo from "../img/film-reel-purple.png";
 import Footer from "./footer";
 import httpService from "../services/httpservice";
 import config from "../config.json";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "../UserContext";
 import { GoogleLogin } from "@react-oauth/google";
@@ -50,7 +50,7 @@ class RegisterForm extends Form {
       if (response.status === 400) {
         toast("Registration Error");
       } else {
-        toast(response.status);
+        toast("Account Created Successfully!");
         // store JWT
         const JWT = response.headers["x-auth-token"];
         localStorage.setItem("token", JWT);
@@ -69,7 +69,6 @@ class RegisterForm extends Form {
     return (
       <>
         <div className="page-container login-register-page">
-          <ToastContainer />
           <div classtype="container">
             <h1 className="mb-4 d-flex">
               Register for{" "}
@@ -140,8 +139,8 @@ class RegisterForm extends Form {
                   `${config.apiEndpoint}/users`,
                   user
                 );
-                toast(response.status);
                 if (response.status === 200) {
+                  toast.success("Account Created Successfully!");
                   // store JWT
                   const token = response.headers["x-auth-token"];
                   localStorage.setItem("token", token);
@@ -150,11 +149,11 @@ class RegisterForm extends Form {
                   this.context.handleRegister(myContext);
                   this.setState({ navigate: true });
                 } else {
-                  toast("Error occurred");
+                  toast.error("An Error Occurred. Please Try Again Later.");
                 }
               }}
               onError={() => {
-                toast("Login Failed");
+                toast("Login Failed.");
               }}
             />
           </div>
