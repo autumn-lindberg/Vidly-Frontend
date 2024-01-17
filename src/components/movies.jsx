@@ -32,19 +32,21 @@ class Movies extends Component {
 
   // handler for the delete button
   handleDelete = async (movie) => {
-    // update movies to reflect deletion
-    // goes through all movies and check if id matches on passed to handleDelete
-    const movies = this.state.movies.filter((m) => m._id !== movie._id);
-    // update state to reflect this
-    this.setState({ movies: movies });
+    this.removeMovie();
+
+    // post data
     try {
       const response = await httpService.delete(
         `${config.apiEndpoint}/movies/${movie._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${movie.title}!`);
-      else toast.error("An Error Occurred. Please Try Again Later.");
+      else {
+        this.addMovie(movie);
+        toast.error("An Error Occurred. Please Try Again Later.");
+      }
     } catch (exception) {
+      this.addMovie(movie);
       toast.error("An Error Occurred. Please Try Again Later.");
     }
   };
@@ -61,6 +63,11 @@ class Movies extends Component {
     movies[index].liked = !movies[index].liked;
     // update state
     this.setState({ movies: movies });
+
+    // grab search content and filter
+    const text = document.querySelector(".movieSearch").value;
+    const filtered = filterMovies(movies, text);
+    this.setState({ filtered: filtered });
 
     // make a put request and update data
     try {
@@ -86,6 +93,13 @@ class Movies extends Component {
   handleGenreChange = (genreName) => {
     // update state to reflect current genre selected (default is all)
     this.setState({ currentGenre: genreName });
+    const pageData = this.getPageData();
+    if (
+      pageData.numberOfMovies <=
+      this.state.currentPage * this.state.pageSize
+    ) {
+      this.setState({ currentPage: 1 });
+    }
   };
 
   // handler for sorting
@@ -118,6 +132,14 @@ class Movies extends Component {
     const movies = this.state.movies;
     const filtered = filterMovies(movies, searchText);
     this.setState({ filtered: filtered });
+    // check page number
+    const pageData = this.getPageData();
+    if (
+      pageData.numberOfMovies <=
+      this.state.currentPage * this.state.pageSize
+    ) {
+      this.setState({ currentPage: 1 });
+    }
   };
 
   // function to show only the information for the current page of items AND current genre
@@ -137,6 +159,26 @@ class Movies extends Component {
     filtered = paginate(filtered, currentPage, pageSize);
     //
     return { filtered, numberOfMovies };
+  };
+
+  addMovie = (movie) => {
+    const movies = [...this.state.movies];
+    movies.push(movie);
+    this.setState({ movies: movies });
+    // grab search content and filter
+    const text = document.querySelector(".movieSearch").value;
+    const filtered = filterMovies(movies, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeMovie = () => {
+    const movies = [...this.state.movies];
+    movies.pop();
+    this.setState({ movies: movies });
+    // grab search content and filter
+    const text = document.querySelector(".movieSearch").value;
+    const filtered = filterMovies(movies, text);
+    this.setState({ filtered: filtered });
   };
 
   render() {
@@ -193,7 +235,10 @@ class Movies extends Component {
                       ></button>
                     </div>
                     <div className="modal-body">
-                      <MovieForm />
+                      <MovieForm
+                        addMovie={this.addMovie}
+                        removeMovie={this.removeMovie}
+                      />
                     </div>
                   </div>
                 </div>
@@ -206,7 +251,7 @@ class Movies extends Component {
               </div>
               <form className="d-flex ms-5 navSearchBar">
                 <input
-                  className="form-control m-3 border border-dark input-lg"
+                  className="form-control m-3 border border-dark input-lg movieSearch"
                   type="search"
                   placeholder="Search Movies"
                   aria-label="Search"

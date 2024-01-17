@@ -4,6 +4,12 @@ import Table from "./common/table";
 import MovieEdit from "./common/movieEdit";
 
 class MovieTable extends Component {
+  createTarget(name) {
+    return "#a" + name;
+  }
+  createId(name) {
+    return "a" + name;
+  }
   // state not needed, doesn't change throughout component life cycle
   // path is the JSON data's property name. components/tableBody.jsx uses this to access the data inside each movie object
   columns = [
@@ -32,12 +38,60 @@ class MovieTable extends Component {
       // content is a function that takes in a movie and uses that to pass it to onDelete handler
       // onDelete is passed in by props from components/movies.jsx as handleDelete()
       content: (movie) => (
-        <button
-          className="btn btn-danger"
-          onClick={() => this.props.onDelete(movie)}
-        >
-          Delete
-        </button>
+        <React.Fragment>
+          <button
+            type="button"
+            className="btn btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target={this.createTarget(movie._id)}
+          >
+            Delete
+          </button>
+          <div
+            className="modal fade"
+            tabIndex="-1"
+            id={this.createId(movie._id)}
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Delete Movie</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p>
+                    Are you sure you want to delete {movie.title}? It cannot be
+                    undone.
+                  </p>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Cancel & Go Back
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => this.props.onDelete(movie)}
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Delete This Movie
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </React.Fragment>
       ),
     },
   ];

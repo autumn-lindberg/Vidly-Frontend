@@ -3,6 +3,18 @@ import Table from "./common/table";
 import { getRentals } from "../services/rentalService";
 
 class RentalTable extends Component {
+  createTarget(name) {
+    return "#a" + name;
+  }
+  createId(name) {
+    return "a" + name;
+  }
+  createTargetTwo(name) {
+    return "#b" + name;
+  }
+  createIdTwo(name) {
+    return "b" + name;
+  }
   // use state to store rentals
   state = {
     rentals: [],
@@ -20,12 +32,60 @@ class RentalTable extends Component {
       key: "Return",
       content: (rental) =>
         rental.dateReturned == null ? (
-          <button
-            className="btn btn-primary"
-            onClick={() => this.props.onReturn(rental)}
-          >
-            Return
-          </button>
+          <React.Fragment>
+            <button
+              type="button"
+              className="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target={this.createTarget(rental._id)}
+            >
+              Return
+            </button>
+            <div
+              className="modal fade"
+              tabIndex="-1"
+              id={this.createId(rental._id)}
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Return Movie</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <p>
+                      Are you sure you want to return {rental.movie.title}? It
+                      cannot be undone.
+                    </p>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      Cancel & Go Back
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => this.props.onReturn(rental)}
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      Return This Movie
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </React.Fragment>
         ) : (
           <i className="mb-0 mt-1 returnedText">RETURNED</i>
         ),
@@ -35,12 +95,61 @@ class RentalTable extends Component {
       // content is a function that takes in a rental and uses that to pass it to onDelete handler
       // onDelete is passed in by props from components/rentals.jsx as handleDelete()
       content: (rental) => (
-        <button
-          className="btn btn-danger"
-          onClick={() => this.props.onDelete(rental)}
-        >
-          Delete
-        </button>
+        <React.Fragment>
+          <button
+            type="button"
+            className="btn btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target={this.createTargetTwo(rental._id)}
+          >
+            Delete
+          </button>
+          <div
+            className="modal fade"
+            tabIndex="-1"
+            id={this.createIdTwo(rental._id)}
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Delete Movie</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p>
+                    Are you sure you want to delete rental of{" "}
+                    {rental.movie.title} to {rental.customer.name}? It cannot be
+                    undone.
+                  </p>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Cancel & Go Back
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => this.props.onDelete(rental)}
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Delete This Movie
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </React.Fragment>
       ),
     },
   ];

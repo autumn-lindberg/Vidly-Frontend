@@ -26,13 +26,7 @@ class Products extends Component {
 
   // handler for the delete button
   handleDelete = async (product) => {
-    // update products to reflect deletion
-    // goes through all products and check if id matches on passed to handleDelete
-    // array filter takes a function as a parameter that returns T/F whether to include or not
-    const products = this.state.products.filter((m) => m.id !== product.id);
-    // update state to reflect this
-    this.setState({ products: products });
-
+    this.removeProduct();
     // send delete request
     try {
       const response = await httpService.delete(
@@ -40,8 +34,12 @@ class Products extends Component {
       );
       if (response.status === 200)
         toast.success(`${product.title} Deleted Successfully!`);
-      else toast.error("An Error Occurred. Please Try Again Later");
+      else {
+        this.addProduct(product);
+        toast.error("An Error Occurred. Please Try Again Later");
+      }
     } catch (exception) {
+      this.addProduct(product);
       toast.error("An Error Occurred. Please Try Again Later");
     }
   };
@@ -91,6 +89,34 @@ class Products extends Component {
     // duplicate state
     const products = this.state.products;
     const filtered = filterProducts(products, searchText);
+    this.setState({ filtered: filtered });
+    // check page number
+    const pageData = this.getPageData();
+    if (
+      pageData.numberOfProducts <=
+      this.state.currentPage * this.state.pageSize
+    ) {
+      this.setState({ currentPage: 1 });
+    }
+  };
+
+  addProduct = (product) => {
+    const products = [...this.state.products];
+    products.push(product);
+    this.setState({ products: products });
+    // grab search content and filter
+    const text = document.querySelector(".productSearch").value;
+    const filtered = filterProducts(products, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeProduct = () => {
+    const products = [...this.state.products];
+    products.pop();
+    this.setState({ products: products });
+    // grab search content and filter
+    const text = document.querySelector(".productSearch").value;
+    const filtered = filterProducts(products, text);
     this.setState({ filtered: filtered });
   };
 
@@ -148,7 +174,10 @@ class Products extends Component {
                       ></button>
                     </div>
                     <div className="modal-body">
-                      <ProductForm />
+                      <ProductForm
+                        addProduct={this.addProduct}
+                        removeProduct={this.removeProduct}
+                      />
                     </div>
                   </div>
                 </div>
@@ -161,7 +190,7 @@ class Products extends Component {
               </div>
               <form className="d-flex ms-5 navSearchBar">
                 <input
-                  className="form-control m-3 border border-dark input-lg"
+                  className="form-control m-3 border border-dark input-lg productSearch"
                   type="search"
                   placeholder="Search products"
                   aria-label="Search"
@@ -173,7 +202,14 @@ class Products extends Component {
           <br />
           <div className="row">
             {filtered.map((product) => {
-              return <ProductCard product={product} key={product.title} />;
+              return (
+                <ProductCard
+                  product={product}
+                  key={product._id}
+                  addProduct={this.addProduct}
+                  removeProduct={this.removeProduct}
+                />
+              );
             })}
             {
               // name of prop is still numberOfMovies because it's being reused

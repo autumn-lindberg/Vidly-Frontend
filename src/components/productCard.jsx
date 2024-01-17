@@ -4,16 +4,27 @@ import { toast } from "react-toastify";
 import httpService from "../services/httpservice";
 import config from "../config.json";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, addProduct, removeProduct }) => {
+  function createTarget(name) {
+    return "#a" + name;
+  }
+  function createId(name) {
+    return "a" + name;
+  }
   async function handleDelete(p) {
     try {
+      removeProduct();
       const response = await httpService.delete(
         `${config.apiEndpoint}/products/${p._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${p.title}!`);
-      else toast.error("An Error Occurred. Please Try Again Later.");
+      else {
+        addProduct(p);
+        toast.error("An Error Occurred. Please Try Again Later.");
+      }
     } catch (exception) {
+      addProduct(p);
       toast.error("An Error Occurred. Please Try Again Later.");
     }
   }
@@ -24,7 +35,7 @@ const ProductCard = ({ product }) => {
         <div className="card" style={{ height: "19rem", width: "15rem" }}>
           <img
             src={`data:image/jpeg;base64, ${Buffer.from(
-              product.imageSrc.data
+              product.imageSrc.data || product.imageSrc
             ).toString("base64")}`}
             className="card-img-top mx-auto"
             alt={product.title}
@@ -48,11 +59,57 @@ const ProductCard = ({ product }) => {
               </div>
               <div className="p-2">
                 <button
-                  onClick={() => handleDelete(product)}
+                  type="button"
                   className="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target={createTarget(product._id)}
                 >
                   Delete
                 </button>
+                <div
+                  className="modal fade"
+                  tabIndex="-1"
+                  id={createId(product._id)}
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title">Delete Product</h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <p>
+                          Are you sure you want to delete {product.title}? It
+                          cannot be undone.
+                        </p>
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          Cancel & Go Back
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(product)}
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          Delete This Product
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

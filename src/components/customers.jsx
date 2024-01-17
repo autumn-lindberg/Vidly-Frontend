@@ -66,7 +66,6 @@ class Customers extends Component {
     // CALL SERVER AND SET INITIAL DATA
     const { data: customers } = await getCustomers();
     this.setState({ customers: customers, filtered: customers });
-    console.log(this.state.customers);
   }
 
   // function to show only the information for the current page of items
@@ -92,6 +91,34 @@ class Customers extends Component {
     // duplicate state
     const customers = this.state.customers;
     const filtered = filterCustomers(customers, searchText);
+    this.setState({ filtered: filtered });
+    // check page number
+    const pageData = this.getPageData();
+    if (
+      pageData.numberOfCustomers <=
+      this.state.currentPage * this.state.pageSize
+    ) {
+      this.setState({ currentPage: 1 });
+    }
+  };
+
+  addCustomer = (customer) => {
+    const customers = [...this.state.customers];
+    customers.push(customer);
+    this.setState({ customers: customers });
+    // grab search content and filter
+    const text = document.querySelector(".customerSearch").value;
+    const filtered = filterCustomers(customers, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeCustomer = () => {
+    const customers = [...this.state.customers];
+    customers.pop();
+    this.setState({ customers: customers });
+    // grab search content and filter
+    const text = document.querySelector(".customerSearch").value;
+    const filtered = filterCustomers(customers, text);
     this.setState({ filtered: filtered });
   };
 
@@ -149,7 +176,10 @@ class Customers extends Component {
                       ></button>
                     </div>
                     <div className="modal-body">
-                      <CustomerForm />
+                      <CustomerForm
+                        addCustomer={this.addCustomer}
+                        removeCustomer={this.removeCustomer}
+                      />
                     </div>
                   </div>
                 </div>
@@ -162,7 +192,7 @@ class Customers extends Component {
               </div>
               <form className="d-flex ms-5 navSearchBar">
                 <input
-                  className="form-control m-3 border border-dark input-lg"
+                  className="form-control m-3 border border-dark input-lg customerSearch"
                   type="search"
                   placeholder="Search Customers"
                   aria-label="Search"

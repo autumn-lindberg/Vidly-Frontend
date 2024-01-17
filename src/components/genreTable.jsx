@@ -3,6 +3,12 @@ import GenreEdit from "./common/genreEdit";
 import Table from "./common/table";
 
 class GenreTable extends Component {
+  createTarget(name) {
+    return "#a" + name;
+  }
+  createId(name) {
+    return "a" + name;
+  }
   // state not needed, doesn't change throughout component life cycle
   // path is the data's property name. components/tableBody.jsx uses this to access the data inside each customer object
   columns = [
@@ -15,17 +21,21 @@ class GenreTable extends Component {
       key: "Delete",
       // content is a function that takes in a customer and uses that to pass it to onDelete handler
       // onDelete is passed in by props from components/customers.jsx as handleDelete()
-      content: (customer) => (
+      content: (genre) => (
         <React.Fragment>
           <button
             type="button"
             className="btn btn-danger"
             data-bs-toggle="modal"
-            data-bs-target="#confirm"
+            data-bs-target={this.createTarget(genre._id)}
           >
             Delete
           </button>
-          <div className="modal fade" tabIndex="-1" id="confirm">
+          <div
+            className="modal fade"
+            tabIndex="-1"
+            id={this.createId(genre._id)}
+          >
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
@@ -39,7 +49,7 @@ class GenreTable extends Component {
                 </div>
                 <div className="modal-body">
                   <p>
-                    Are you sure you want to delete this genre? It cannot be
+                    Are you sure you want to delete {genre.name}? It cannot be
                     undone.
                   </p>
                 </div>
@@ -48,13 +58,16 @@ class GenreTable extends Component {
                     type="button"
                     className="btn btn-primary"
                     data-bs-dismiss="modal"
+                    aria-label="Close"
                   >
                     Cancel & Go Back
                   </button>
                   <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => this.props.onDelete(customer)}
+                    onClick={() => this.props.onDelete(genre)}
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
                   >
                     Delete This Genre
                   </button>

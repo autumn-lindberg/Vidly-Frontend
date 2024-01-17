@@ -83,16 +83,22 @@ class ProductForm extends Form {
         stock: data.stock,
         imageSrc: data.imageSrc,
       };
+      console.log(product);
 
       try {
+        this.props.addProduct(product);
         const response = await httpService.post(
           `${config.apiEndpoint}/products`,
           product
         );
         if (response.status === 200)
           toast.success(`Successfully Added ${product.title} To Products!`);
-        else toast.error("An Error Occurred. Please Try Again Later.");
+        else {
+          this.props.removeProduct();
+          toast.error("An Error Occurred. Please Try Again Later.");
+        }
       } catch (exception) {
+        this.props.removeProduct();
         toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {

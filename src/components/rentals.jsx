@@ -91,6 +91,14 @@ class Rentals extends Component {
     const rentals = this.state.rentals;
     const filtered = filterRentals(rentals, searchText);
     this.setState({ filtered: filtered });
+    // check page number
+    const pageData = this.getPageData();
+    if (
+      pageData.numberOfRentals <=
+      this.state.currentPage * this.state.pageSize
+    ) {
+      this.setState({ currentPage: 1 });
+    }
   };
 
   async onReturn(rental) {

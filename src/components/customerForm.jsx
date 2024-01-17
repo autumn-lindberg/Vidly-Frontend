@@ -64,14 +64,21 @@ class CustomerForm extends Form {
         points: 0,
       };
       try {
+        this.props.addCustomer(customer);
         const response = await httpService.post(
           `${config.apiEndpoint}/customers`,
           customer
         );
         if (response.status === 200)
           toast.success(`Created New Customer ${customer.name} Successfully!`);
-        else toast.error("An Error Occurred. Please Try Again Later.");
+        else {
+          // remove customer if error
+          this.props.removeCustomer();
+          toast.error("An Error Occurred. Please Try Again Later.");
+        }
       } catch (exception) {
+        // remove customer if error
+        this.props.removeCustomer();
         toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {
@@ -91,7 +98,9 @@ class CustomerForm extends Form {
         );
         if (response.status === 200)
           toast.success(`Successfully Updated ${customer.name}!`);
-        else toast.error("Error Occurred. Please Try Again Later.");
+        else {
+          toast.error("Error Occurred. Please Try Again Later.");
+        }
         this.setState({ navigate: true });
       } catch (exception) {
         toast.error("Error Occurred. Please Try Again Later.");
