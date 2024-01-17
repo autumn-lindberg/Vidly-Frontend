@@ -26,12 +26,7 @@ class Genres extends Component {
 
   // handler for the delete button
   handleDelete = async (genre) => {
-    // update genres to reflect deletion
-    // goes through all genres and check if id matches on passed to handleDelete
-    // array filter takes a function as a parameter that returns T/F whether to include or not
-    const genres = this.state.genres.filter((m) => m.id !== genre.id);
-    // update state to reflect this
-    this.setState({ genres: genres });
+    this.removeGenre();
 
     // send delete request
     try {
@@ -40,8 +35,12 @@ class Genres extends Component {
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${genre.name}!`);
-      else toast.error("An Error Occurred. Please Try Again Later");
+      else {
+        this.addGenre(genre);
+        toast.error("An Error Occurred. Please Try Again Later");
+      }
     } catch (exception) {
+      this.addGenre(genre);
       toast.error("An Error Occurred. Please Try Again Later");
     }
   };
@@ -91,6 +90,34 @@ class Genres extends Component {
     // duplicate state
     const genres = this.state.genres;
     const filtered = filterGenres(genres, searchText);
+    this.setState({ filtered: filtered });
+    // check page number
+    const pageData = this.getPageData();
+    if (
+      pageData.numberOfGenres <=
+      this.state.currentPage * this.state.pageSize
+    ) {
+      this.setState({ currentPage: 1 });
+    }
+  };
+
+  addGenre = (genre) => {
+    const genres = [...this.state.genres];
+    genres.push(genre);
+    this.setState({ genres: genres });
+    // grab search content and filter
+    const text = document.querySelector(".genreSearch").value;
+    const filtered = filterGenres(genres, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeGenre = () => {
+    const genres = [...this.state.genres];
+    genres.pop();
+    this.setState({ genres: genres });
+    // grab search content and filter
+    const text = document.querySelector(".genreSearch").value;
+    const filtered = filterGenres(genres, text);
     this.setState({ filtered: filtered });
   };
 
@@ -148,7 +175,10 @@ class Genres extends Component {
                       ></button>
                     </div>
                     <div className="modal-body">
-                      <GenreForm />
+                      <GenreForm
+                        addGenre={this.addGenre}
+                        removeGenre={this.removeGenre}
+                      />
                     </div>
                   </div>
                 </div>
@@ -161,7 +191,7 @@ class Genres extends Component {
               </div>
               <form className="d-flex ms-5 navSearchBar">
                 <input
-                  className="form-control m-3 border border-dark input-lg"
+                  className="form-control m-3 border border-dark input-lg genreSearch"
                   type="search"
                   placeholder="Search Genres"
                   aria-label="Search"

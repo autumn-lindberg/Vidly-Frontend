@@ -42,14 +42,21 @@ class GenreForm extends Form {
         name: data.name,
       };
       try {
+        const copy = { ...genre };
+        copy._id = copy._id.toString();
+        this.props.addGenre(copy);
         const response = await httpService.post(
           `${config.apiEndpoint}/genres`,
           genre
         );
         if (response.status === 200)
           toast.success(`Created New Genre ${genre.name}!`);
-        else toast.error("An Error Occurred. Please Try Again Later.");
+        else {
+          this.props.removeGenre();
+          toast.error("An Error Occurred. Please Try Again Later.");
+        }
       } catch (exception) {
+        this.props.removeGenre();
         toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {

@@ -5,7 +5,7 @@ import httpService from "../services/httpservice";
 import { getGenres } from "../services/genreService";
 import config from "../config.json";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 const Joi = require("joi-browser");
 const ObjectId = require("bson-objectid");
 
@@ -64,14 +64,23 @@ class MovieForm extends Form {
         liked: false,
       };
       try {
+        this.props.addMovie(movie);
         const response = await httpService.post(
           `${config.apiEndpoint}/movies`,
           movie
         );
-        if (response.status === 200)
+        if (response.status === 200) {
           toast.success(`Created New Movie ${movie.title}!`);
-        else toast.error("An Error Occurred. Please Try Again Later.");
+        } else {
+          // remove movie if error
+          this.props.removeMovie();
+          toast.error("An Error Occurred. Please Try Again Later.");
+          console.log(response.status);
+        }
       } catch (exception) {
+        // remove movie if error
+        this.props.removeMovie();
+        console.log(exception);
         toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {
@@ -94,9 +103,10 @@ class MovieForm extends Form {
           `${config.apiEndpoint}/movies/${this.props.placeholders._id}`,
           movie
         );
-        if (response.status === 200)
+        if (response.status === 200) {
           toast.success(`Successfully Updated ${movie.title}!`);
-        else toast.error("An Error Occurred. Please Try Again Later");
+          this.setState({ navigate: true });
+        } else toast.error("An Error Occurred. Please Try Again Later");
       } catch (exception) {
         toast.error("An Error Occurred. Please Try Again Later");
       }
@@ -112,6 +122,7 @@ class MovieForm extends Form {
   render() {
     return (
       <div classtype="container">
+        {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
         {
           // Submission handler
         }

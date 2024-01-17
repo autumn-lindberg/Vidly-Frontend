@@ -29,7 +29,7 @@ const ListGroup = ({ currentGenre, genres, onGenreChange }) => {
       }
       {genres.map((genre) => (
         <li
-          key={genre.name}
+          key={genre._id}
           // logic for whether genre highlighted or not (for bootstrap)
           className={
             currentGenre === genre.name
