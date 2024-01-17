@@ -6,6 +6,7 @@ import filmReel from "../img/film-reel-multiple.jpg";
 import smiles from "../img/smiling-group.jpg";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
+import ContactForm from "./common/react-index";
 import "react-toastify/dist/ReactToastify.css";
 
 class Home extends Component {
@@ -91,6 +92,8 @@ class Home extends Component {
           </div>
         </div>
         <Footer />
+        <br />
+        <ContactForm />
       </React.Fragment>
     );
   }

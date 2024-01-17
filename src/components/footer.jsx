@@ -1,8 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../img/film-reel-purple.png";
+import Axios from "axios";
 
 function Footer() {
+  const [email, setEmail] = useState();
+  useEffect(() => {
+    const thankYouMessage = document.querySelector(".thankyou_message");
+    thankYouMessage.style.display = "none";
+  }, []);
+  function handleChange(e) {
+    setEmail(e.currentTarget.value);
+  }
+  function submitForm(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("Email", email);
+    Axios({
+      method: "post",
+      url: "https://script.google.com/macros/s/AKfycbzYMCL5dlqRBvqGg6nsUugs8o2jWPorYwZvor5drvjUhOO7A8_qMWe0fcqMlQQAFhEY/exec",
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+        //handle success
+        if (response.status === 200) {
+          var formElements = document.querySelector(".form-elements");
+          if (formElements) {
+            formElements.style.display = "none"; // hide form
+          }
+          var thankYouMessage = document.querySelector(".thankyou_message");
+          if (thankYouMessage) {
+            thankYouMessage.style.display = "flex";
+          }
+        }
+        console.log(response);
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
+  }
   return (
     <div className="jumbotron jumbotron-fluid footer">
       <div className="container d-flex justify-content-between footer-columns pb-2">
@@ -91,22 +129,29 @@ function Footer() {
           <p>Stay in the know about community events, sales, and updates.</p>
           <form
             className="gform"
-            method="POST"
-            action="https://script.google.com/macros/s/AKfycbzYMCL5dlqRBvqGg6nsUugs8o2jWPorYwZvor5drvjUhOO7A8_qMWe0fcqMlQQAFhEY/exec"
-            target="_blank"
+            //target="_blank"
+            onSubmit={submitForm}
           >
-            <input
-              className="form-control subscribe"
-              placeholder="Enter your email"
-              type="text"
-              name="Email"
-              id="Email"
-            />
-            <button className="btn btn-primary subscribe-button">
-              Subscribe
-            </button>
-            <div style={{ display: "none" }} className="thankyou_message">
-              <h2>Thanks for contacting us! We will get back to you soon.</h2>
+            <div className="form-elements">
+              <input
+                onChange={handleChange}
+                className="form-control subscribe"
+                placeholder="Enter your email"
+                type="text"
+                name="Email"
+                id="Email"
+              />
+              <button
+                className="btn btn-primary subscribe-button"
+                type="submit"
+              >
+                Subscribe
+              </button>
+            </div>
+            <div className="thankyou_message">
+              <h5 className="fw-bold">
+                Thank you for contacting us! We will get back to you soon.
+              </h5>
             </div>
           </form>
         </div>
