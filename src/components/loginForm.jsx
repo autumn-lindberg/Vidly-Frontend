@@ -4,7 +4,7 @@ import logo from "../img/film-reel-purple.png";
 import httpService from "../services/httpservice";
 import config from "../config.json";
 import Footer from "./footer";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
 import UserContext from "../UserContext";
 import { jwtDecode } from "jwt-decode";
@@ -45,9 +45,9 @@ class LoginForm extends Form {
         user
       );
       if (response.status === 400) {
-        toast("User Not Found");
+        toast.error("User Not Found.");
       } else {
-        toast(response.status);
+        toast.success("Logged In Successfully!");
         // store JWT
         const JWT = response.headers["x-auth-token"];
         localStorage.setItem("token", JWT);
@@ -68,7 +68,6 @@ class LoginForm extends Form {
     return (
       <>
         <div className="page-container login-register-page">
-          <ToastContainer />
           <div classtype="container">
             <h1 className="mb-4 d-flex">
               Login to{" "}
@@ -133,7 +132,6 @@ class LoginForm extends Form {
                   `${config.apiEndpoint}/login`,
                   user
                 );
-                toast(response.status);
                 if (response.status === 200) {
                   // store JWT
                   const token = response.headers["x-auth-token"];
@@ -141,13 +139,14 @@ class LoginForm extends Form {
                   // set context
                   const myContext = jwtDecode(token);
                   this.context.handleLogin(myContext);
+                  toast.success("Logged In Successfully!");
                   this.setState({ navigate: true });
                 } else {
-                  toast("Error occurred");
+                  toast.error("An Error Occurred. Please Try Again Later.");
                 }
               }}
               onError={() => {
-                toast("Login Failed");
+                toast.error("Login Failed.");
               }}
             />
           </div>

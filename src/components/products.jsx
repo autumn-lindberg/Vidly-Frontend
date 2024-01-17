@@ -5,11 +5,10 @@ import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getProducts } from "../services/productService";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
 import config from "../config.json";
-import "react-toastify/dist/ReactToastify.css";
 import { filterProducts } from "../utils/filterProducts";
 import UserContext from "../UserContext";
 import { Navigate } from "react-router-dom";
@@ -39,9 +38,11 @@ class Products extends Component {
       const response = await httpService.delete(
         `${config.apiEndpoint}/products/${product._id}`
       );
-      toast(`Status: ${response.status}`);
+      if (response.status === 200)
+        toast.success(`${product.title} Deleted Successfully!`);
+      else toast.error("An Error Occurred. Please Try Again Later");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later");
     }
   };
 
@@ -115,7 +116,6 @@ class Products extends Component {
           console.log("")
         )}
         <div className="page-container ms-3 me-3">
-          <ToastContainer />
           <div className="titleAndButton d-flex mb-2 justify-content-start align-items-top">
             <div className="addButtonModal">
               <button

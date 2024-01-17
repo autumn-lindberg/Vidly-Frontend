@@ -4,11 +4,10 @@ import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getRentals } from "../services/rentalService";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
 import config from "../config.json";
-import "react-toastify/dist/ReactToastify.css";
 import { filterRentals } from "../utils/filterRentals";
 import UserContext from "../UserContext";
 import { Navigate } from "react-router-dom";
@@ -38,9 +37,11 @@ class Rentals extends Component {
       const response = await httpService.delete(
         `${config.apiEndpoint}/rentals/${rental._id}`
       );
-      toast(`Status: ${response.status}`);
+      if (response.status === 200)
+        toast.success("Successfully Deleted Rental Record!");
+      else toast.error("An Error Occurred. Please Try Again later.");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again later.");
     }
   };
 
@@ -99,9 +100,11 @@ class Rentals extends Component {
         `${config.apiEndpoint}/returns`,
         rental
       );
-      toast(response.status);
+      if (response.status === 200)
+        toast.success(`Successfully Returned ${rental.movie.title}!`);
+      else toast.error("An Error Occurred. Please Try Again Later.");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later.");
     }
   }
 
@@ -127,7 +130,6 @@ class Rentals extends Component {
           console.log("")
         )}
         <div className="page-container ms-3">
-          <ToastContainer />
           <div className="d-flex justify-content-start align-items-top">
             <div className="title">
               <h1>Rentals List</h1>

@@ -5,11 +5,10 @@ import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { getCustomers } from "../services/customerService";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
 import config from "../config.json";
-import "react-toastify/dist/ReactToastify.css";
 import { filterCustomers } from "../utils/filterCustomers";
 import UserContext from "../UserContext";
 import { Navigate } from "react-router-dom";
@@ -39,9 +38,11 @@ class Customers extends Component {
       const response = await httpService.delete(
         `${config.apiEndpoint}/customers/${customer._id}`
       );
-      toast(`Status: ${response.status}`);
+      if (response.status === 200)
+        toast.success(`Successfully Deleted ${customer.name}!`);
+      else toast.error("An Error Occurred. Please Try Again Later.");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later.");
     }
   };
 
@@ -116,7 +117,6 @@ class Customers extends Component {
           console.log("")
         )}
         <div className="page-container ms-5">
-          <ToastContainer />
           <div className="titleAndButton d-flex justify-content-start align-items-top">
             <div className="addButtonModal">
               <button

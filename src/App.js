@@ -17,6 +17,8 @@ import NewRental from "./components/newRental";
 import { Route, Routes } from "react-router-dom";
 import React, { useState } from "react";
 import UserContext from "./UserContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
@@ -46,6 +48,7 @@ function App() {
       >
         <div className="bg-light">
           <NavBar />
+          <ToastContainer theme="colored" />
           <main className="container-fluid pt-0 ps-0 pe-0 mainContainer">
             <Routes>
               <Route index element={<Home />}></Route>

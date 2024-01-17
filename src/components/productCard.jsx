@@ -1,14 +1,20 @@
 import { Buffer } from "buffer";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import httpService from "../services/httpservice";
 import config from "../config.json";
 
 const ProductCard = ({ product }) => {
   async function handleDelete(p) {
     try {
-      await httpService.delete(`${config.apiEndpoint}/products/${p._id}`);
+      const response = await httpService.delete(
+        `${config.apiEndpoint}/products/${p._id}`
+      );
+      if (response.status === 200)
+        toast.success(`Successfully Deleted ${p.title}!`);
+      else toast.error("An Error Occurred. Please Try Again Later.");
     } catch (exception) {
-      console.log(exception);
+      toast.error("An Error Occurred. Please Try Again Later.");
     }
   }
 
