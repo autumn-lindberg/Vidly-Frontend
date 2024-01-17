@@ -65,7 +65,7 @@ class Movies extends Component {
     try {
       const response = await httpService.put(
         `${config.apiEndpoint}/movies/${movie._id}`,
-        movie[index]
+        movies[index]
       );
       toast(`Status: ${response.status}`);
     } catch (exception) {

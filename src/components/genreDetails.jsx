@@ -1,6 +1,6 @@
 import React from "react";
 import Footer from "./footer";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import GenreForm from "./genreForm";
 
 const CustomerDetails = () => {

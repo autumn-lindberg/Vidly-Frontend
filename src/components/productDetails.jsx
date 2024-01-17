@@ -1,7 +1,7 @@
 import React from "react";
 import ProductForm from "./productForm";
 import Footer from "./footer";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const ProductDetails = () => {
   //const routeParams = useParams();
