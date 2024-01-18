@@ -52,9 +52,6 @@ class ProductForm extends Form {
 
   componentDidMount() {
     if (this.props.placeholders) {
-      // set initial data
-      const { placeholders } = this.props;
-      this.setState({ data: placeholders });
       // populate the thumbnail
       const fileInput = document.querySelector('input[type="file"]');
       // take array from props
@@ -145,7 +142,7 @@ class ProductForm extends Form {
               description: data.description,
               price: data.price,
               stock: data.stock,
-              imageSrc: result,
+              imageSrc: file,
             };
             try {
               const response = await httpService.put(
@@ -170,11 +167,12 @@ class ProductForm extends Form {
       });
     }
   };
+  doNothing() {}
 
   render() {
     return (
       <div classtype="container">
-        {this.state.navigate ? <Navigate to="/products" /> : console.log("")}
+        {this.state.navigate ? <Navigate to="/products" /> : this.doNothing()}
         {
           // Submission handler
         }
@@ -182,10 +180,10 @@ class ProductForm extends Form {
           {
             // inputs
           }
-          {this.renderInput("title", "Title")}
-          {this.renderInput("description", "Description")}
-          {this.renderInput("price", "Price")}
-          {this.renderInput("stock", "Stock")}
+          {this.renderInput("title", "Title", "text")}
+          {this.renderInput("description", "Description", "text")}
+          {this.renderInput("price", "Price", "text")}
+          {this.renderInput("stock", "Stock", "text")}
           {this.renderFileUpload("fileName")}
           <HorizontalDivider />
           <div className="text-center">
@@ -193,7 +191,17 @@ class ProductForm extends Form {
               // renderButton is also part of "this" now
               this.renderButton("Submit", "btn btn-success")
             }
-            <Link to="/products">
+            {this.props.placeholders ? (
+              <Link to="/products">
+                <button
+                  type="button"
+                  className="btn btn-danger ms-2"
+                  aria-label="Close"
+                >
+                  Cancel
+                </button>
+              </Link>
+            ) : (
               <button
                 type="button"
                 className="btn btn-danger ms-2"
@@ -202,7 +210,7 @@ class ProductForm extends Form {
               >
                 Cancel
               </button>
-            </Link>
+            )}
           </div>
         </form>
       </div>

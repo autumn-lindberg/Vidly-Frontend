@@ -64,6 +64,8 @@ class LoginForm extends Form {
     }
   };
 
+  doNothing() {}
+
   render() {
     return (
       <>
@@ -150,7 +152,7 @@ class LoginForm extends Form {
               }}
             />
           </div>
-          {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
+          {this.state.navigate ? <Navigate to="/movies" /> : this.doNothing()}
         </div>
         <Footer />
       </>

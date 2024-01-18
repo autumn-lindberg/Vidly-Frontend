@@ -65,6 +65,8 @@ class RegisterForm extends Form {
     }
   };
 
+  doNothing() {}
+
   render() {
     return (
       <>
@@ -157,7 +159,7 @@ class RegisterForm extends Form {
               }}
             />
           </div>
-          {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
+          {this.state.navigate ? <Navigate to="/movies" /> : this.doNothing()}
         </div>
         <Footer />
       </>

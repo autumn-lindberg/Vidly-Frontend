@@ -33,7 +33,13 @@ class TableBody extends Component {
                 // for each column in columns array (located in components/movieTable.jsx and passed by props to table.jsx then here)
                 columns.map((column) => (
                   // create a table cell
-                  <td key={column.label || column.key}>
+                  <td
+                    key={
+                      column.path
+                        ? `${item._id}${column.path}`
+                        : `${item._id}${column.key}`
+                    }
+                  >
                     {
                       // render a movie object's data for a given column by accessing its "path"
                       // see components/movieTable.jsx and services/fakeMovieService.js to see these props

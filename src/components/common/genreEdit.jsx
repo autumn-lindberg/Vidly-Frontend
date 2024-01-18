@@ -7,8 +7,7 @@ const GenreEdit = ({ genre }) => {
       <Link
         to={`/genres/${genre._id}`}
         state={{
-          _id: genre._id,
-          name: genre.name,
+          ...genre,
         }}
       >
         <i className="bi-pencil h2 text-dark hoverLink"></i>

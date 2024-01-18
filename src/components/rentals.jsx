@@ -116,6 +116,8 @@ class Rentals extends Component {
     }
   }
 
+  doNothing() {}
+
   render() {
     let message = "";
     // get data for sorting from state
@@ -135,7 +137,7 @@ class Rentals extends Component {
         {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
-          console.log("")
+          this.doNothing()
         )}
         <div className="page-container ms-3">
           <div className="d-flex justify-content-start align-items-top">

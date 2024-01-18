@@ -48,7 +48,9 @@ class Form extends Component {
       // ? (data[e.currentTarget.name] = data["fileName"])
       data[e.currentTarget.name] = this.setFileName(e.target.files[0]);
       data["imageSrc"] = e.target.files[0];
-    } else data[e.currentTarget.name] = e.currentTarget.value;
+    } else {
+      data[e.currentTarget.name] = e.currentTarget.value;
+    }
     // update the state to reflect current input and error info
     this.setState({ data, errors });
   };
@@ -104,19 +106,40 @@ class Form extends Component {
     );
   }
 
-  // renders a single dropdown item
-  renderDropdownItem(name, label) {
+  // renders a whole dropdown list
+  renderDropdown(items, name) {
     return (
-      <option value={name} key={name} id={name}>
-        {label}
-      </option>
+      <select
+        className="form-select"
+        defaultValue=""
+        onChange={this.handleDropdown}
+        name={name}
+      >
+        <option id="" name="" key="" disabled value="">
+          {" "}
+        </option>
+        {items.map((item) => {
+          // uppercase first letter
+          item.name = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+          return (
+            <option
+              id={`a${item._id}`}
+              name={item.name}
+              key={item._id}
+              value={item.name}
+            >
+              {item.name}
+            </option>
+          );
+        })}
+      </select>
     );
   }
 
   // renders a single radio button with a label
-  renderRadioButton(name, label, group) {
+  renderRadioButton(name, label, group, key) {
     return (
-      <div className="form-check" key={label}>
+      <div className="form-check" key={key}>
         {}
         <input
           className="form-check-input"
@@ -126,7 +149,7 @@ class Form extends Component {
           value={name}
           onChange={this.setRadio}
         />
-        <label className="form-check-label" for={name}>
+        <label className="form-check-label" htmlFor={name}>
           {label}
         </label>
       </div>
@@ -145,7 +168,7 @@ class Form extends Component {
   renderFileUpload(name) {
     return (
       <div className="mb-3">
-        <label for="formFile" className="form-label">
+        <label htmlFor="formFile" className="form-label">
           Thumbnail Photo
         </label>
         <input

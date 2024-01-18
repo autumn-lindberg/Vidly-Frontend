@@ -10,6 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 class Home extends Component {
   render() {
+    const width = "15rem";
+    const height = "20rem";
     return (
       <React.Fragment>
         <ToastContainer />
@@ -68,7 +70,8 @@ class Home extends Component {
               body="Track your inventory easily with Vidly's movie management tool. Available to all users."
               button="Inventory"
               link="/movies"
-              width="14rem"
+              width={width}
+              height={height}
             />
             <Card
               className="image-hover"
@@ -77,7 +80,8 @@ class Home extends Component {
               body="Make the most of your reputation by merchandising. A cost-effective way to generate revenue."
               button="Manage"
               link="/products"
-              width="14rem"
+              width={width}
+              height={height}
             />
             <Card
               className="image-hover"
@@ -86,7 +90,8 @@ class Home extends Component {
               body="Get to know your customers by keeping in touch with them. Send newsletters, reminders, and texts."
               button="View Customers"
               link="/customers"
-              width="14rem"
+              width={width}
+              height={height}
             />
           </div>
         </div>

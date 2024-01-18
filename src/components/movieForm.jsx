@@ -16,10 +16,10 @@ class MovieForm extends Form {
     genres: [],
     data: this.props.placeholders
       ? {
-          title: this.props.placeholders.name,
+          title: this.props.placeholders.title,
           genre: this.props.placeholders.genre.name,
-          numberInStock: this.props.placeholders.numberInStock,
-          dailyRentalRate: this.props.placeholders.dailyRentalRate,
+          numberInStock: this.props.placeholders.numberInStock.toString(),
+          dailyRentalRate: this.props.placeholders.dailyRentalRate.toString(),
         }
       : { title: "", genre: "", numberInStock: "", dailyRentalRate: "" },
     errors: {},
@@ -37,14 +37,9 @@ class MovieForm extends Form {
     // get genres for radio buttons
     const { data: genres } = await getGenres();
     this.setState({ genres: genres });
-    // set defaults
-    if (this.props.placeholders) {
-      const { placeholders } = this.props;
-      this.setState({ data: placeholders });
-      // set radio to checked
-      const checked = document.querySelector(".form-select");
-      checked.value = placeholders.genre.name;
-    }
+    // set selected genre
+    const select = document.querySelector(".form-select");
+    select.value = this.state.data.genre || "";
   }
 
   // form.jsx component requires the submit function to be called doSubmit
@@ -117,12 +112,15 @@ class MovieForm extends Form {
     const data = { ...this.state.data };
     data.genre = e.currentTarget.value;
     this.setState({ data: data });
+    this.handleChange(e);
   };
+
+  doNothing() {}
 
   render() {
     return (
       <div classtype="container">
-        {this.state.navigate ? <Navigate to="/movies" /> : console.log("")}
+        {this.state.navigate ? <Navigate to="/movies" /> : this.doNothing()}
         {
           // Submission handler
         }
@@ -130,27 +128,16 @@ class MovieForm extends Form {
           {
             // title input
           }
-          {this.renderInput("title", "Title")}
+          {this.renderInput("title", "Title", "text")}
           {
             // genre radio boxes
           }
           <label className="text-center form-label">Genre</label>
           <div className="d-flex justify-content-evenly mb-4">
-            <select className="form-select" onChange={this.handleDropdown}>
-              <option id="" name="" key="" disabled selected value="">
-                {" "}
-              </option>
-              {this.state.genres.map((genre) => {
-                const name = genre.name;
-                // uppercase first letter
-                genre.name =
-                  genre.name.charAt(0).toUpperCase() + genre.name.slice(1);
-                return this.renderDropdownItem(name, genre.name);
-              })}
-            </select>
+            {this.renderDropdown(this.state.genres, "genre")}
           </div>
-          {this.renderInput("numberInStock", "Stock")}
-          {this.renderInput("dailyRentalRate", "Rate")}
+          {this.renderInput("numberInStock", "Stock", "text")}
+          {this.renderInput("dailyRentalRate", "Rate", "text")}
           <HorizontalDivider />
           <div className="text-center">
             {
@@ -158,7 +145,17 @@ class MovieForm extends Form {
               // why tf does it throw error when both these functions are called in same {}??
               this.renderButton("Submit", "btn btn-success")
             }
-            <Link to="/movies">
+            {this.props.placeholders ? (
+              <Link to="/movies">
+                <button
+                  type="button"
+                  className="btn btn-danger ms-2"
+                  aria-label="Close"
+                >
+                  Cancel
+                </button>
+              </Link>
+            ) : (
               <button
                 type="button"
                 className="btn btn-danger ms-2"
@@ -167,7 +164,7 @@ class MovieForm extends Form {
               >
                 Cancel
               </button>
-            </Link>
+            )}
           </div>
         </form>
       </div>

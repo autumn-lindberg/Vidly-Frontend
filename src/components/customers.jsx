@@ -122,6 +122,8 @@ class Customers extends Component {
     this.setState({ filtered: filtered });
   };
 
+  doNothing() {}
+
   render() {
     let message = "";
     // get data for sorting from state
@@ -141,7 +143,7 @@ class Customers extends Component {
         {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
-          console.log("")
+          this.doNothing()
         )}
         <div className="page-container ms-5">
           <div className="titleAndButton d-flex justify-content-start align-items-top">

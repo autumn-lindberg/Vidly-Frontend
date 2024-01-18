@@ -26,13 +26,6 @@ class GenreForm extends Form {
     name: Joi.string().required().label("Name"),
   };
 
-  componentDidMount() {
-    if (this.props.placeholders) {
-      const { placeholders } = this.props;
-      this.setState({ data: placeholders });
-    }
-  }
-
   // form.jsx component requires the submit function to be called doSubmit
   doSubmit = async () => {
     const data = { ...this.state.data };
@@ -79,10 +72,12 @@ class GenreForm extends Form {
     }
   };
 
+  doNothing() {}
+
   render() {
     return (
       <div classtype="container">
-        {this.state.navigate ? <Navigate to="/genres" /> : console.log("")}
+        {this.state.navigate ? <Navigate to="/genres" /> : this.doNothing()}
         {
           // Submission handler
         }
@@ -97,7 +92,17 @@ class GenreForm extends Form {
               // renderButton is also part of "this" now
               this.renderButton("Submit", "btn btn-success")
             }
-            <Link to="/genres">
+            {this.props.placeholders ? (
+              <Link to="/genres">
+                <button
+                  type="button"
+                  className="btn btn-danger ms-2"
+                  aria-label="Close"
+                >
+                  Cancel
+                </button>
+              </Link>
+            ) : (
               <button
                 type="button"
                 className="btn btn-danger ms-2"
@@ -106,7 +111,7 @@ class GenreForm extends Form {
               >
                 Cancel
               </button>
-            </Link>
+            )}
           </div>
         </form>
       </div>

@@ -66,21 +66,21 @@ function Footer() {
                   target="_blank"
                   style={{ textDecoration: "none" }}
                 >
-                  <i class="bi-instagram h2"></i>
+                  <i className="bi-instagram h2"></i>
                 </Link>
                 <Link
                   to={{ pathname: "https://www.facebook.com" }}
                   target="_blank"
                   style={{ textDecoration: "none" }}
                 >
-                  <i class="bi-facebook h2"></i>
+                  <i className="bi-facebook h2"></i>
                 </Link>
                 <Link
                   to={{ pathname: "https://www.youtube.com" }}
                   target="_blank"
                   style={{ textDecoration: "none" }}
                 >
-                  <i class="bi-youtube h2"></i>
+                  <i className="bi-youtube h2"></i>
                 </Link>
               </div>
             </div>
