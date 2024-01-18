@@ -121,6 +121,8 @@ class Genres extends Component {
     this.setState({ filtered: filtered });
   };
 
+  doNothing() {}
+
   render() {
     let message = "";
     // get data for sorting from state
@@ -141,7 +143,7 @@ class Genres extends Component {
           {!localStorage.getItem("token") ? (
             <Navigate to="/login" />
           ) : (
-            console.log("")
+            this.doNothing()
           )}
           <div className="titleAndButton d-flex justify-content-start align-items-top">
             <div className="addButtonModal">

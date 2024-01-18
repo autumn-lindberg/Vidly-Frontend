@@ -64,6 +64,7 @@ class Products extends Component {
     // CALL SERVER AND SET INITIAL DATA
     const { data: products } = await getProducts();
     this.setState({ products: products, filtered: products });
+    console.log(this.validate());
   }
 
   // function to show only the information for the current page of items
@@ -120,6 +121,8 @@ class Products extends Component {
     this.setState({ filtered: filtered });
   };
 
+  doNothing() {}
+
   render() {
     let message = "";
     // get data for sorting from state
@@ -139,7 +142,7 @@ class Products extends Component {
         {!localStorage.getItem("token") ? (
           <Navigate to="/login" />
         ) : (
-          console.log("")
+          this.doNothing()
         )}
         <div className="page-container ms-3 me-3">
           <div className="titleAndButton d-flex mb-2 justify-content-start align-items-top">

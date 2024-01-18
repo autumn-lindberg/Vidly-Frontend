@@ -36,6 +36,7 @@ const NavBar = () => {
     userContext.handleLogout();
     resetNavigate();
   };
+  const doNothing = () => {};
   return (
     <React.Fragment>
       <nav className="navbar navbar-expand-lg navbar-light myNav pt-1 pb-1">
@@ -161,7 +162,7 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
-      {navigate ? <Navigate to="/login" /> : console.log("")}
+      {navigate ? <Navigate to="/login" /> : doNothing()}
     </React.Fragment>
   );
 };

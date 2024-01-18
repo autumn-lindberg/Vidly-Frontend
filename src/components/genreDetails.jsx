@@ -3,14 +3,13 @@ import Footer from "./footer";
 import { useLocation } from "react-router-dom";
 import GenreForm from "./genreForm";
 
-const CustomerDetails = () => {
+const GenreDetails = () => {
   //const routeParams = useParams();
   const location = useLocation();
   let placeholders;
   if (location.state) {
     placeholders = {
-      _id: location.state._id,
-      name: location.state.name,
+      ...location.state,
     };
   }
   return (
@@ -23,4 +22,4 @@ const CustomerDetails = () => {
   );
 };
 
-export default CustomerDetails;
+export default GenreDetails;
