@@ -2,7 +2,6 @@ import React from "react";
 import Form from "./common/form";
 import HorizontalDivider from "./common/horizontalDivider";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -39,7 +38,7 @@ class GenreForm extends Form {
         copy._id = copy._id.toString();
         this.props.addGenre(copy);
         const response = await httpService.post(
-          `${config.apiEndpoint}/genres`,
+          `${process.env.REACT_APP_API_ENDPOINT}/genres`,
           genre
         );
         if (response.status === 200)
@@ -59,7 +58,7 @@ class GenreForm extends Form {
       };
       try {
         const response = await httpService.put(
-          `${config.apiEndpoint}/genres/${this.props.placeholders._id}`,
+          `${process.env.REACT_APP_API_ENDPOINT}/genres/${this.props.placeholders._id}`,
           genre
         );
         if (response.status === 200)

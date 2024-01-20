@@ -3,7 +3,6 @@ import Form from "./common/form";
 import HorizontalDivider from "./common/horizontalDivider";
 import httpService from "../services/httpservice";
 import { getGenres } from "../services/genreService";
-import config from "../config.json";
 import { toast } from "react-toastify";
 import { Link, Navigate } from "react-router-dom";
 const Joi = require("joi-browser");
@@ -28,9 +27,25 @@ class MovieForm extends Form {
 
   schema = {
     title: Joi.string().required().label("Title"),
-    numberInStock: Joi.string().required().label("Stock"),
+    numberInStock: Joi.string()
+      .regex(/[0-9]+/)
+      .required()
+      .label("Stock")
+      .error(() => {
+        return {
+          message: '"Stock" must be a number',
+        };
+      }),
     genre: Joi.string().required().label("Genre"),
-    dailyRentalRate: Joi.string().required().label("Rate"),
+    dailyRentalRate: Joi.string()
+      .regex(/[0-9]+/)
+      .required()
+      .label("Rate")
+      .error(() => {
+        return {
+          message: '"Rate" must be a number',
+        };
+      }),
   };
 
   async componentDidMount() {
@@ -61,20 +76,20 @@ class MovieForm extends Form {
       try {
         this.props.addMovie(movie);
         const response = await httpService.post(
-          `${config.apiEndpoint}/movies`,
+          `${process.env.REACT_APP_API_ENDPOINT}/movies`,
           movie
         );
         if (response.status === 200) {
           toast.success(`Created New Movie ${movie.title}!`);
         } else {
           // remove movie if error
-          this.props.removeMovie();
+          this.props.removeMovie(movie);
           toast.error("An Error Occurred. Please Try Again Later.");
           console.log(response.status);
         }
       } catch (exception) {
         // remove movie if error
-        this.props.removeMovie();
+        this.props.removeMovie(movie);
         console.log(exception);
         toast.error("An Error Occurred. Please Try Again Later.");
       }
@@ -88,14 +103,14 @@ class MovieForm extends Form {
         genre: {
           // check if element has
           _id: genre._id,
-          name: data.genre,
+          name: genre.name,
         },
         dailyRentalRate: data.dailyRentalRate,
         liked: this.props.placeholders.liked,
       };
       try {
         const response = await httpService.put(
-          `${config.apiEndpoint}/movies/${this.props.placeholders._id}`,
+          `${process.env.REACT_APP_API_ENDPOINT}/movies/${this.props.placeholders._id}`,
           movie
         );
         if (response.status === 200) {

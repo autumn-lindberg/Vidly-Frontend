@@ -2,7 +2,6 @@ import React from "react";
 import Form from "./common/form";
 import HorizontalDivider from "./common/horizontalDivider";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
@@ -36,10 +35,18 @@ class CustomerForm extends Form {
       .label("Phone")
       .error(() => {
         return {
-          message: "Phone Number must be ten digits, without spaces.",
+          message: '"Phone" must be ten digits, without spaces',
         };
       }),
-    email: Joi.string().required().label("Email"),
+    email: Joi.string()
+      .regex(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
+      .required()
+      .label("Email")
+      .error(() => {
+        return {
+          message: '"Email" must be a valid email',
+        };
+      }),
   };
 
   // form.jsx component requires the submit function to be called doSubmit
@@ -59,19 +66,19 @@ class CustomerForm extends Form {
       try {
         this.props.addCustomer(customer);
         const response = await httpService.post(
-          `${config.apiEndpoint}/customers`,
+          `${process.env.REACT_APP_API_ENDPOINT}/customers`,
           customer
         );
         if (response.status === 200)
           toast.success(`Created New Customer ${customer.name} Successfully!`);
         else {
           // remove customer if error
-          this.props.removeCustomer();
+          this.props.removeCustomer(customer);
           toast.error("An Error Occurred. Please Try Again Later.");
         }
       } catch (exception) {
         // remove customer if error
-        this.props.removeCustomer();
+        this.props.removeCustomer(customer);
         toast.error("An Error Occurred. Please Try Again Later.");
       }
     } else {
@@ -86,7 +93,7 @@ class CustomerForm extends Form {
       };
       try {
         const response = await httpService.put(
-          `${config.apiEndpoint}/customers/${this.props.placeholders._id}`,
+          `${process.env.REACT_APP_API_ENDPOINT}/customers/${this.props.placeholders._id}`,
           customer
         );
         if (response.status === 200)

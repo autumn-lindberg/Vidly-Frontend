@@ -8,7 +8,6 @@ import { getCustomers } from "../services/customerService";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { filterCustomers } from "../utils/filterCustomers";
 import UserContext from "../UserContext";
 import { Navigate } from "react-router-dom";
@@ -26,22 +25,21 @@ class Customers extends Component {
 
   // handler for the delete button
   handleDelete = async (customer) => {
-    // update customers to reflect deletion
-    // goes through all customers and check if id matches on passed to handleDelete
-    // array filter takes a function as a parameter that returns T/F whether to include or not
-    const customers = this.state.customers.filter((m) => m.id !== customer.id);
-    // update state to reflect this
-    this.setState({ customers: customers });
-
+    const customers = [...this.state.customers];
+    this.removeCustomer(customer);
     // send delete request
     try {
       const response = await httpService.delete(
-        `${config.apiEndpoint}/customers/${customer._id}`
+        `${process.env.REACT_APP_API_ENDPOINT}/customers/${customer._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${customer.name}!`);
-      else toast.error("An Error Occurred. Please Try Again Later.");
+      else {
+        this.addCustomerBack(customer, customers.indexOf(customer));
+        toast.error("An Error Occurred. Please Try Again Later.");
+      }
     } catch (exception) {
+      this.addCustomerBack(customer, customers.indexOf(customer));
       toast.error("An Error Occurred. Please Try Again Later.");
     }
   };
@@ -77,6 +75,8 @@ class Customers extends Component {
     // length is a property of EVERY array in JS
     const { length: numberOfCustomers } = filtered;
     // order data using lodash
+    // prevent sorting for "like", "edit", and "delete"
+    sortColumn.path ? this.doNothing() : (sortColumn.path = "");
     // params are original array, propName of column being sorted, order by
     filtered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     // paginate data
@@ -112,9 +112,20 @@ class Customers extends Component {
     this.setState({ filtered: filtered });
   };
 
-  removeCustomer = () => {
-    const customers = [...this.state.customers];
-    customers.pop();
+  addCustomerBack = (customer, index) => {
+    const data = [...this.state.customers];
+    const customers = [...data.slice(0, index), customer, ...data.slice(index)];
+    this.setState({ customers: customers });
+    // grab search content and filter
+    const text = document.querySelector(".customerSearch").value;
+    const filtered = filterCustomers(customers, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeCustomer = (customer) => {
+    const data = [...this.state.customers];
+    // array filter takes a function as a parameter that returns T/F whether to include or not
+    const customers = data.filter((c) => c._id !== customer._id);
     this.setState({ customers: customers });
     // grab search content and filter
     const text = document.querySelector(".customerSearch").value;

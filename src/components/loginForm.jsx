@@ -2,7 +2,6 @@ import React from "react";
 import Form from "./common/form";
 import logo from "../img/film-reel-purple.png";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import Footer from "./footer";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
@@ -41,7 +40,7 @@ class LoginForm extends Form {
     try {
       // response is called DATA, not BODY!!!
       const response = await httpService.post(
-        `${config.apiEndpoint}/login`,
+        `${process.env.REACT_APP_API_ENDPOINT}/login`,
         user
       );
       if (response.status === 400) {
@@ -131,7 +130,7 @@ class LoginForm extends Form {
                 };
                 // send object to new user
                 const response = await httpService.post(
-                  `${config.apiEndpoint}/login`,
+                  `${process.env.REACT_APP_API_ENDPOINT}/login`,
                   user
                 );
                 if (response.status === 200) {

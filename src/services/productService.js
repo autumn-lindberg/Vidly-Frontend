@@ -1,9 +1,8 @@
 import httpService from "./httpservice";
-import config from "../config.json";
 
 export async function getProducts() {
   try {
-    return httpService.get(`${config.apiEndpoint}/products`);
+    return httpService.get(`${process.env.REACT_APP_API_ENDPOINT}/products`);
   } catch (exception) {
     console.log(exception);
   }
@@ -11,7 +10,9 @@ export async function getProducts() {
 
 export async function getProduct(productId) {
   try {
-    return httpService.get(`${config.apiEndpoint}/products/${productId}`);
+    return httpService.get(
+      `${process.env.REACT_APP_API_ENDPOINT}/products/${productId}`
+    );
   } catch (exception) {
     console.log(exception);
   }
@@ -19,7 +20,10 @@ export async function getProduct(productId) {
 
 export async function saveProduct(product) {
   try {
-    return httpService.post(`${config.apiEndpoint}/products`, product);
+    return httpService.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/products`,
+      product
+    );
   } catch (exception) {
     console.log(exception);
   }
@@ -28,7 +32,7 @@ export async function saveProduct(product) {
 export function updateProduct(product) {
   try {
     return httpService.put(
-      `${config.apiEndpoint}/products/${product._id}`,
+      `${process.env.REACT_APP_API_ENDPOINT}/products/${product._id}`,
       product
     );
   } catch (exception) {
@@ -38,7 +42,9 @@ export function updateProduct(product) {
 
 export function deleteProduct(product) {
   try {
-    return httpService.delete(`${config.apiEndpoint}/products/${product._id}`);
+    return httpService.delete(
+      `${process.env.REACT_APP_API_ENDPOINT}/products/${product._id}`
+    );
   } catch (exception) {
     console.log(exception);
   }

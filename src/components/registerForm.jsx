@@ -4,7 +4,6 @@ import Form from "./common/form";
 import logo from "../img/film-reel-purple.png";
 import Footer from "./footer";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "../UserContext";
@@ -44,13 +43,13 @@ class RegisterForm extends Form {
     // send request
     try {
       const response = await httpService.post(
-        `${config.apiEndpoint}/users`,
+        `${process.env.REACT_APP_API_ENDPOINT}/users`,
         user
       );
       if (response.status === 400) {
-        toast("Registration Error");
+        toast.error("Registration Error");
       } else {
-        toast("Account Created Successfully!");
+        toast.success("Account Created Successfully!");
         // store JWT
         const JWT = response.headers["x-auth-token"];
         localStorage.setItem("token", JWT);
@@ -138,7 +137,7 @@ class RegisterForm extends Form {
                 };
                 // send object to new user
                 const response = await httpService.post(
-                  `${config.apiEndpoint}/users`,
+                  `${process.env.REACT_APP_API_ENDPOINT}/users`,
                   user
                 );
                 if (response.status === 200) {
@@ -155,7 +154,7 @@ class RegisterForm extends Form {
                 }
               }}
               onError={() => {
-                toast("Login Failed.");
+                toast.error("Login Failed.");
               }}
             />
           </div>

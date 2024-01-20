@@ -230,7 +230,7 @@ td:has(> .btn.btn-danger),
 .movieTable th:nth-child(7),
 .genreTable th:nth-child(3),
 .rentalTable th:nth-child(5),
-.movieList th:nth-child(6) {
+.movieList th:nth-child(7) {
   text-align: center;
 }
 

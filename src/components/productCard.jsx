@@ -1,32 +1,12 @@
 import { Buffer } from "buffer";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import httpService from "../services/httpservice";
-import config from "../config.json";
 
-const ProductCard = ({ product, addProduct, removeProduct }) => {
+const ProductCard = ({ product, onDelete }) => {
   function createTarget(name) {
     return "#a" + name;
   }
   function createId(name) {
     return "a" + name;
-  }
-  async function handleDelete(p) {
-    try {
-      removeProduct();
-      const response = await httpService.delete(
-        `${config.apiEndpoint}/products/${p._id}`
-      );
-      if (response.status === 200)
-        toast.success(`Successfully Deleted ${p.title}!`);
-      else {
-        addProduct(p);
-        toast.error("An Error Occurred. Please Try Again Later.");
-      }
-    } catch (exception) {
-      addProduct(p);
-      toast.error("An Error Occurred. Please Try Again Later.");
-    }
   }
 
   return (
@@ -100,7 +80,7 @@ const ProductCard = ({ product, addProduct, removeProduct }) => {
                         <button
                           type="button"
                           className="btn btn-danger"
-                          onClick={() => handleDelete(product)}
+                          onClick={() => onDelete(product)}
                           data-bs-dismiss="modal"
                           aria-label="Close"
                         >

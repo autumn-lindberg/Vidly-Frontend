@@ -20,14 +20,32 @@ class RentalTable extends Component {
     rentals: [],
   };
   async componentDidMount() {
-    const { data: rentals } = await getRentals();
+    let { data: rentals } = await getRentals();
     this.setState({ rentals: rentals });
   }
+
   // path is the data's property name. components/tableBody.jsx uses this to access the data inside each rental object
   columns = [
     { path: "customer.name", label: "Name" },
     { path: "movie.title", label: "Title" },
     { path: "movie.genre.name", label: "Genre" },
+    {
+      path: "dateOut",
+      key: "Date Out",
+      content: (rental) => (
+        <i className="fw-light mb-0 mt-1 returnedText">
+          {new Date(rental.dateOut).toLocaleString("en-us", {
+            weekday: "narrow",
+            year: "2-digit",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}
+        </i>
+      ),
+    },
     {
       key: "Return",
       content: (rental) =>
@@ -87,7 +105,7 @@ class RentalTable extends Component {
             </div>
           </React.Fragment>
         ) : (
-          <i className="mb-0 mt-1 returnedText">RETURNED</i>
+          <i className="mb-0 mt-1 returnedText">${rental.rentalFee}</i>
         ),
     },
     {
@@ -143,7 +161,7 @@ class RentalTable extends Component {
                     data-bs-dismiss="modal"
                     aria-label="Close"
                   >
-                    Delete This Movie
+                    Delete This Rental
                   </button>
                 </div>
               </div>

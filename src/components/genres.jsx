@@ -8,7 +8,6 @@ import { getGenres } from "../services/genreService";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { filterGenres } from "../utils/filterGenres";
 import { Navigate } from "react-router-dom";
 import UserContext from "../UserContext";
@@ -26,21 +25,22 @@ class Genres extends Component {
 
   // handler for the delete button
   handleDelete = async (genre) => {
-    this.removeGenre();
+    const genres = [...this.state.genres];
+    this.removeGenre(genre);
 
     // send delete request
     try {
       const response = await httpService.delete(
-        `${config.apiEndpoint}/genres/${genre._id}`
+        `${process.env.REACT_APP_API_ENDPOINT}/genres/${genre._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${genre.name}!`);
       else {
-        this.addGenre(genre);
+        this.addGenreBack(genre, genres.indexOf(genre));
         toast.error("An Error Occurred. Please Try Again Later");
       }
     } catch (exception) {
-      this.addGenre(genre);
+      this.addGenreBack(genre, genres.indexOf(genre));
       toast.error("An Error Occurred. Please Try Again Later");
     }
   };
@@ -76,6 +76,8 @@ class Genres extends Component {
     // length is a property of EVERY array in JS
     const { length: numberOfGenres } = filtered;
     // order data using lodash
+    // prevent sorting for "edit", and "delete"
+    sortColumn.path ? this.doNothing() : (sortColumn.path = "");
     // params are original array, propName of column being sorted, order by
     filtered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     // paginate data
@@ -111,9 +113,20 @@ class Genres extends Component {
     this.setState({ filtered: filtered });
   };
 
-  removeGenre = () => {
-    const genres = [...this.state.genres];
-    genres.pop();
+  addGenreBack = (genre, index) => {
+    const data = [...this.state.genres];
+    const genres = [...data.slice(0, index), genre, ...data.slice(index)];
+    this.setState({ genres: genres });
+    // grab search content and filter
+    const text = document.querySelector(".genreSearch").value;
+    const filtered = filterGenres(genres, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeGenre = (genre) => {
+    const data = [...this.state.genres];
+    // array filter takes a function as a parameter that returns T/F whether to include or not
+    const genres = data.filter((g) => g._id !== genre._id);
     this.setState({ genres: genres });
     // grab search content and filter
     const text = document.querySelector(".genreSearch").value;
@@ -211,7 +224,6 @@ class Genres extends Component {
                   onSort={this.onSort}
                   sortColumn={this.state.sortColumn}
                   onDelete={this.handleDelete}
-                  onLike={this.handleLike}
                 />
                 {
                   // name of prop is still numberOfMovies because it's being reused

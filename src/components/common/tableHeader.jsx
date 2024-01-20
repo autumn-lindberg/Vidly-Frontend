@@ -8,8 +8,13 @@ class TableHeader extends Component {
     // pass in sortColumn by props from components/table.jsx, then from movieTable, then from movies.jsx
     const { sortColumn } = this.props;
     if (sortColumn.path === path) {
-      // if path is the same, reverse order
-      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+      if (sortColumn.order === "asc") {
+        // reverse order
+        sortColumn.order = "desc";
+      } else if (sortColumn.order === "desc") {
+        // reset sort column
+        sortColumn.path = "";
+      }
     } else {
       // otherwise new path, sort asc
       sortColumn.order = "asc";
@@ -27,7 +32,7 @@ class TableHeader extends Component {
     let className = "bi-caret-";
     if (sortColumn.order === "asc") {
       className += "up-fill";
-    } else {
+    } else if (sortColumn.order === "desc") {
       className += "down-fill";
     }
     return (

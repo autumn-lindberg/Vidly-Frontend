@@ -5,6 +5,7 @@ import { filterMovies } from "../utils/filterMovies";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import { Link } from "react-router-dom";
+import { getRentals } from "../services/rentalService";
 import _ from "lodash";
 
 class MovieList extends Component {
@@ -26,6 +27,7 @@ class MovieList extends Component {
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
     { path: "dailyRentalRate", label: "Price" },
+    { path: "qtyRented", label: "Rented" },
     {
       key: "Liked",
       // content is a function that takes in a movie and uses its liked prop to fill in heart or not (using onLike function)
@@ -93,8 +95,30 @@ class MovieList extends Component {
     },
   ];
 
-  componentDidMount() {
-    this.setState({ filtered: this.props.movies });
+  async componentDidMount() {
+    // CALL SERVER AND SET INITIAL DATA
+    const { data: rentals } = await getRentals();
+    this.setState({ rentals: rentals });
+    // sort through movies and assign extra prop "qtyRented"
+    // also remove the option if number in stock is 0
+    const movies = this.props.movies.map((movie) => {
+      if (movie.numberInStock === 0) return {};
+      movie.qtyRented = 0;
+      return movie;
+    });
+    // get the rentals for this customer
+    const thisCustomersRentals = rentals.filter((rental) => {
+      return rental.customer._id === this.props.customerId;
+    });
+    // mark qty rented out in movie
+    thisCustomersRentals.forEach((rental) => {
+      movies.map((movie) => {
+        if (movie._id === rental.movie._id && !rental.dateReturned)
+          movie.qtyRented += 1;
+        return movie;
+      });
+    });
+    this.setState({ filtered: movies });
   }
 
   // function to show only the information for the current page of items AND current genre
@@ -107,6 +131,8 @@ class MovieList extends Component {
     const { length: numberOfMovies } = filtered;
 
     // order data using lodash
+    // prevent sorting for "liked", and "select"
+    sortColumn.path ? this.doNothing() : (sortColumn.path = "");
     // params are original array, propName of column being sorted, order by
     filtered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     // paginate data
@@ -142,6 +168,8 @@ class MovieList extends Component {
       this.setState({ currentPage: 1 });
     }
   };
+
+  doNothing() {}
 
   render() {
     // get data for sorting from state
