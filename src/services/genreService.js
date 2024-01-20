@@ -1,9 +1,8 @@
 import httpService from "./httpservice";
-import config from "../config.json";
 
 export async function getGenres() {
   try {
-    return httpService.get(`${config.apiEndpoint}/genres`);
+    return httpService.get(`${process.env.REACT_APP_API_ENDPOINT}/genres`);
   } catch (exception) {
     console.log(exception);
   }
@@ -11,7 +10,9 @@ export async function getGenres() {
 
 export async function getGenre(genreId) {
   try {
-    return httpService.get(`${config.apiEndpoint}/genres/${genreId}`);
+    return httpService.get(
+      `${process.env.REACT_APP_API_ENDPOINT}/genres/${genreId}`
+    );
   } catch (exception) {
     console.log(exception);
   }
@@ -19,7 +20,10 @@ export async function getGenre(genreId) {
 
 export async function saveGenre(genre) {
   try {
-    return httpService.post(`${config.apiEndpoint}/genres`, genre);
+    return httpService.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/genres`,
+      genre
+    );
   } catch (exception) {
     console.log(exception);
   }
@@ -27,7 +31,10 @@ export async function saveGenre(genre) {
 
 export function updateGenre(genre) {
   try {
-    return httpService.put(`${config.apiEndpoint}/genres/${genre._id}`, genre);
+    return httpService.put(
+      `${process.env.REACT_APP_API_ENDPOINT}/genres/${genre._id}`,
+      genre
+    );
   } catch (exception) {
     console.log(exception);
   }
@@ -35,7 +42,9 @@ export function updateGenre(genre) {
 
 export function deleteGenre(genre) {
   try {
-    return httpService.delete(`${config.apiEndpoint}/genres/${genre._id}`);
+    return httpService.delete(
+      `${process.env.REACT_APP_API_ENDPOINT}/genres/${genre._id}`
+    );
   } catch (exception) {
     console.log(exception);
   }

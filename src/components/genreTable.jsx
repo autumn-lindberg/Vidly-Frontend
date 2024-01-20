@@ -9,7 +9,6 @@ class GenreTable extends Component {
   createId(name) {
     return "a" + name;
   }
-  // state not needed, doesn't change throughout component life cycle
   // path is the data's property name. components/tableBody.jsx uses this to access the data inside each customer object
   columns = [
     { path: "name", label: "Name" },

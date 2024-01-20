@@ -7,7 +7,6 @@ import { getRentals } from "../services/rentalService";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { filterRentals } from "../utils/filterRentals";
 import UserContext from "../UserContext";
 import { Navigate } from "react-router-dom";
@@ -25,23 +24,24 @@ class Rentals extends Component {
 
   // handler for the delete button
   handleDelete = async (rental) => {
-    // update rentals to reflect deletion
-    // goes through all rentals and check if id matches on passed to handleDelete
-    // array filter takes a function as a parameter that returns T/F whether to include or not
-    const rentals = this.state.rentals.filter((m) => m.id !== rental.id);
-    // update state to reflect this
-    this.setState({ rentals: rentals });
+    const rentals = [...this.state.rentals];
+    this.removeRental(rental);
 
     // send delete request
     try {
       const response = await httpService.delete(
-        `${config.apiEndpoint}/rentals/${rental._id}`
+        `${process.env.REACT_APP_API_ENDPOINT}/rentals/${rental._id}`
       );
-      if (response.status === 200)
+      if (response.status === 200) {
         toast.success("Successfully Deleted Rental Record!");
-      else toast.error("An Error Occurred. Please Try Again later.");
+      } else {
+        this.addRentalBack(rental, rentals.indexOf(rental));
+        toast.error("An Error Occurred. Please Try Again later.");
+      }
     } catch (exception) {
+      this.addRentalBack(rental, rentals.indexOf(rental));
       toast.error("An Error Occurred. Please Try Again later.");
+      console.log(exception);
     }
   };
 
@@ -76,6 +76,8 @@ class Rentals extends Component {
     // length is a property of EVERY array in JS
     const { length: numberOfRentals } = filtered;
     // order data using lodash
+    // prevent sorting for "return" and "delete"
+    sortColumn.path ? this.doNothing() : (sortColumn.path = "");
     // params are original array, propName of column being sorted, order by
     filtered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     // paginate data
@@ -101,20 +103,70 @@ class Rentals extends Component {
     }
   };
 
-  async onReturn(rental) {
+  reRender = async () => {
+    const { data: rentals } = await getRentals();
+    this.setState({ rentals: rentals, filtered: rentals });
+    /*
+    const rentals = [...this.state.rentals];
+    this.setState({ rentals: rentals });
+    // grab search content and filter
+    const text = document.querySelector(".rentalSearch").value;
+    const filtered = filterRentals(rentals, text);
+    this.setState({ filtered: filtered });
+    */
+  };
+
+  onReturn = async (rental) => {
     // post to rentals api
     try {
       const response = await httpService.post(
-        `${config.apiEndpoint}/returns`,
+        `${process.env.REACT_APP_API_ENDPOINT}/returns`,
         rental
       );
-      if (response.status === 200)
+      if (response.status === 200) {
         toast.success(`Successfully Returned ${rental.movie.title}!`);
-      else toast.error("An Error Occurred. Please Try Again Later.");
+        // re-render page
+        const { data: rentals } = await getRentals();
+        this.setState({ rentals: rentals, filtered: rentals });
+      } else toast.error("An Error Occurred. Please Try Again Later.");
     } catch (exception) {
       toast.error("An Error Occurred. Please Try Again Later.");
+      console.log(exception);
     }
-  }
+  };
+
+  addRental = (rental) => {
+    const rentals = [...this.state.rentals];
+    rentals.push(rental);
+    this.setState({ rentals: rentals });
+    // grab search content and filter
+    const text = document.querySelector(".rentalSearch").value;
+    const filtered = filterRentals(rentals, text);
+    this.setState({ filtered: filtered });
+  };
+
+  addRentalBack = (rental, index) => {
+    const data = [...this.state.rentals];
+    const rentals = [...data.slice(0, index), rental, ...data.slice(index)];
+    this.setState({ rentals: rentals });
+    // grab search content and filter
+    const text = document.querySelector(".rentalSearch").value;
+    const filtered = filterRentals(rentals, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeRental = (rental) => {
+    const data = [...this.state.rentals];
+    // update rentals to reflect deletion
+    // goes through all rentals and check if id matches on passed to handleDelete
+    // array filter takes a function as a parameter that returns T/F whether to include or not
+    const rentals = data.filter((r) => r._id !== rental._id);
+    this.setState({ rentals: rentals });
+    // grab search content and filter
+    const text = document.querySelector(".rentalSearch").value;
+    const filtered = filterRentals(rentals, text);
+    this.setState({ filtered: filtered });
+  };
 
   doNothing() {}
 
@@ -147,7 +199,7 @@ class Rentals extends Component {
             </div>
             <form className="d-flex ms-5 w-50">
               <input
-                className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg"
+                className="navSearchBar form-control mb-3 mt-3 ms-3 border border-dark input-lg rentalSearch"
                 type="search"
                 placeholder="Search Rentals"
                 aria-label="Search"
@@ -165,6 +217,8 @@ class Rentals extends Component {
                   sortColumn={this.state.sortColumn}
                   onReturn={this.onReturn}
                   onDelete={this.handleDelete}
+                  addRental={this.addRental}
+                  removeRental={this.removeRental}
                 />
               </div>
               {

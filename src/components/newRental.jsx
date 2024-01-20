@@ -2,7 +2,6 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import MovieList from "./movieList";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { toast } from "react-toastify";
 import Footer from "./footer";
 const ObjectId = require("bson-objectid");
@@ -38,12 +37,12 @@ const NewRental = () => {
     // send request
     try {
       const response = await httpService.post(
-        `${config.apiEndpoint}/rentals`,
+        `${process.env.REACT_APP_API_ENDPOINT}/rentals`,
         rental
       );
       if (response.status === 200)
         toast.success(
-          `Successfully Rented ${rental.customer.name} to ${rental.movie.title}!`
+          `Successfully Rented ${rental.movie.title} to ${rental.customer.name}!`
         );
       else toast.error("An Error Occurred. Please Try Again Later");
     } catch (exception) {
@@ -55,7 +54,11 @@ const NewRental = () => {
     <React.Fragment>
       <div className="page-container">
         <h1>Rent a Movie to {location.state.name}</h1>
-        <MovieList movies={location.state.movies} onSelect={handleSelect} />
+        <MovieList
+          movies={location.state.movies}
+          onSelect={handleSelect}
+          customerId={location.state._id}
+        />
       </div>
       <Footer />
     </React.Fragment>

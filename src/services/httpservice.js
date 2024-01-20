@@ -6,11 +6,11 @@ import { toast } from "react-toastify";
 Axios.interceptors.response.use(null, (error) => {
   const { response } = error;
   if (response && response.status >= 400 && response.status < 500) {
-    toast(`Error ${response.status}`);
+    toast.error(`Error Code: ${response.status}`);
     return Promise.reject(error);
   } else {
     console.log(error);
-    toast("An Unexpected Error Occurred");
+    toast.error("An Unexpected Error Occurred");
     return Promise.reject(error);
   }
 });

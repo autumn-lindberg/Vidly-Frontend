@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { getMovies } from "../services/movieService";
 import { getGenres } from "../services/genreService";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import Footer from "./footer";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
@@ -32,21 +31,22 @@ class Movies extends Component {
 
   // handler for the delete button
   handleDelete = async (movie) => {
-    this.removeMovie();
+    const movies = [...this.state.movies];
+    this.removeMovie(movie);
 
     // post data
     try {
       const response = await httpService.delete(
-        `${config.apiEndpoint}/movies/${movie._id}`
+        `${process.env.REACT_APP_API_ENDPOINT}/movies/${movie._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${movie.title}!`);
       else {
-        this.addMovie(movie);
+        this.addMovieBack(movie, movies.indexOf(movie));
         toast.error("An Error Occurred. Please Try Again Later.");
       }
     } catch (exception) {
-      this.addMovie(movie);
+      this.addMovieBack(movie, movies.indexOf(movie));
       toast.error("An Error Occurred. Please Try Again Later.");
     }
   };
@@ -72,7 +72,7 @@ class Movies extends Component {
     // make a put request and update data
     try {
       const response = await httpService.put(
-        `${config.apiEndpoint}/movies/${movie._id}`,
+        `${process.env.REACT_APP_API_ENDPOINT}/movies/${movie._id}`,
         movies[index]
       );
       if (response.status === 200)
@@ -120,8 +120,14 @@ class Movies extends Component {
     addButton.style.width = style;
 
     // set initial data
-    const { data: movies } = await getMovies();
+    let { data: movies } = await getMovies();
     const { data: genres } = await getGenres();
+
+    // also remove the option if number in stock is 0
+    movies = movies.filter((movie) => {
+      return movie.numberInStock !== 0;
+    });
+
     this.setState({ movies: movies, genres: genres, filtered: movies });
   }
 
@@ -153,7 +159,9 @@ class Movies extends Component {
     const { length: numberOfMovies } = filtered;
 
     // order data using lodash
-    // params are original array, propName of column being sorted, order by
+    // prevent sorting for "like", "edit", and "delete"
+    sortColumn.path ? this.doNothing() : (sortColumn.path = "");
+    // params are original array, prop name of column being sorted, order by
     filtered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     // paginate data
     filtered = paginate(filtered, currentPage, pageSize);
@@ -171,9 +179,22 @@ class Movies extends Component {
     this.setState({ filtered: filtered });
   };
 
-  removeMovie = () => {
-    const movies = [...this.state.movies];
-    movies.pop();
+  addMovieBack = (movie, index) => {
+    const data = [...this.state.movies];
+    const movies = [...data.slice(0, index), movie, ...data.slice(index)];
+    this.setState({ movies: movies });
+    // grab search content and filter
+    const text = document.querySelector(".movieSearch").value;
+    const filtered = filterMovies(movies, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeMovie = (movie) => {
+    const data = [...this.state.movies];
+    // update rentals to reflect deletion
+    // goes through all rentals and check if id matches on passed to handleDelete
+    // array filter takes a function as a parameter that returns T/F whether to include or not
+    const movies = data.filter((m) => m._id !== movie._id);
     this.setState({ movies: movies });
     // grab search content and filter
     const text = document.querySelector(".movieSearch").value;

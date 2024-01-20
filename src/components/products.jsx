@@ -8,7 +8,6 @@ import { getProducts } from "../services/productService";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { filterProducts } from "../utils/filterProducts";
 import UserContext from "../UserContext";
 import { Navigate } from "react-router-dom";
@@ -26,20 +25,22 @@ class Products extends Component {
 
   // handler for the delete button
   handleDelete = async (product) => {
-    this.removeProduct();
+    const products = [...this.state.products];
+    this.removeProduct(product);
+
     // send delete request
     try {
       const response = await httpService.delete(
-        `${config.apiEndpoint}/products/${product._id}`
+        `${process.env.REACT_APP_API_ENDPOINT}/products/${product._id}`
       );
       if (response.status === 200)
         toast.success(`${product.title} Deleted Successfully!`);
       else {
-        this.addProduct(product);
+        this.addProductBack(product, products.indexOf(product));
         toast.error("An Error Occurred. Please Try Again Later");
       }
     } catch (exception) {
-      this.addProduct(product);
+      this.addProductBack(product, products.indexOf(product));
       toast.error("An Error Occurred. Please Try Again Later");
     }
   };
@@ -64,7 +65,6 @@ class Products extends Component {
     // CALL SERVER AND SET INITIAL DATA
     const { data: products } = await getProducts();
     this.setState({ products: products, filtered: products });
-    console.log(this.validate());
   }
 
   // function to show only the information for the current page of items
@@ -111,9 +111,20 @@ class Products extends Component {
     this.setState({ filtered: filtered });
   };
 
-  removeProduct = () => {
-    const products = [...this.state.products];
-    products.pop();
+  addProductBack = (product, index) => {
+    const data = [...this.state.products];
+    const products = [...data.slice(0, index), product, ...data.slice(index)];
+    this.setState({ products: products });
+    // grab search content and filter
+    const text = document.querySelector(".productSearch").value;
+    const filtered = filterProducts(products, text);
+    this.setState({ filtered: filtered });
+  };
+
+  removeProduct = (product) => {
+    const data = [...this.state.products];
+    // array filter takes a function as a parameter that returns T/F whether to include or not
+    const products = data.filter((p) => p._id !== product._id);
     this.setState({ products: products });
     // grab search content and filter
     const text = document.querySelector(".productSearch").value;
@@ -209,8 +220,7 @@ class Products extends Component {
                 <ProductCard
                   product={product}
                   key={product._id}
-                  addProduct={this.addProduct}
-                  removeProduct={this.removeProduct}
+                  onDelete={this.handleDelete}
                 />
               );
             })}

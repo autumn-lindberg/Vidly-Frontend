@@ -2,7 +2,6 @@ import React from "react";
 import Form from "./common/form";
 import HorizontalDivider from "./common/horizontalDivider";
 import httpService from "../services/httpservice";
-import config from "../config.json";
 import { Navigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Compressor from "compressorjs";
@@ -42,11 +41,21 @@ class ProductForm extends Form {
     price: Joi.string()
       .regex(/^[0-9]+$/)
       .required()
-      .label("Price"),
+      .label("Price")
+      .error(() => {
+        return {
+          message: '"Price" must be a number',
+        };
+      }),
     stock: Joi.string()
       .regex(/^[0-9]+$/)
       .required()
-      .label("Stock"),
+      .label("Stock")
+      .error(() => {
+        return {
+          message: '"Stock" must be a number',
+        };
+      }),
     imageSrc: Joi.any().required().label("Thumbnail"),
   };
 
@@ -72,6 +81,7 @@ class ProductForm extends Form {
       dataTransfer.items.add(myFile);
       // set file input to files in datatransfer
       fileInput.files = dataTransfer.files;
+      // add it to state
     }
   }
 
@@ -100,7 +110,7 @@ class ProductForm extends Form {
             try {
               this.props.addProduct(product);
               const response = await httpService.post(
-                `${config.apiEndpoint}/products`,
+                `${process.env.REACT_APP_API_ENDPOINT}/products`,
                 product
               );
               if (response.status === 200)
@@ -108,11 +118,11 @@ class ProductForm extends Form {
                   `Successfully Added ${product.title} To Products!`
                 );
               else {
-                this.props.removeProduct();
+                this.props.removeProduct(product);
                 toast.error("An Error Occurred. Please Try Again Later.");
               }
             } catch (exception) {
-              this.props.removeProduct();
+              this.props.removeProduct(product);
               toast.error("An Error Occurred. Please Try Again Later.");
             }
           };
@@ -124,47 +134,76 @@ class ProductForm extends Form {
           console.log(error);
         },
       });
+      // else this is a product update
     } else {
-      // compress file
-      new Compressor(data.imageSrc, {
-        quality: 0.8,
-        success: async (result) => {
-          // convert to proper format
-          let reader = new FileReader();
-          reader.readAsArrayBuffer(result);
-          reader.onload = async () => {
-            const file = Array.from(new Uint8Array(reader.result));
-            // result has the compressed file.
-            const product = {
-              _id: this.props.placeholders._id,
-              title: data.title,
-              fileName: data.fileName,
-              description: data.description,
-              price: data.price,
-              stock: data.stock,
-              imageSrc: file,
-            };
-            try {
-              const response = await httpService.put(
-                `${config.apiEndpoint}/products/${this.props.placeholders._id}`,
-                product
-              );
-              if (response.status === 200)
-                toast.success(`Updated ${product.title} Successfully!`);
-              else toast.error("An Error Occurred. Please Try Again Later");
-              this.setState({ navigate: true });
-            } catch (exception) {
-              toast.error("An Error Occurred. Please Try Again Later");
-            }
-          };
-        },
-        error: (error) => {
-          toast.error(
-            "An Error Occurred While Compressing Image. Please Try Again Later."
+      // if file has not been changed and is still in MongoDB format
+      // DO NOT COMPRESS AGAIN
+      if (!(data.imageSrc instanceof File)) {
+        const product = {
+          _id: this.props.placeholders._id,
+          title: data.title,
+          fileName: data.fileName,
+          description: data.description,
+          price: data.price,
+          stock: data.stock,
+          imageSrc: data.imageSrc,
+        };
+        try {
+          const response = await httpService.put(
+            `${process.env.REACT_APP_API_ENDPOINT}/products/${this.props.placeholders._id}`,
+            product
           );
-          console.log(error);
-        },
-      });
+          if (response.status === 200)
+            toast.success(`Updated ${product.title} Successfully!`);
+          else toast.error("An Error Occurred. Please Try Again Later");
+          this.setState({ navigate: true });
+        } catch (exception) {
+          toast.error("An Error Occurred. Please Try Again Later");
+        }
+        // else file has been changed (already in File format)
+      } else {
+        // compress file
+        new Compressor(data.imageSrc, {
+          quality: 0.8,
+          success: async (result) => {
+            // convert to proper format
+            let reader = new FileReader();
+            reader.readAsArrayBuffer(result);
+            reader.onload = async () => {
+              const file = Array.from(new Uint8Array(reader.result));
+              // result has the compressed file.
+              console.log(file);
+              const product = {
+                _id: this.props.placeholders._id,
+                title: data.title,
+                fileName: data.fileName,
+                description: data.description,
+                price: data.price,
+                stock: data.stock,
+                imageSrc: file,
+              };
+              try {
+                const response = await httpService.put(
+                  `${process.env.REACT_APP_API_ENDPOINT}/products/${this.props.placeholders._id}`,
+                  product
+                );
+                if (response.status === 200)
+                  toast.success(`Updated ${product.title} Successfully!`);
+                else toast.error("An Error Occurred. Please Try Again Later");
+                this.setState({ navigate: true });
+              } catch (exception) {
+                toast.error("An Error Occurred. Please Try Again Later");
+              }
+            };
+          },
+          error: (error) => {
+            toast.error(
+              "An Error Occurred While Compressing Image. Please Try Again Later."
+            );
+            console.log(error);
+          },
+        });
+      }
     }
   };
   doNothing() {}

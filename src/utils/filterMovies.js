@@ -7,7 +7,8 @@ export function filterMovies(allResults, currentText) {
   // boolean function is the grounds on whether to include/exlude from new array
   return allResults.filter(
     (result) =>
-      result.title.toLowerCase().includes(currentText) ||
-      result.genre.name.toLowerCase().includes(currentText)
+      (result.title.toLowerCase().includes(currentText) ||
+        result.genre.name.toLowerCase().includes(currentText)) &&
+      result.numberInStock !== 0
   );
 }

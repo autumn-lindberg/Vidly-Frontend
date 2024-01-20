@@ -6,7 +6,7 @@ import { getMovies } from "../services/movieService";
 
 class CustomerTable extends Component {
   createTarget(name) {
-    return "#" + name;
+    return "#a" + name;
   }
   createId(name) {
     return "a" + name;

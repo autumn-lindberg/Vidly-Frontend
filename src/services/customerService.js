@@ -1,9 +1,8 @@
 import httpService from "./httpservice";
-import config from "../config.json";
 
 export async function getCustomers() {
   try {
-    return httpService.get(`${config.apiEndpoint}/customers`);
+    return httpService.get(`${process.env.REACT_APP_API_ENDPOINT}/customers`);
   } catch (exception) {
     console.log(exception);
   }
@@ -11,7 +10,9 @@ export async function getCustomers() {
 
 export async function getCustomer(customerId) {
   try {
-    return httpService.get(`${config.apiEndpoint}/customers/${customerId}`);
+    return httpService.get(
+      `${process.env.REACT_APP_API_ENDPOINT}/customers/${customerId}`
+    );
   } catch (exception) {
     console.log(exception);
   }
@@ -19,7 +20,10 @@ export async function getCustomer(customerId) {
 
 export async function saveCustomer(customer) {
   try {
-    return httpService.post(`${config.apiEndpoint}/customers`, customer);
+    return httpService.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/customers`,
+      customer
+    );
   } catch (exception) {
     console.log(exception);
   }
@@ -28,7 +32,7 @@ export async function saveCustomer(customer) {
 export function updateCustomer(customer) {
   try {
     return httpService.put(
-      `${config.apiEndpoint}/customers/${customer._id}`,
+      `${process.env.REACT_APP_API_ENDPOINT}/customers/${customer._id}`,
       customer
     );
   } catch (exception) {
@@ -39,7 +43,7 @@ export function updateCustomer(customer) {
 export function deleteCustomer(customer) {
   try {
     return httpService.delete(
-      `${config.apiEndpoint}/customers/${customer._id}`
+      `${process.env.REACT_APP_API_ENDPOINT}/customers/${customer._id}`
     );
   } catch (exception) {
     console.log(exception);
