@@ -15,14 +15,16 @@ import GenreDetails from "./components/genreDetails";
 import Rentals from "./components/rentals";
 import NewRental from "./components/newRental";
 import { Route, Routes } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import UserContext from "./UserContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import httpService from "./services/httpservice";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   const [user, setUser] = useState({});
+  const [clientId, setClientId] = useState(null);
   function handleLogin(user) {
     setUser(user);
   }
@@ -32,8 +34,21 @@ function App() {
   function handleLogout() {
     setUser({});
   }
+  useEffect(() => {
+    async function fetchData() {
+      // set API URL in local storage
+      // each time app is loaded, it's overwritten
+      localStorage.setItem("API_URL", "https://autumn-lindberg-vidly.com/api");
+      // get app's client ID
+      const { data } = await httpService.get(
+        `${localStorage.getItem("API_URL")}/get-client-id`
+      );
+      setClientId(data);
+    }
+    fetchData();
+  }, []);
   return (
-    <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={clientId}>
       {
         // give access to user and setUser
       }

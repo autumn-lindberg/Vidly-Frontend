@@ -2,7 +2,7 @@ import httpService from "./httpservice";
 
 export function getMovies() {
   try {
-    return httpService.get(`${process.env.REACT_APP_API_ENDPOINT}/movies`);
+    return httpService.get(`${localStorage.getItem("API_URL")}/movies`);
   } catch (exception) {
     console.log(exception);
   }
@@ -11,7 +11,7 @@ export function getMovies() {
 export async function getMovie(movieId) {
   try {
     return httpService.get(
-      `${process.env.REACT_APP_API_ENDPOINT}/movies/${movieId}`
+      `${localStorage.getItem("API_URL")}/movies/${movieId}`
     );
   } catch (exception) {
     console.log(exception);
@@ -20,10 +20,7 @@ export async function getMovie(movieId) {
 
 export async function saveMovie(movie) {
   try {
-    return httpService.post(
-      `${process.env.REACT_APP_API_ENDPOINT}/movies`,
-      movie
-    );
+    return httpService.post(`${localStorage.getItem("API_URL")}/movies`, movie);
   } catch (exception) {
     console.log(exception);
   }
@@ -32,7 +29,7 @@ export async function saveMovie(movie) {
 export function updateMovie(movie) {
   try {
     return httpService.put(
-      `${process.env.REACT_APP_API_ENDPOINT}/movies/${movie._id}`,
+      `${localStorage.getItem("API_URL")}/movies/${movie._id}`,
       movie
     );
   } catch (exception) {
@@ -43,7 +40,7 @@ export function updateMovie(movie) {
 export function deleteMovie(movie) {
   try {
     return httpService.delete(
-      `${process.env.REACT_APP_API_ENDPOINT}/movies/${movie._id}`
+      `${localStorage.getItem("API_URL")}/movies/${movie._id}`
     );
   } catch (exception) {
     console.log(exception);

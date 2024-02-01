@@ -76,7 +76,7 @@ class MovieForm extends Form {
       try {
         this.props.addMovie(movie);
         const response = await httpService.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/movies`,
+          `${localStorage.getItem("API_URL")}/movies`,
           movie
         );
         if (response.status === 200) {
@@ -110,7 +110,9 @@ class MovieForm extends Form {
       };
       try {
         const response = await httpService.put(
-          `${process.env.REACT_APP_API_ENDPOINT}/movies/${this.props.placeholders._id}`,
+          `${localStorage.getItem("API_URL")}/movies/${
+            this.props.placeholders._id
+          }`,
           movie
         );
         if (response.status === 200) {

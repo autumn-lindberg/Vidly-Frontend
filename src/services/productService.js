@@ -2,7 +2,7 @@ import httpService from "./httpservice";
 
 export async function getProducts() {
   try {
-    return httpService.get(`${process.env.REACT_APP_API_ENDPOINT}/products`);
+    return httpService.get(`${localStorage.getItem("API_URL")}/products`);
   } catch (exception) {
     console.log(exception);
   }
@@ -11,7 +11,7 @@ export async function getProducts() {
 export async function getProduct(productId) {
   try {
     return httpService.get(
-      `${process.env.REACT_APP_API_ENDPOINT}/products/${productId}`
+      `${localStorage.getItem("API_URL")}/products/${productId}`
     );
   } catch (exception) {
     console.log(exception);
@@ -21,7 +21,7 @@ export async function getProduct(productId) {
 export async function saveProduct(product) {
   try {
     return httpService.post(
-      `${process.env.REACT_APP_API_ENDPOINT}/products`,
+      `${localStorage.getItem("API_URL")}/products`,
       product
     );
   } catch (exception) {
@@ -32,7 +32,7 @@ export async function saveProduct(product) {
 export function updateProduct(product) {
   try {
     return httpService.put(
-      `${process.env.REACT_APP_API_ENDPOINT}/products/${product._id}`,
+      `${localStorage.getItem("API_URL")}/products/${product._id}`,
       product
     );
   } catch (exception) {
@@ -43,7 +43,7 @@ export function updateProduct(product) {
 export function deleteProduct(product) {
   try {
     return httpService.delete(
-      `${process.env.REACT_APP_API_ENDPOINT}/products/${product._id}`
+      `${localStorage.getItem("API_URL")}/products/${product._id}`
     );
   } catch (exception) {
     console.log(exception);

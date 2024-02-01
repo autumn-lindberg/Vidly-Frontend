@@ -40,7 +40,7 @@ class LoginForm extends Form {
     try {
       // response is called DATA, not BODY!!!
       const response = await httpService.post(
-        `${process.env.REACT_APP_API_ENDPOINT}/login`,
+        `${localStorage.getItem("API_URL")}/login`,
         user
       );
       if (response.status === 400) {
@@ -130,7 +130,7 @@ class LoginForm extends Form {
                 };
                 // send object to new user
                 const response = await httpService.post(
-                  `${process.env.REACT_APP_API_ENDPOINT}/login`,
+                  `${localStorage.getItem("API_URL")}/login`,
                   user
                 );
                 if (response.status === 200) {

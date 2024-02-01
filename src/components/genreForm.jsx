@@ -38,7 +38,7 @@ class GenreForm extends Form {
         copy._id = copy._id.toString();
         this.props.addGenre(copy);
         const response = await httpService.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/genres`,
+          `${localStorage.getItem("API_URL")}/genres`,
           genre
         );
         if (response.status === 200)
@@ -58,7 +58,9 @@ class GenreForm extends Form {
       };
       try {
         const response = await httpService.put(
-          `${process.env.REACT_APP_API_ENDPOINT}/genres/${this.props.placeholders._id}`,
+          `${localStorage.getItem("API_URL")}/genres/${
+            this.props.placeholders._id
+          }`,
           genre
         );
         if (response.status === 200)

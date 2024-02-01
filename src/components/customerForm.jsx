@@ -66,7 +66,7 @@ class CustomerForm extends Form {
       try {
         this.props.addCustomer(customer);
         const response = await httpService.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/customers`,
+          `${localStorage.getItem("API_URL")}/customers`,
           customer
         );
         if (response.status === 200)
@@ -93,7 +93,9 @@ class CustomerForm extends Form {
       };
       try {
         const response = await httpService.put(
-          `${process.env.REACT_APP_API_ENDPOINT}/customers/${this.props.placeholders._id}`,
+          `${localStorage.getItem("API_URL")}/customers/${
+            this.props.placeholders._id
+          }`,
           customer
         );
         if (response.status === 200)

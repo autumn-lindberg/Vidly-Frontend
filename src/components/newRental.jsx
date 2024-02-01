@@ -37,16 +37,21 @@ const NewRental = () => {
     // send request
     try {
       const response = await httpService.post(
-        `${process.env.REACT_APP_API_ENDPOINT}/rentals`,
+        `${localStorage.getItem("API_URL")}/rentals`,
         rental
       );
-      if (response.status === 200)
+      if (response.status === 200) {
         toast.success(
           `Successfully Rented ${rental.movie.title} to ${rental.customer.name}!`
         );
-      else toast.error("An Error Occurred. Please Try Again Later");
+        return true;
+      } else {
+        toast.error("An Error Occurred. Please Try Again Later");
+        return false;
+      }
     } catch (exception) {
       toast.error("An Error Occurred. Please Try Again Later");
+      return false;
     }
   };
 

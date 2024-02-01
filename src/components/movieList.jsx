@@ -15,6 +15,7 @@ class MovieList extends Component {
   createId(name) {
     return "a" + name;
   }
+
   state = {
     filtered: [],
     currentPage: 1,
@@ -80,7 +81,7 @@ class MovieList extends Component {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={() => this.props.onSelect(movie)}
+                    onClick={() => this.updateRentalTable(movie)}
                     data-bs-dismiss="modal"
                     aria-label="Close"
                   >
@@ -94,6 +95,30 @@ class MovieList extends Component {
       ),
     },
   ];
+
+  updateRentalTable = async (movie) => {
+    // filtered has qtyRented
+    let data = [...this.state.filtered];
+    data = data.map((m) => {
+      if (m._id === movie._id) {
+        m.qtyRented += 1;
+      }
+      return m;
+    });
+    this.setState({ filtered: data });
+    const response = await this.props.onSelect(movie);
+    // if bad response, undo update
+    if (!response) {
+      console.log("bad response");
+      data = data.map((m) => {
+        if (m._id === movie._id) {
+          m.qtyRented -= 1;
+        }
+        return m;
+      });
+      this.setState({ filtered: data });
+    }
+  };
 
   async componentDidMount() {
     // CALL SERVER AND SET INITIAL DATA
