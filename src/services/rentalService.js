@@ -2,7 +2,7 @@ import httpService from "./httpservice";
 
 export async function getRentals() {
   try {
-    return httpService.get(`${process.env.REACT_APP_API_ENDPOINT}/rentals`);
+    return httpService.get(`${localStorage.getItem("API_URL")}/rentals`);
   } catch (exception) {
     console.log(exception);
   }
@@ -11,7 +11,7 @@ export async function getRentals() {
 export async function getRental(rentalId) {
   try {
     return httpService.get(
-      `${process.env.REACT_APP_API_ENDPOINT}/rentals/${rentalId}`
+      `${localStorage.getItem("API_URL")}/rentals/${rentalId}`
     );
   } catch (exception) {
     console.log(exception);
@@ -21,7 +21,7 @@ export async function getRental(rentalId) {
 export async function saveRental(rental) {
   try {
     return httpService.post(
-      `${process.env.REACT_APP_API_ENDPOINT}/rentals`,
+      `${localStorage.getItem("API_URL")}/rentals`,
       rental
     );
   } catch (exception) {
@@ -32,7 +32,7 @@ export async function saveRental(rental) {
 export function updateRental(rental) {
   try {
     return httpService.put(
-      `${process.env.REACT_APP_API_ENDPOINT}/rentals/${rental._id}`,
+      `${localStorage.getItem("API_URL")}/rentals/${rental._id}`,
       rental
     );
   } catch (exception) {
@@ -43,7 +43,7 @@ export function updateRental(rental) {
 export function deleteRental(rental) {
   try {
     return httpService.delete(
-      `${process.env.REACT_APP_API_ENDPOINT}/rentals/${rental._id}`
+      `${localStorage.getItem("API_URL")}/rentals/${rental._id}`
     );
   } catch (exception) {
     console.log(exception);

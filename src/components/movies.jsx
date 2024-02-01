@@ -37,7 +37,7 @@ class Movies extends Component {
     // post data
     try {
       const response = await httpService.delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/movies/${movie._id}`
+        `${localStorage.getItem("API_URL")}/movies/${movie._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${movie.title}!`);
@@ -72,7 +72,7 @@ class Movies extends Component {
     // make a put request and update data
     try {
       const response = await httpService.put(
-        `${process.env.REACT_APP_API_ENDPOINT}/movies/${movie._id}`,
+        `${localStorage.getItem("API_URL")}/movies/${movie._id}`,
         movies[index]
       );
       if (response.status === 200)
@@ -181,6 +181,16 @@ class Movies extends Component {
 
   addMovieBack = (movie, index) => {
     const data = [...this.state.movies];
+
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // removeMovie() decremented page size, so use that
+    if (currentPage * pageSize === index) {
+      currentPage += 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     const movies = [...data.slice(0, index), movie, ...data.slice(index)];
     this.setState({ movies: movies });
     // grab search content and filter
@@ -191,6 +201,17 @@ class Movies extends Component {
 
   removeMovie = (movie) => {
     const data = [...this.state.movies];
+
+    const movieIndex = data.indexOf(movie);
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // page size is not yet decremented, so math must be adjusted
+    if ((currentPage - 1) * pageSize === movieIndex) {
+      currentPage -= 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     // update rentals to reflect deletion
     // goes through all rentals and check if id matches on passed to handleDelete
     // array filter takes a function as a parameter that returns T/F whether to include or not

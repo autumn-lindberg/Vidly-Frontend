@@ -43,7 +43,7 @@ class RegisterForm extends Form {
     // send request
     try {
       const response = await httpService.post(
-        `${process.env.REACT_APP_API_ENDPOINT}/users`,
+        `${localStorage.getItem("API_URL")}/users`,
         user
       );
       if (response.status === 400) {
@@ -137,7 +137,7 @@ class RegisterForm extends Form {
                 };
                 // send object to new user
                 const response = await httpService.post(
-                  `${process.env.REACT_APP_API_ENDPOINT}/users`,
+                  `${localStorage.getItem("API_URL")}/users`,
                   user
                 );
                 if (response.status === 200) {
@@ -154,7 +154,7 @@ class RegisterForm extends Form {
                 }
               }}
               onError={() => {
-                toast.error("Login Failed.");
+                toast.error("Registration Failed.");
               }}
             />
           </div>

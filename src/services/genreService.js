@@ -2,7 +2,7 @@ import httpService from "./httpservice";
 
 export async function getGenres() {
   try {
-    return httpService.get(`${process.env.REACT_APP_API_ENDPOINT}/genres`);
+    return httpService.get(`${localStorage.getItem("API_URL")}/genres`);
   } catch (exception) {
     console.log(exception);
   }
@@ -11,7 +11,7 @@ export async function getGenres() {
 export async function getGenre(genreId) {
   try {
     return httpService.get(
-      `${process.env.REACT_APP_API_ENDPOINT}/genres/${genreId}`
+      `${localStorage.getItem("API_URL")}/genres/${genreId}`
     );
   } catch (exception) {
     console.log(exception);
@@ -20,10 +20,7 @@ export async function getGenre(genreId) {
 
 export async function saveGenre(genre) {
   try {
-    return httpService.post(
-      `${process.env.REACT_APP_API_ENDPOINT}/genres`,
-      genre
-    );
+    return httpService.post(`${localStorage.getItem("API_URL")}/genres`, genre);
   } catch (exception) {
     console.log(exception);
   }
@@ -32,7 +29,7 @@ export async function saveGenre(genre) {
 export function updateGenre(genre) {
   try {
     return httpService.put(
-      `${process.env.REACT_APP_API_ENDPOINT}/genres/${genre._id}`,
+      `${localStorage.getItem("API_URL")}/genres/${genre._id}`,
       genre
     );
   } catch (exception) {
@@ -43,7 +40,7 @@ export function updateGenre(genre) {
 export function deleteGenre(genre) {
   try {
     return httpService.delete(
-      `${process.env.REACT_APP_API_ENDPOINT}/genres/${genre._id}`
+      `${localStorage.getItem("API_URL")}/genres/${genre._id}`
     );
   } catch (exception) {
     console.log(exception);

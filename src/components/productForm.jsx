@@ -110,7 +110,7 @@ class ProductForm extends Form {
             try {
               this.props.addProduct(product);
               const response = await httpService.post(
-                `${process.env.REACT_APP_API_ENDPOINT}/products`,
+                `${localStorage.getItem("API_URL")}/products`,
                 product
               );
               if (response.status === 200)
@@ -150,7 +150,9 @@ class ProductForm extends Form {
         };
         try {
           const response = await httpService.put(
-            `${process.env.REACT_APP_API_ENDPOINT}/products/${this.props.placeholders._id}`,
+            `${localStorage.getItem("API_URL")}/products/${
+              this.props.placeholders._id
+            }`,
             product
           );
           if (response.status === 200)
@@ -184,7 +186,9 @@ class ProductForm extends Form {
               };
               try {
                 const response = await httpService.put(
-                  `${process.env.REACT_APP_API_ENDPOINT}/products/${this.props.placeholders._id}`,
+                  `${localStorage.getItem("API_URL")}/products/${
+                    this.props.placeholders._id
+                  }`,
                   product
                 );
                 if (response.status === 200)

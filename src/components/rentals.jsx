@@ -30,7 +30,7 @@ class Rentals extends Component {
     // send delete request
     try {
       const response = await httpService.delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/rentals/${rental._id}`
+        `${localStorage.getItem("API_URL")}/rentals/${rental._id}`
       );
       if (response.status === 200) {
         toast.success("Successfully Deleted Rental Record!");
@@ -120,7 +120,7 @@ class Rentals extends Component {
     // post to rentals api
     try {
       const response = await httpService.post(
-        `${process.env.REACT_APP_API_ENDPOINT}/returns`,
+        `${localStorage.getItem("API_URL")}/returns`,
         rental
       );
       if (response.status === 200) {
@@ -147,6 +147,16 @@ class Rentals extends Component {
 
   addRentalBack = (rental, index) => {
     const data = [...this.state.rentals];
+
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // removeMovie() decremented page size, so use that
+    if (currentPage * pageSize === index) {
+      currentPage += 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     const rentals = [...data.slice(0, index), rental, ...data.slice(index)];
     this.setState({ rentals: rentals });
     // grab search content and filter
@@ -157,6 +167,17 @@ class Rentals extends Component {
 
   removeRental = (rental) => {
     const data = [...this.state.rentals];
+
+    const rentalIndex = data.indexOf(rental);
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // page size is not yet decremented, so math must be adjusted
+    if ((currentPage - 1) * pageSize === rentalIndex) {
+      currentPage -= 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     // update rentals to reflect deletion
     // goes through all rentals and check if id matches on passed to handleDelete
     // array filter takes a function as a parameter that returns T/F whether to include or not

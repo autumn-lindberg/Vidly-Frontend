@@ -31,7 +31,7 @@ class Products extends Component {
     // send delete request
     try {
       const response = await httpService.delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/products/${product._id}`
+        `${localStorage.getItem("API_URL")}/products/${product._id}`
       );
       if (response.status === 200)
         toast.success(`${product.title} Deleted Successfully!`);
@@ -113,6 +113,16 @@ class Products extends Component {
 
   addProductBack = (product, index) => {
     const data = [...this.state.products];
+
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // removeMovie() decremented page size, so use that
+    if (currentPage * pageSize === index) {
+      currentPage += 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     const products = [...data.slice(0, index), product, ...data.slice(index)];
     this.setState({ products: products });
     // grab search content and filter
@@ -123,6 +133,17 @@ class Products extends Component {
 
   removeProduct = (product) => {
     const data = [...this.state.products];
+
+    const productIndex = data.indexOf(product);
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // page size is not yet decremented, so math must be adjusted
+    if ((currentPage - 1) * pageSize === productIndex) {
+      currentPage -= 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     // array filter takes a function as a parameter that returns T/F whether to include or not
     const products = data.filter((p) => p._id !== product._id);
     this.setState({ products: products });

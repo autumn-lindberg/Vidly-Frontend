@@ -30,7 +30,7 @@ class Customers extends Component {
     // send delete request
     try {
       const response = await httpService.delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/customers/${customer._id}`
+        `${localStorage.getItem("API_URL")}/customers/${customer._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${customer.name}!`);
@@ -114,6 +114,16 @@ class Customers extends Component {
 
   addCustomerBack = (customer, index) => {
     const data = [...this.state.customers];
+
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // removeMovie() decremented page size, so use that
+    if (currentPage * pageSize === index) {
+      currentPage += 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     const customers = [...data.slice(0, index), customer, ...data.slice(index)];
     this.setState({ customers: customers });
     // grab search content and filter
@@ -124,6 +134,17 @@ class Customers extends Component {
 
   removeCustomer = (customer) => {
     const data = [...this.state.customers];
+
+    const customerIndex = data.indexOf(customer);
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // page size is not yet decremented, so math must be adjusted
+    if ((currentPage - 1) * pageSize === customerIndex) {
+      currentPage -= 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     // array filter takes a function as a parameter that returns T/F whether to include or not
     const customers = data.filter((c) => c._id !== customer._id);
     this.setState({ customers: customers });

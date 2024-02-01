@@ -31,7 +31,7 @@ class Genres extends Component {
     // send delete request
     try {
       const response = await httpService.delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/genres/${genre._id}`
+        `${localStorage.getItem("API_URL")}/genres/${genre._id}`
       );
       if (response.status === 200)
         toast.success(`Successfully Deleted ${genre.name}!`);
@@ -115,6 +115,16 @@ class Genres extends Component {
 
   addGenreBack = (genre, index) => {
     const data = [...this.state.genres];
+
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // removeMovie() decremented page size, so use that
+    if (currentPage * pageSize === index) {
+      currentPage += 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     const genres = [...data.slice(0, index), genre, ...data.slice(index)];
     this.setState({ genres: genres });
     // grab search content and filter
@@ -125,6 +135,17 @@ class Genres extends Component {
 
   removeGenre = (genre) => {
     const data = [...this.state.genres];
+
+    const genreIndex = data.indexOf(genre);
+    let { currentPage, pageSize } = this.state;
+    // check if it was last item in page to be deleted
+    // for example item #9 page size = 4, movieIndex would be 8
+    // page size is not yet decremented, so math must be adjusted
+    if ((currentPage - 1) * pageSize === genreIndex) {
+      currentPage -= 1;
+    }
+    this.setState({ currentPage: currentPage });
+
     // array filter takes a function as a parameter that returns T/F whether to include or not
     const genres = data.filter((g) => g._id !== genre._id);
     this.setState({ genres: genres });
