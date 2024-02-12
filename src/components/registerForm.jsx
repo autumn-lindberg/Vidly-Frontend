@@ -133,7 +133,7 @@ class RegisterForm extends Form {
                   name: jwt.name,
                   email: jwt.email,
                   password: jwt.sub,
-                  isAdmin: true,
+                  isAdmin: false,
                 };
                 // send object to new user
                 const response = await httpService.post(

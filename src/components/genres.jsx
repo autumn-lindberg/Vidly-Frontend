@@ -38,6 +38,7 @@ class Genres extends Component {
       else {
         this.addGenreBack(genre, genres.indexOf(genre));
         toast.error("An Error Occurred. Please Try Again Later");
+        toast.error(`Error Code: ${response.status}`);
       }
     } catch (exception) {
       this.addGenreBack(genre, genres.indexOf(genre));

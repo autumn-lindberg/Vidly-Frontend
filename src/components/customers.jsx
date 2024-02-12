@@ -37,6 +37,7 @@ class Customers extends Component {
       else {
         this.addCustomerBack(customer, customers.indexOf(customer));
         toast.error("An Error Occurred. Please Try Again Later.");
+        toast.error(`Error Code: ${response.status}`);
       }
     } catch (exception) {
       this.addCustomerBack(customer, customers.indexOf(customer));
