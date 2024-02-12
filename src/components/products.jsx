@@ -38,6 +38,7 @@ class Products extends Component {
       else {
         this.addProductBack(product, products.indexOf(product));
         toast.error("An Error Occurred. Please Try Again Later");
+        toast.error(`Error Code: ${response.status}`);
       }
     } catch (exception) {
       this.addProductBack(product, products.indexOf(product));

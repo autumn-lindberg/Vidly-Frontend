@@ -1,5 +1,5 @@
 # use node alpine image to run container (build context)
-FROM node:14.16.0-alpine3.13
+FROM node:latest
 
 # create a user with minimal permissions to run container
 #
